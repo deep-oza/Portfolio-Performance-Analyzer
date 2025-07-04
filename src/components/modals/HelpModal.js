@@ -1,0 +1,101 @@
+import React, { useContext, useEffect, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { PortfolioContext } from '../../contexts/PortfolioContext';
+
+const HelpModal = () => {
+  const { helpModalVisible, setHelpModalVisible } = useContext(PortfolioContext);
+  
+  const hideHelpModal = useCallback(() => {
+    setHelpModalVisible(false);
+  }, [setHelpModalVisible]);
+  
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && helpModalVisible) {
+        hideHelpModal();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [helpModalVisible, hideHelpModal]);
+  
+  const handleOutsideClick = (e) => {
+    if (e.target.id === 'helpModal') {
+      hideHelpModal();
+    }
+  };
+  
+  if (!helpModalVisible) {
+    return null;
+  }
+  
+  return (
+    <div 
+      id="helpModal" 
+      className="modal-overlay" 
+      style={{ display: 'flex' }}
+      onClick={handleOutsideClick}
+    >
+      <div className="modal-container help-modal-container">
+        <div className="modal-content">
+          <h3 className="modal-title">
+            <FontAwesomeIcon icon={faQuestionCircle} /> Help & Instructions
+          </h3>
+          <div className="help-content">
+            <div className="help-section">
+              <h4>Getting Started</h4>
+              <p>Welcome to the Portfolio Performance Analyzer! This tool helps you track and analyze your stock investments.</p>
+              <ol>
+                <li>Add stocks using the <strong>Add New Stock</strong> button</li>
+                <li>Enter current market prices in the table</li>
+                <li>View performance metrics and charts</li>
+              </ol>
+            </div>
+            
+            <div className="help-section">
+              <h4>Key Metrics Explained</h4>
+              <ul>
+                <li><strong>Return % Since Purchase:</strong> Simple return percentage based on unrealized gain/loss only</li>
+                <li><strong>CAGR %:</strong> Compound Annual Growth Rate - annualized return over time</li>
+                <li><strong>Unrealized G/L:</strong> Current gain or loss based on market price</li>
+                <li><strong>Realized Gain:</strong> Profits already booked from partial sells</li>
+              </ul>
+            </div>
+            
+            <div className="help-section">
+              <h4>Data Management</h4>
+              <ul>
+                <li>Your data is stored locally in your browser</li>
+                <li>Use <strong>Export Data</strong> to backup your portfolio</li>
+                <li>Import a CSV file with your portfolio data</li>
+              </ul>
+            </div>
+            
+            <div className="help-section">
+              <h4>Tips & Tricks</h4>
+              <ul>
+                <li>Use the search bar to quickly find stocks</li>
+                <li>Filter by gainers/losers to focus on specific stocks</li>
+                <li>Click column headers to sort the table</li>
+                <li>Use the charts to visualize your portfolio allocation and performance</li>
+              </ul>
+            </div>
+          </div>
+          <div className="modal-actions">
+            <button id="helpModalClose" className="btn" onClick={hideHelpModal}>
+              Got it!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HelpModal; 
