@@ -281,19 +281,9 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         </div>
         <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: '2rem 0' }} />
         <div style={holdingGridStyle}>
-          {/* Short Term Holdings – Histogram */}
+          {/* Short Term Holdings – List group only, no chart */}
           <div style={cardStyle}>
             <div style={titleStyle}>Short Term Holdings (≤ 1 year)</div>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={shortTermHistogram} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
-                <YAxis allowDecimals={false} />
-                <Tooltip content={HoldingTooltip(shortTermBins)} />
-                <Legend />
-                <Bar dataKey="count" fill="#4f8cff" name="Stocks" />
-              </BarChart>
-            </ResponsiveContainer>
             {/* List stocks in short term as list group */}
             <div style={{ marginTop: 16 }}>
               <div style={{ fontWeight: 500, marginBottom: 4 }}>Stocks:</div>
@@ -324,19 +314,9 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
               })()}
             </div>
           </div>
-          {/* Long Term Holdings – Histogram */}
+          {/* Long Term Holdings – List group only, no chart */}
           <div style={cardStyle}>
             <div style={titleStyle}>Long Term Holdings (&gt; 1 year)</div>
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={longTermHistogram} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
-                <YAxis allowDecimals={false} />
-                <Tooltip content={HoldingTooltip(longTermBins)} />
-                <Legend />
-                <Bar dataKey="count" fill="#4f8cff" name="Stocks" />
-              </BarChart>
-            </ResponsiveContainer>
             {/* List stocks in long term as list group */}
             <div style={{ marginTop: 16 }}>
               <div style={{ fontWeight: 500, marginBottom: 4 }}>Stocks:</div>
