@@ -26,10 +26,27 @@ export const importPortfolioCSV = (file) => {
           return;
         }
 
-        // Parse header and map column indices
-        const headerCols = lines[0]
-          .split(/[\t,]/)
-          .map((h) => h.trim().toLowerCase());
+        // Find the first line that contains all required columns
+        const requiredCols = ["symbol", "qty", "avg price"];
+        let headerLineIdx = -1;
+        let headerCols = [];
+        for (let i = 0; i < lines.length; i++) {
+          const cols = lines[i].split(/[\t,]/).map((h) => h.trim().toLowerCase());
+          let foundAll = requiredCols.every(req => cols.includes(req));
+          if (foundAll) {
+            headerLineIdx = i;
+            headerCols = cols;
+            break;
+          }
+        }
+        if (headerLineIdx === -1) {
+          reject(new Error(
+            `CSV is missing required columns: ${requiredCols.join(", ")}.\n\n` +
+            `Required columns: symbol, qty, avg price.\n` +
+            `Optional columns: name, purchase date, current price, realized gain, dividend.`
+          ));
+          return;
+        }
 
         // Expected columns and their possible alternative names
         const columnMappings = {
@@ -68,7 +85,6 @@ export const importPortfolioCSV = (file) => {
 
         // Create a map of actual column indices to our internal column names
         const colMap = {};
-        const requiredCols = ["symbol", "qty", "avg price"]; // Must have these at minimum
         let missingRequired = [];
 
         // Map header columns to our expected columns
@@ -89,9 +105,7 @@ export const importPortfolioCSV = (file) => {
         if (missingRequired.length > 0) {
           reject(
             new Error(
-              `CSV is missing required columns: ${missingRequired.join(
-                ", "
-              )}.\n\n` +
+              `CSV is missing required columns: ${missingRequired.join(", ")}.\n\n` +
                 `Required columns: symbol, qty, avg price.\n` +
                 `Optional columns: name, purchase date, current price, realized gain, dividend.`
             )
@@ -104,8 +118,10 @@ export const importPortfolioCSV = (file) => {
         const newPrices = {};
         const skippedRows = [];
 
-        lines.slice(1).forEach((line, idx) => {
-          if (!line.trim()) return; // Skip empty lines
+        // Start reading data from the line after the header
+        for (let i = headerLineIdx + 1; i < lines.length; i++) {
+          const line = lines[i];
+          if (!line.trim()) continue; // Skip empty lines
 
           // Split the line into columns
           const cols = line.split(/[\t,]/).map((c) => c.trim());
@@ -115,8 +131,8 @@ export const importPortfolioCSV = (file) => {
 
           // Skip rows without a symbol
           if (!sym) {
-            skippedRows.push(`Row ${idx + 2}: Missing symbol`);
-            return;
+            skippedRows.push(`Row ${i + 1}: Missing symbol`);
+            continue;
           }
 
           // Get quantity and validate
@@ -125,7 +141,7 @@ export const importPortfolioCSV = (file) => {
 
           if (qty <= 0) {
             skippedRows.push(
-              `Row ${idx + 2}, ${sym}: Invalid quantity (${qty})`
+              `Row ${i + 1}, ${sym}: Invalid quantity (${qty})`
             );
             // Still continue with the row, but using 0 as qty
           }
@@ -139,7 +155,7 @@ export const importPortfolioCSV = (file) => {
 
           if (avgP <= 0) {
             skippedRows.push(
-              `Row ${idx + 2}, ${sym}: Invalid avg price (${avgP})`
+              `Row ${i + 1}, ${sym}: Invalid avg price (${avgP})`
             );
             // Still continue with the row, but using 0 as avgP
           }
@@ -211,7 +227,7 @@ export const importPortfolioCSV = (file) => {
               ? cols[colMap["current price"]]
               : "";
           newPrices[sym.toUpperCase()] = curP ? parseFloat(curP) : null;
-        });
+        }
 
         // Check if we have any valid entries
         if (newPortfolio.length === 0) {
@@ -256,25 +272,22 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
     const symbol = stock.symbol;
     const invested = stock.invested || 0;
     totalInvested += invested;
-
     const price = parseFloat(currentPrices[symbol]) || 0;
     if (price > 0) {
       const cv = stock.qty * price;
       currentValue += cv;
       const days = calculateDaysHeld(stock.purchaseDate);
       const yrs = days / 365.25;
-
-      if (yrs > 0 && invested > 0 && cv > 0) {
+      if (yrs > 0 && invested > 0 && cv > 0 && days >= 90) { // Only include if held at least 90 days
         try {
           // Use a safe calculation approach
           const cagr = (Math.pow(cv / invested, 1 / yrs) - 1) * 100;
-
           // Only include valid CAGR values
           if (
             isFinite(cagr) &&
             !isNaN(cagr) &&
             cagr > -100 &&
-            cagr < 1000000
+            cagr < 200 // Only include if CAGR < 200%
           ) {
             sumWeightedCagr += invested * cagr;
             sumInvestedWithPrice += invested;
@@ -313,80 +326,62 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
   rows.push(["Overall Return", overallReturn.toFixed(2) + "%"]);
   rows.push([]); // blank line
 
-  // Table headers
+  // Table headers (import-compatible + extra reference columns, all lowercase and with alternatives)
   const headers = [
-    "Symbol",
-    "Name",
-    "Qty",
-    "Avg Price",
-    "Invested",
-    "Purchase Date",
-    "Current Price",
-    "Current Value",
-    "Unrealized G/L",
-    "Realized Gain",
-    "Dividend",
-    "Total Return",
-    "Return % Since Purchase",
-    "CAGR %",
-    "Days Held",
+    "symbol",
+    "name",
+    "qty", // also matches 'quantity', 'shares', etc. in import
+    "avg price", // also matches 'average price', 'buy price', etc.
+    "purchase date",
+    "current price",
+    "realized gain",
+    "dividend",
+    "return % since purchase",
+    "cagr %",
+    "days held"
   ];
   rows.push(headers);
 
-  // Table data
+  // Table data (import-compatible + extra reference columns)
   portfolioData.forEach((stock) => {
     const symbol = stock.symbol;
     const qty = stock.qty;
     const avgPrice = stock.avgPrice;
-    const invested = stock.invested;
     const purchaseDate = stock.purchaseDate;
     const rg = stock.realizedGain || 0;
     const dv = stock.dividend || 0;
     const price = parseFloat(currentPrices[symbol]) || 0;
-
-    let cv = "",
-      ugr = "",
-      tr = "",
-      rp = "",
-      cagr = "",
-      days = "";
-    if (price > 0) {
-      cv = (qty * price).toFixed(2);
-      ugr = (qty * price - invested).toFixed(2);
-      tr = (parseFloat(ugr) + rg + dv).toFixed(2);
+    let days = "", years = null, cagr = "", returnPercent = "";
+    if (purchaseDate && price > 0 && avgPrice > 0 && qty > 0) {
       days = calculateDaysHeld(purchaseDate);
-      const yrs = days / 365.25;
-      if (yrs > 0 && invested > 0) {
-        rp = ((ugr / invested) * 100).toFixed(2) + "%";
+      years = days / 365.25;
+      if (years > 0 && days >= 90) {
         try {
-          const fv = invested + parseFloat(ugr);
-          if (fv > 0) {
-            cagr =
-              ((Math.pow(fv / invested, 1 / yrs) - 1) * 100).toFixed(2) +
-              "%";
+          const invested = qty * avgPrice;
+          const currentValue = qty * price;
+          const rawCagr = (Math.pow(currentValue / invested, 1 / years) - 1) * 100;
+          if (isFinite(rawCagr) && !isNaN(rawCagr) && rawCagr > -100 && rawCagr < 200) {
+            cagr = rawCagr.toFixed(2) + "%";
           }
-        } catch (e) {
-          cagr = "0.00%";
-        }
+        } catch {}
+      }
+      // Return % Since Purchase
+      if (avgPrice > 0) {
+        returnPercent = (((price - avgPrice) / avgPrice) * 100).toFixed(2) + "%";
       }
     }
-
     rows.push([
       stock.symbol,
       stock.name || "",
       qty,
       avgPrice.toFixed(2),
-      invested.toFixed(2),
       purchaseDate,
       price ? price.toFixed(2) : "",
-      cv,
-      ugr,
       rg.toFixed(2),
       dv.toFixed(2),
-      tr,
-      rp,
+      returnPercent,
       cagr,
-      days,
+      days
     ]);
   });
 
