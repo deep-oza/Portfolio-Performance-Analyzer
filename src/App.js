@@ -27,12 +27,11 @@ function App() {
           
           <SummaryCards />
           <ControlPanel />
+          {/* Add StockForm component here */}
+          <StockForm />
           {/* Stock Quote Card */}
           <StockLTPCard />
           <SearchFilterBar />
-          
-          {/* Add StockForm component here */}
-          <StockForm />
           
           {/* Add PortfolioTable component here */}
           <PortfolioTable />
