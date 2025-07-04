@@ -60,7 +60,21 @@ const SearchFilterBar = () => {
             className="btn btn-sm" 
             id="clearSearch" 
             onClick={clearSearch}
-            style={{ zIndex: 10, visibility: 'visible', opacity: 1 }}
+            style={{ 
+              zIndex: 10, 
+              visibility: 'visible', 
+              opacity: 1,
+              color: '#333',
+              background: 'rgba(0,0,0,0.08)',
+              borderRadius: '50%',
+              padding: '5px',
+              width: '22px',
+              height: '22px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '10px'
+            }}
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>

@@ -674,11 +674,17 @@ body[data-theme="dark"] th {
   right: var(--space-2);
   background: transparent;
   border: none;
-  color: var(--neutral-500);
+  color: var(--neutral-800);
   cursor: pointer;
   padding: var(--space-1);
   z-index: 5;
   pointer-events: auto;
+  transition: all 0.2s ease;
+}
+
+#clearSearch:hover {
+  color: var(--neutral-900);
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .filter-options {
