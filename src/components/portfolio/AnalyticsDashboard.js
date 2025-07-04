@@ -63,12 +63,23 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     const price = parseFloat(currentPrices[stock.symbol]) || 0;
     const invested = stock.qty * stock.avgPrice;
     const currentValue = stock.qty * price;
+    const daysHeld = Math.ceil((new Date() - new Date(stock.purchaseDate)) / (1000 * 60 * 60 * 24));
+    const years = daysHeld / 365.25;
+    let cagr = null;
+    if (years > 0 && invested > 0 && currentValue > 0 && daysHeld >= 90) {
+      try {
+        const rawCagr = (Math.pow(currentValue / invested, 1 / years) - 1) * 100;
+        if (isFinite(rawCagr) && !isNaN(rawCagr) && rawCagr > -100 && rawCagr < 200) {
+          cagr = rawCagr;
+        }
+      } catch {}
+    }
     return {
       symbol: stock.symbol,
       invested,
       currentValue,
       unrealizedGL: currentValue - invested,
-      cagr: calculateCAGR(invested, currentValue, stock.purchaseDate),
+      cagr,
       returnPercent: invested > 0 ? ((currentValue - invested) / invested) * 100 : 0,
     };
   });

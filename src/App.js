@@ -27,10 +27,9 @@ function App() {
           
           <SummaryCards />
           <ControlPanel />
-          <SearchFilterBar />
-          
           {/* Stock Quote Card */}
           <StockLTPCard />
+          <SearchFilterBar />
           
           {/* Add StockForm component here */}
           <StockForm />

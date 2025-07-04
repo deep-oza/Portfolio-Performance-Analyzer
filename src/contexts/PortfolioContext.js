@@ -103,7 +103,7 @@ export const PortfolioProvider = ({ children }) => {
         if (ltp != null) {
           return {
             ...stock,
-            currentPrice: ltp,
+            currentPrice: Number(ltp).toFixed(2),
             // Optionally update other fields here if needed
           };
         }
@@ -112,7 +112,7 @@ export const PortfolioProvider = ({ children }) => {
       
       for (const symbol of symbols) {
         if (stockData[symbol]?.price) {
-          newPrices[symbol] = stockData[symbol].price.toString();
+          newPrices[symbol] = Number(stockData[symbol].price).toFixed(2);
         } else if (stockData[symbol]?.error) {
           failed.push({ symbol, error: stockData[symbol].error });
         }
@@ -260,10 +260,10 @@ export const PortfolioProvider = ({ children }) => {
         
         const daysHeld = calculateDaysHeld(stock.purchaseDate);
         const years = daysHeld / 365.25;
-        if (years > 0 && invested > 0 && currentVal > 0) {
+        if (years > 0 && invested > 0 && currentVal > 0 && daysHeld >= 90) {
           try {
             const cagr = (Math.pow(currentVal / invested, 1 / years) - 1) * 100;
-            if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 1000000) {
+            if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
               sumWeightedCagr += invested * cagr;
               sumInvestedWithPrice += invested;
             }

@@ -92,10 +92,6 @@ const SearchFilterBar = () => {
           <option value="gainers">Gainers Only</option>
           <option value="losers">Losers Only</option>
         </select>
-        
-        <button className="btn btn-sm" onClick={handleUpdateAll}>
-          <FontAwesomeIcon icon={faSyncAlt} /> Update All
-        </button>
       </div>
     </div>
   );
