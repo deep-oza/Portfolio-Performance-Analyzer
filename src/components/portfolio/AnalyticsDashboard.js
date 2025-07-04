@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
 } from 'recharts';
+import { PortfolioContext } from '../../contexts/PortfolioContext';
 
 // Helper to calculate CAGR
 function calculateCAGR(invested, currentValue, purchaseDate) {
@@ -36,6 +37,19 @@ function truncateName(name, maxLen = 18) {
 }
 
 const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
+  // Get current theme from context
+  const { theme } = useContext(PortfolioContext);
+  const isDarkTheme = theme === 'dark';
+  
+  // Theme-aware colors
+  const chartBackground = isDarkTheme ? '#383838' : '#fff';
+  const cardBackground = isDarkTheme ? '#363636' : '#fff';
+  const gridColor = isDarkTheme ? '#606060' : '#ccc';
+  const textColor = isDarkTheme ? '#f5f5f5' : '#333';
+  const tooltipBackground = isDarkTheme ? '#404040' : '#fff';
+  const tooltipBorder = isDarkTheme ? '#606060' : '#ccc';
+  const tooltipText = isDarkTheme ? '#f5f5f5' : '#333';
+
   if (!portfolioData || portfolioData.length === 0) {
     return (
       <div style={{ margin: '2rem 0', textAlign: 'center', color: '#888' }}>
@@ -130,20 +144,22 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     width: '100%',
   };
   const cardStyle = {
-    background: '#fff',
+    background: cardBackground,
     borderRadius: '12px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+    boxShadow: isDarkTheme 
+      ? '0 2px 8px rgba(0,0,0,0.2)'
+      : '0 2px 8px rgba(0,0,0,0.07)',
     padding: '1rem',
     minHeight: '340px',
     display: 'flex',
     flexDirection: 'column',
-    border: '1px solid #e0e0e0',
+    border: `1px solid ${isDarkTheme ? '#444' : '#e0e0e0'}`,
   };
   const titleStyle = {
     fontWeight: 600,
     fontSize: '1.1rem',
     marginBottom: '0.5rem',
-    color: 'var(--text-primary, #222)'
+    color: isDarkTheme ? '#f5f5f5' : 'var(--text-primary, #222)'
   };
 
   // Responsive grid for short/long term cards
@@ -155,12 +171,12 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     alignItems: 'start',
   };
 
-  // List group item style
+  // Theme-aware list group styles
   const listGroupStyle = {
     marginTop: 12,
     borderRadius: 8,
-    border: '1px solid #e0e0e0',
-    background: '#fafbfc',
+    border: `1px solid ${isDarkTheme ? '#505050' : '#e0e0e0'}`,
+    background: isDarkTheme ? '#383838' : '#fafbfc',
     padding: 0,
     overflow: 'hidden',
   };
@@ -168,11 +184,11 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '8px 12px',
-    borderBottom: '1px solid #ececec',
+    padding: '10px 16px',
+    borderBottom: `1px solid ${isDarkTheme ? '#484848' : '#ececec'}`,
     fontSize: 14,
-    minHeight: 36,
-    background: '#fff',
+    minHeight: 40,
+    background: isDarkTheme ? '#404040' : '#fff',
   };
   const lastListItemStyle = {
     ...listItemStyle,
@@ -183,10 +199,12 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    maxWidth: 180,
+    maxWidth: '75%',
+    fontSize: 15,
+    color: isDarkTheme ? '#f5f5f5' : 'inherit',
   };
   const heldTextStyle = {
-    color: '#2563c7',
+    color: isDarkTheme ? '#4f8cff' : '#2563c7', // blue highlight - brighter in dark mode
     fontWeight: 700,
     fontVariantNumeric: 'tabular-nums',
     marginLeft: 12,
@@ -203,7 +221,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         {/* Unrealized Gain/Loss per Stock – Bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Unrealized Gain/Loss per Stock</div>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={260} style={{ background: chartBackground }}>
             <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="symbol" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
@@ -218,7 +236,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         {/* CAGR by Stock – Column/Vertical bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>CAGR by Stock</div>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={260} style={{ background: chartBackground }}>
             <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="symbol" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
@@ -233,7 +251,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         {/* Return % per Stock – Column chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Return % per Stock</div>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={260} style={{ background: chartBackground }}>
             <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="symbol" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
@@ -248,7 +266,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         {/* Invested vs Current Value – Grouped bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Invested vs Current Value</div>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={260} style={{ background: chartBackground }}>
             <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="symbol" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
@@ -264,13 +282,20 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         {/* Top Gainers & Losers – Bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Top Gainers & Losers</div>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={260} style={{ background: chartBackground }}>
             <BarChart data={gainersLosersData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="symbol" interval={0} tick={{ angle: 0, fontSize: 13, dy: 10 }} />
-              <YAxis tickFormatter={v => v + '%'} />
-              <Tooltip formatter={v => v.toFixed(2) + '%'} />
-              <Legend />
+              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+              <XAxis dataKey="symbol" interval={0} tick={{ angle: 0, fontSize: 13, dy: 10, fill: textColor }} />
+              <YAxis tickFormatter={v => v + '%'} tick={{ fill: textColor }} />
+              <Tooltip 
+                formatter={v => v.toFixed(2) + '%'} 
+                contentStyle={{
+                  background: tooltipBackground,
+                  border: `1px solid ${tooltipBorder}`,
+                  color: tooltipText
+                }}
+              />
+              <Legend wrapperStyle={{ color: textColor }} />
               <Bar dataKey="returnPercent" name="Return %" >
                 {gainersLosersData.map((entry, idx) => (
                   <Cell key={`cell-${idx}`} fill={entry.returnPercent >= 0 ? '#4caf50' : '#e53935'} />
@@ -304,7 +329,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
                       const isLast = idx === stocks.length - 1;
                       return (
                         <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
-                          <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 24)}</span>
+                          <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32)}</span>
                           <span style={heldTextStyle}>{formatDuration(days)}</span>
                         </div>
                       );
@@ -337,7 +362,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
                       const isLast = idx === stocks.length - 1;
                       return (
                         <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
-                          <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 24)}</span>
+                          <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32)}</span>
                           <span style={heldTextStyle}>{formatDuration(days)}</span>
                         </div>
                       );
