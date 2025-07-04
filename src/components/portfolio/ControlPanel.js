@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faFileImport, faDownload, faTrashAlt, faSync } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faFileImport, faDownload, faTrashAlt, faSync, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import { importPortfolioCSV, exportPortfolioCSV, downloadCSV } from '../../utils/csvUtils';
 
@@ -25,21 +25,37 @@ const ControlPanel = () => {
   
   // Modal text for CSV upload confirmation
   const csvModalConfig = {
-    title: "CSV Upload Confirmation",
+    title: "Import Portfolio from CSV",
     message: (
-      <div style={{textAlign: 'left'}}>
-        <p>Before uploading your portfolio CSV, please ensure your file contains the <b>required columns</b>:</p>
-        <ul>
-          <li><b>symbol</b> (or: stock, ticker, scrip)</li>
-          <li><b>qty</b> (or: quantity, shares, units, holding)</li>
-          <li><b>avg price</b> (or: average price, buy price, purchase price, cost)</li>
-        </ul>
-        <p>Optional columns for more accurate analysis:</p>
-        <ul>
-          <li>name, purchase date, current price, realized gain, dividend</li>
-        </ul>
-        <p>Please verify your CSV data is complete and accurate.<br/>Missing or incorrect data may result in incomplete or inaccurate portfolio analysis, including metrics like investment, returns, XIRR, and CAGR.</p>
-        <p>Do you want to proceed with the upload?</p>
+      <div style={{ textAlign: 'left', fontSize: '1.05em' }}>
+        <div style={{ marginBottom: 16, background: '#f8f9fa', padding: 12, borderRadius: 8, border: '1px solid #e0e0e0' }}>
+          <strong>How to Import:</strong>
+          <ol style={{ margin: '10px 0 0 20px' }}>
+            <li>Download the <a href="/sample_portfolio.csv" download style={{ color: '#007bff', textDecoration: 'underline' }}>Sample CSV</a> for reference.</li>
+            <li>Ensure your file includes <b>all required columns</b>:</li>
+          </ol>
+          <ul style={{ marginLeft: 30 }}>
+            <li><b>symbol</b> <span style={{ color: '#888' }}>(or: stock, ticker, scrip)</span></li>
+            <li><b>qty</b> <span style={{ color: '#888' }}>(or: quantity, shares, units, holding)</span></li>
+            <li><b>avg price</b> <span style={{ color: '#888' }}>(or: average price, buy price, purchase price, cost)</span></li>
+          </ul>
+          <div style={{ marginTop: 8 }}>Optional columns for enhanced analysis:</div>
+          <ul style={{ marginLeft: 30 }}>
+            <li>name, purchase date, realized gain, dividend</li>
+          </ul>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <b>Tips:</b>
+          <ul style={{ marginLeft: 20 }}>
+            <li>Check your data for accuracy before uploading.</li>
+            <li>Missing or incorrect data may result in incomplete or inaccurate analysis.</li>
+            <li>File must be in <b>.csv</b> format (comma or tab separated).</li>
+          </ul>
+        </div>
+        <div style={{ color: '#d9534f', fontWeight: 500, marginBottom: 8 }}>
+          <FontAwesomeIcon icon={faFileImport} /> This will <b>replace</b> your current portfolio.
+        </div>
+        <div style={{ marginTop: 10 }}>Do you want to proceed with the upload?</div>
       </div>
     ),
     confirmText: "Confirm and Upload",
@@ -129,17 +145,16 @@ const ControlPanel = () => {
         style={{ display: 'none' }}
         ref={fileInputRef}
       />
-      <button className="btn" onClick={handleImportClick}>
+      <button className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleImportClick}>
         <FontAwesomeIcon icon={faFileImport} /> Import Portfolio (CSV)
       </button>
-      
-      <button className="btn" onClick={handleAddClick}>
+      <button className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleAddClick}>
         <FontAwesomeIcon icon={faPlus} /> Add New Stock
       </button>
-      
       {hasData && (
         <button 
           className="btn btn-primary"
+          style={{ fontWeight: 600, marginRight: 10 }}
           onClick={handleRefreshPrices}
           disabled={isLoadingPrices}
         >
@@ -147,15 +162,13 @@ const ControlPanel = () => {
           {isLoadingPrices ? 'Updating Prices...' : 'Refresh Prices'}
         </button>
       )}
-      
       {hasData && (
-        <button id="exportDataBtn" className="btn" onClick={handleExportClick}>
+        <button id="exportDataBtn" className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleExportClick}>
           <FontAwesomeIcon icon={faDownload} /> Export Data
         </button>
       )}
-      
       {hasData && (
-        <button id="clearPortfolioBtn" className="btn btn-danger" onClick={confirmClearPortfolio}>
+        <button id="clearPortfolioBtn" className="btn btn-danger" style={{ fontWeight: 600 }} onClick={confirmClearPortfolio}>
           <FontAwesomeIcon icon={faTrashAlt} /> Clear Portfolio
         </button>
       )}

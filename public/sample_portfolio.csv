@@ -1,0 +1,4 @@
+symbol,qty,avg price,purchase date,name,realized gain,dividend
+AAPL,10,150,2022-01-15,Apple Inc,50,10
+GOOGL,5,2500,2021-11-10,Alphabet Inc,0,0
+TSLA,8,700,2022-03-05,Tesla Inc,100,5 
