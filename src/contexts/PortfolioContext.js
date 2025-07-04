@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
+import { batchGetLTP } from '../utils/stockUtils';
 
 // Create context
 export const PortfolioContext = createContext();
@@ -41,7 +42,15 @@ export const PortfolioProvider = ({ children }) => {
     showCancel: true
   });
   
+  // API data loading state
+  const [isLoadingPrices, setIsLoadingPrices] = useState(false);
+  const [priceError, setPriceError] = useState(null);
+  
   const [helpModalVisible, setHelpModalVisible] = useState(false);
+  
+  // Batch error modal state
+  const [batchErrors, setBatchErrors] = useState([]);
+  const [showBatchErrorModal, setShowBatchErrorModal] = useState(false);
   
   // Save data to localStorage whenever it changes
   useEffect(() => {
@@ -65,6 +74,62 @@ export const PortfolioProvider = ({ children }) => {
       localStorage.setItem(onboardingKey, 'true');
     }
   }, []);
+  
+  // Fetch latest stock prices from Twelve Data API
+  const fetchLatestPrices = useCallback(async () => {
+    if (!portfolioData.length) return;
+    
+    // Get unique symbols from portfolio
+    const symbols = [...new Set(portfolioData.map(stock => stock.symbol))];
+    
+    if (!symbols.length) return;
+    
+    setIsLoadingPrices(true);
+    setPriceError(null);
+    setBatchErrors([]);
+    setShowBatchErrorModal(false);
+    
+    try {
+      // The API key check is now handled in stockUtils.js
+      const stockData = await batchGetLTP(symbols);
+      
+      // Update prices
+      const newPrices = { ...currentPrices };
+      const failed = [];
+      
+      // Update portfolioData with latest price for each stock
+      setPortfolioData(prevData => prevData.map(stock => {
+        const ltp = stockData[stock.symbol]?.price;
+        if (ltp != null) {
+          return {
+            ...stock,
+            currentPrice: ltp,
+            // Optionally update other fields here if needed
+          };
+        }
+        return stock;
+      }));
+      
+      for (const symbol of symbols) {
+        if (stockData[symbol]?.price) {
+          newPrices[symbol] = stockData[symbol].price.toString();
+        } else if (stockData[symbol]?.error) {
+          failed.push({ symbol, error: stockData[symbol].error });
+        }
+      }
+      
+      setCurrentPrices(newPrices);
+      if (failed.length > 0) {
+        setBatchErrors(failed);
+        setShowBatchErrorModal(true);
+      }
+    } catch (error) {
+      console.error('Error fetching stock prices:', error);
+      setPriceError(error.message || 'Failed to fetch stock prices');
+    } finally {
+      setIsLoadingPrices(false);
+    }
+  }, [portfolioData, currentPrices]);
   
   // Calculate days held
   const calculateDaysHeld = useCallback((purchaseDate) => {
@@ -244,14 +309,18 @@ export const PortfolioProvider = ({ children }) => {
       editingStock,
       modalConfig,
       helpModalVisible,
-      
+      isLoadingPrices,
+      priceError,
+      batchErrors,
+      showBatchErrorModal,
+      setShowBatchErrorModal,
+      setBatchErrors,
       setSortState,
       setSearchTerm,
       setPerformanceFilter,
       setShowAddStockForm,
       setEditingStock,
       setHelpModalVisible,
-      
       addStock,
       updateStock,
       deleteStock,
@@ -263,10 +332,27 @@ export const PortfolioProvider = ({ children }) => {
       hideModal,
       showMessage,
       showError,
+      calculateSummary,
       calculateDaysHeld,
-      calculateSummary
+      fetchLatestPrices
     }}>
       {children}
+      {/* Batch error modal */}
+      {showBatchErrorModal && batchErrors.length > 0 && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Failed to Load Data</h3>
+            <ul>
+              {batchErrors.map(({ symbol, error }) => (
+                <li key={symbol}>
+                  <strong>{symbol}:</strong> {error}
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setShowBatchErrorModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </PortfolioContext.Provider>
   );
 };

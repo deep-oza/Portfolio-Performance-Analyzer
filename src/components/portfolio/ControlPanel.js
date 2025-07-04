@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faFileImport, faDownload, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faFileImport, faDownload, faTrashAlt, faSync } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import { importPortfolioCSV, exportPortfolioCSV, downloadCSV } from '../../utils/csvUtils';
 
@@ -14,7 +14,10 @@ const ControlPanel = () => {
     showModal, 
     clearPortfolio,
     showMessage,
-    showError 
+    showError,
+    fetchLatestPrices,
+    isLoadingPrices,
+    priceError
   } = useContext(PortfolioContext);
   
   const fileInputRef = useRef(null);
@@ -92,6 +95,17 @@ const ControlPanel = () => {
     setShowAddStockForm(true);
   };
   
+  const handleRefreshPrices = async () => {
+    if (isLoadingPrices) return; // Prevent multiple clicks
+    
+    try {
+      await fetchLatestPrices();
+      showMessage("Success", "Stock prices updated successfully from Twelve Data API.");
+    } catch (error) {
+      showError(`Failed to refresh prices: ${error.message || 'Unknown error'}`);
+    }
+  };
+  
   const confirmClearPortfolio = () => {
     showModal({
       title: "Clear Portfolio",
@@ -123,6 +137,17 @@ const ControlPanel = () => {
       <button className="btn" onClick={handleAddClick}>
         <FontAwesomeIcon icon={faPlus} /> Add New Stock
       </button>
+      
+      {hasData && (
+        <button 
+          className="btn btn-primary"
+          onClick={handleRefreshPrices}
+          disabled={isLoadingPrices}
+        >
+          <FontAwesomeIcon icon={faSync} spin={isLoadingPrices} /> 
+          {isLoadingPrices ? 'Updating Prices...' : 'Refresh Prices'}
+        </button>
+      )}
       
       {hasData && (
         <button id="exportDataBtn" className="btn" onClick={handleExportClick}>

@@ -11,6 +11,7 @@ import HelpModal from './components/modals/HelpModal';
 import StockForm from './components/portfolio/StockForm';
 import PortfolioTable from './components/portfolio/PortfolioTable';
 import Footer from './components/Footer';
+import StockLTPCard from './components/portfolio/StockLTPCard';
 // We'll add more imports as we create the components
 
 function App() {
@@ -27,6 +28,9 @@ function App() {
           <SummaryCards />
           <ControlPanel />
           <SearchFilterBar />
+          
+          {/* Stock Quote Card */}
+          <StockLTPCard />
           
           {/* Add StockForm component here */}
           <StockForm />

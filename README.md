@@ -1,6 +1,66 @@
-# Getting Started with Create React App
+# Portfolio Holdings React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application for tracking and analyzing your stock portfolio. This project includes real-time stock price data integration with the Twelve Data API.
+
+## Features
+
+- Track your stock portfolio with performance metrics
+- Import/Export portfolio data via CSV
+- Real-time stock price data from Twelve Data API
+- Fetch Last Traded Price (LTP) for Indian stocks (NSE)
+- Dark/Light theme toggle
+- Responsive design for desktop and mobile
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- NPM (v6 or higher)
+- Twelve Data API key (get one at [https://twelvedata.com/](https://twelvedata.com/))
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/portfolio_holdings_react.git
+   cd portfolio_holdings_react
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the project root and add your Twelve Data API key:
+   ```
+   REACT_APP_TWELVE_API_KEY=your_api_key_here
+   ```
+
+4. Start the development server
+   ```bash
+   npm start
+   ```
+
+## Twelve Data API Integration
+
+This project uses the Twelve Data API to fetch real-time stock quotes. The integration has the following features:
+
+- **StockLTPCard Component**: A dedicated component that allows users to search for any NSE stock by symbol and view its Last Traded Price (LTP), name, and percentage change.
+
+- **Batch Price Updates**: The app can fetch prices for all stocks in your portfolio at once.
+
+- **API Key Management**: API key is stored in the `.env` file to keep it secure.
+
+- **Error Handling**: Graceful error handling for API errors and loading states.
+
+- **Stock Symbol Format**: Uses the format `SYMBOL:NS` for NSE stocks (e.g., TCS:NS, INFY:NS).
+
+### Usage
+
+1. Use the StockLTPCard component to search for individual stock quotes
+2. Use the "Refresh Prices" button in the Control Panel to update all portfolio stock prices at once
+3. Automatically fetches prices when the app loads or when new stocks are added
 
 ## Available Scripts
 
@@ -11,60 +71,18 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Builds the app for production to the `build` folder.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To learn more about the technologies used in this project:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [React](https://reactjs.org/)
+- [Twelve Data API](https://twelvedata.com/docs)
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)

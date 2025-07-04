@@ -924,4 +924,170 @@ body[data-theme="dark"] th {
   width: 100% !important;
 }
 
-/* Responsive grid for dashboard cards is handled inline in the component for theme compatibility */ 
+/* Responsive grid for dashboard cards is handled inline in the component for theme compatibility */
+
+/* Add these styles for the StockLTPCard component */
+
+.stock-ltp-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.stock-ltp-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1.3rem;
+}
+
+.stock-search-form {
+  margin-bottom: 1.5rem;
+}
+
+.stock-ltp-card .input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stock-ltp-card .input-group input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.stock-ltp-card .input-group button {
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.stock-ltp-card .btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.stock-ltp-card .btn-secondary {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.stock-ltp-card .loading-spinner {
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-secondary);
+}
+
+.stock-ltp-card .error-message {
+  background-color: rgba(255, 76, 76, 0.1);
+  border-left: 3px solid #ff4c4c;
+  padding: 0.8rem;
+  color: #ff4c4c;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.stock-ltp-card .quote-data {
+  background-color: var(--panel-bg);
+  border-radius: 6px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.stock-ltp-card .quote-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.8rem;
+}
+
+.stock-ltp-card .quote-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.stock-ltp-card .exchange-info {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.stock-ltp-card .quote-price {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.stock-ltp-card .price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.stock-ltp-card .percent-change {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.stock-ltp-card .percent-change.positive {
+  background-color: rgba(24, 184, 90, 0.15);
+  color: #18b85a;
+}
+
+.stock-ltp-card .percent-change.negative {
+  background-color: rgba(255, 76, 76, 0.15);
+  color: #ff4c4c;
+}
+
+.stock-ltp-card .quote-timestamp {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.stock-ltp-card .no-data-message,
+.stock-ltp-card .instructions {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--panel-bg);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .stock-ltp-card {
+    padding: 1rem;
+  }
+  
+  .stock-ltp-card .price {
+    font-size: 1.5rem;
+  }
+  
+  .stock-ltp-card .percent-change {
+    font-size: 0.9rem;
+  }
+}
+
+/* Remove these mock data styles - we don't need them anymore */
+.mock-data-notice,
+.mock-data-tag {
+  display: none;
+} 
