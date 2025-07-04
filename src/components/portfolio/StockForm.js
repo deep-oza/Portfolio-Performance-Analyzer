@@ -121,127 +121,155 @@ const StockForm = () => {
     }
   };
   
+  // Modal close logic
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && (showAddStockForm || editingStock)) {
+        hideForm();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showAddStockForm, editingStock]);
+
+  const handleOutsideClick = (e) => {
+    if (e.target.id === 'stockFormModal') {
+      hideForm();
+    }
+  };
+
   if (!showAddStockForm && !editingStock) {
     return null;
   }
   
   const isEditing = !!editingStock;
-  
+
   return (
-    <div id="addStockForm" className="form-container">
-      <h3 className="form-title" id="stockFormTitle">
-        <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
-        {isEditing ? ' Edit Stock' : ' Add New Stock'}
-      </h3>
+    <div 
+      id="stockFormModal" 
+      className="modal-overlay" 
+      style={{ display: 'flex' }}
+      onClick={handleOutsideClick}
+    >
+      <div className="modal-container" style={{ maxWidth: 700 }}>
+        <div className="modal-content">
+          <h3 className="form-title" id="stockFormTitle">
+            <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
+            {isEditing ? ' Edit Stock' : ' Add New Stock'}
+          </h3>
 
-      <div className="form-section">
-        <h4 className="form-section-title">Stock Information</h4>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label required" htmlFor="newSymbol">Stock Symbol</label>
-            <input
-              type="text"
-              id="newSymbol"
-              className={`form-input ${errors.symbol ? 'error' : ''}`}
-              placeholder="e.g. AAPL"
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-              onKeyPress={handleKeyPress}
-              autoComplete="off"
-            />
-            <div className="form-error">Please enter a valid stock symbol</div>
+          <div className="form-section">
+            <h4 className="form-section-title">Stock Information</h4>
+            <div className="form-grid">
+              <div className="form-group">
+                <label className="form-label required" htmlFor="newSymbol">Stock Symbol</label>
+                <input
+                  type="text"
+                  id="newSymbol"
+                  className={`form-input ${errors.symbol ? 'error' : ''}`}
+                  placeholder="e.g. AAPL"
+                  value={symbol}
+                  onChange={(e) => setSymbol(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="off"
+                />
+                <div className="form-error">Please enter a valid stock symbol</div>
+              </div>
+              <div className="form-group">
+                <label className="form-label required" htmlFor="newQty">Quantity</label>
+                <input
+                  type="number"
+                  id="newQty"
+                  className={`form-input ${errors.qty ? 'error' : ''}`}
+                  placeholder="e.g. 10"
+                  min="0"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <div className="form-error">Quantity must be greater than 0</div>
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label className="form-label required" htmlFor="newQty">Quantity</label>
-            <input
-              type="number"
-              id="newQty"
-              className={`form-input ${errors.qty ? 'error' : ''}`}
-              placeholder="e.g. 10"
-              min="0"
-              value={qty}
-              onChange={(e) => setQty(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <div className="form-error">Quantity must be greater than 0</div>
+
+          <div className="form-section">
+            <h4 className="form-section-title">Purchase Details</h4>
+            <div className="form-grid">
+              <div className="form-group">
+                <label className="form-label required" htmlFor="newAvgPrice">Average Price</label>
+                <input
+                  type="number"
+                  id="newAvgPrice"
+                  className={`form-input ${errors.avgPrice ? 'error' : ''}`}
+                  placeholder="e.g. 150.75"
+                  step="0.01"
+                  min="0"
+                  value={avgPrice}
+                  onChange={(e) => setAvgPrice(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <div className="form-error">Price must be greater than 0</div>
+              </div>
+              <div className="form-group">
+                <label className="form-label required" htmlFor="newPurchaseDate">Purchase Date</label>
+                <input 
+                  type="date" 
+                  id="newPurchaseDate" 
+                  className={`form-input ${errors.purchaseDate ? 'error' : ''}`}
+                  value={purchaseDate}
+                  onChange={(e) => setPurchaseDate(e.target.value)}
+                />
+                <div className="form-helper">Date when you purchased the stock</div>
+                <div className="form-error">Please select a valid date</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h4 className="form-section-title">Performance Metrics (Optional)</h4>
+            <div className="form-grid">
+              <div className="form-group">
+                <label className="form-label" htmlFor="newRealizedGain">Realized Gain</label>
+                <input
+                  type="number"
+                  id="newRealizedGain"
+                  className="form-input"
+                  placeholder="e.g. 100.50"
+                  step="0.01"
+                  value={realizedGain}
+                  onChange={(e) => setRealizedGain(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <div className="form-helper">Profits already realized from this stock</div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="newDividend">Dividend</label>
+                <input
+                  type="number"
+                  id="newDividend"
+                  className="form-input"
+                  placeholder="e.g. 25.75"
+                  step="0.01"
+                  value={dividend}
+                  onChange={(e) => setDividend(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <div className="form-helper">Total dividends received</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button className="btn btn-secondary" onClick={hideForm}>
+              <FontAwesomeIcon icon={faTimes} /> Cancel
+            </button>
+            <button className="btn" onClick={handleSubmit} id="saveStockBtn">
+              <FontAwesomeIcon icon={faCheck} /> {isEditing ? 'Update Stock' : 'Add Stock'}
+            </button>
           </div>
         </div>
-      </div>
-
-      <div className="form-section">
-        <h4 className="form-section-title">Purchase Details</h4>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label required" htmlFor="newAvgPrice">Average Price</label>
-            <input
-              type="number"
-              id="newAvgPrice"
-              className={`form-input ${errors.avgPrice ? 'error' : ''}`}
-              placeholder="e.g. 150.75"
-              step="0.01"
-              min="0"
-              value={avgPrice}
-              onChange={(e) => setAvgPrice(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <div className="form-error">Price must be greater than 0</div>
-          </div>
-          <div className="form-group">
-            <label className="form-label required" htmlFor="newPurchaseDate">Purchase Date</label>
-            <input 
-              type="date" 
-              id="newPurchaseDate" 
-              className={`form-input ${errors.purchaseDate ? 'error' : ''}`}
-              value={purchaseDate}
-              onChange={(e) => setPurchaseDate(e.target.value)}
-            />
-            <div className="form-helper">Date when you purchased the stock</div>
-            <div className="form-error">Please select a valid date</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="form-section">
-        <h4 className="form-section-title">Performance Metrics (Optional)</h4>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label" htmlFor="newRealizedGain">Realized Gain</label>
-            <input
-              type="number"
-              id="newRealizedGain"
-              className="form-input"
-              placeholder="e.g. 100.50"
-              step="0.01"
-              value={realizedGain}
-              onChange={(e) => setRealizedGain(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <div className="form-helper">Profits already realized from this stock</div>
-          </div>
-          <div className="form-group">
-            <label className="form-label" htmlFor="newDividend">Dividend</label>
-            <input
-              type="number"
-              id="newDividend"
-              className="form-input"
-              placeholder="e.g. 25.75"
-              step="0.01"
-              value={dividend}
-              onChange={(e) => setDividend(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <div className="form-helper">Total dividends received</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="form-actions">
-        <button className="btn btn-secondary" onClick={hideForm}>
-          <FontAwesomeIcon icon={faTimes} /> Cancel
-        </button>
-        <button className="btn" onClick={handleSubmit} id="saveStockBtn">
-          <FontAwesomeIcon icon={faCheck} /> {isEditing ? 'Update Stock' : 'Add Stock'}
-        </button>
       </div>
     </div>
   );

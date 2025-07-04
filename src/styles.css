@@ -549,12 +549,17 @@ body[data-theme="dark"] th {
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   width: 90%;
-  max-width: 500px;
+  max-width: 700px;
   padding: 0;
+  /* max-height: 95vh; */
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-content {
   padding: var(--space-5);
+  overflow-y: auto;
+  flex: 1 1 auto;
 }
 
 .modal-title {
@@ -888,6 +893,21 @@ body[data-theme="dark"] th {
     max-width: 95vw !important;
     min-width: unset;
     padding: var(--space-2);
+  }
+  .modal-content {
+    padding: var(--space-2);
+  }
+  .form-container {
+    padding: var(--space-2);
+  }
+  .form-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .modal-container {
+    max-width: 98vw;
   }
 }
 
