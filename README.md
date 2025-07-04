@@ -1,12 +1,12 @@
 # Portfolio Holdings React
 
-A React application for tracking and analyzing your stock portfolio. This project includes real-time stock price data integration with the Twelve Data API.
+A React application for tracking and analyzing your stock portfolio. This project includes real-time stock price data integration with Yahoo Finance.
 
 ## Features
 
 - Track your stock portfolio with performance metrics
 - Import/Export portfolio data via CSV
-- Real-time stock price data from Twelve Data API
+- Real-time stock price data from Yahoo Finance
 - Fetch Last Traded Price (LTP) for Indian stocks (NSE)
 - Dark/Light theme toggle
 - Responsive design for desktop and mobile
@@ -17,7 +17,6 @@ A React application for tracking and analyzing your stock portfolio. This projec
 
 - Node.js (v14 or higher)
 - NPM (v6 or higher)
-- Twelve Data API key (get one at [https://twelvedata.com/](https://twelvedata.com/))
 
 ### Installation
 
@@ -32,29 +31,22 @@ A React application for tracking and analyzing your stock portfolio. This projec
    npm install
    ```
 
-3. Create a `.env` file in the project root and add your Twelve Data API key:
-   ```
-   REACT_APP_TWELVE_API_KEY=your_api_key_here
-   ```
-
-4. Start the development server
+3. Start the development server
    ```bash
    npm start
    ```
 
-## Twelve Data API Integration
+## Yahoo Finance API Integration
 
-This project uses the Twelve Data API to fetch real-time stock quotes. The integration has the following features:
+This project uses Yahoo Finance (via AllOrigins CORS proxy) to fetch real-time stock quotes. The integration has the following features:
 
 - **StockLTPCard Component**: A dedicated component that allows users to search for any NSE stock by symbol and view its Last Traded Price (LTP), name, and percentage change.
 
 - **Batch Price Updates**: The app can fetch prices for all stocks in your portfolio at once.
 
-- **API Key Management**: API key is stored in the `.env` file to keep it secure.
-
 - **Error Handling**: Graceful error handling for API errors and loading states.
 
-- **Stock Symbol Format**: Uses the format `SYMBOL:NS` for NSE stocks (e.g., TCS:NS, INFY:NS).
+- **Stock Symbol Format**: Uses the format `SYMBOL.NS` for NSE stocks (e.g., TCS.NS, INFY.NS).
 
 ### Usage
 
@@ -84,5 +76,5 @@ Builds the app for production to the `build` folder.
 To learn more about the technologies used in this project:
 
 - [React](https://reactjs.org/)
-- [Twelve Data API](https://twelvedata.com/docs)
+- [Yahoo Finance](https://finance.yahoo.com/)
 - [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)

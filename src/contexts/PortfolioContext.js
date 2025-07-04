@@ -75,7 +75,7 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, []);
   
-  // Fetch latest stock prices from Twelve Data API
+  // Fetch latest stock prices from Yahoo Finance
   const fetchLatestPrices = useCallback(async () => {
     if (!portfolioData.length) return;
     

@@ -97,10 +97,9 @@ const ControlPanel = () => {
   
   const handleRefreshPrices = async () => {
     if (isLoadingPrices) return; // Prevent multiple clicks
-    
     try {
       await fetchLatestPrices();
-      showMessage("Success", "Stock prices updated successfully from Twelve Data API.");
+      showMessage("Success", "Stock prices updated successfully.");
     } catch (error) {
       showError(`Failed to refresh prices: ${error.message || 'Unknown error'}`);
     }

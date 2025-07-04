@@ -10,13 +10,27 @@ const StockLTPCard = () => {
   const [symbol, setSymbol] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { data, loading, error, refresh, fetchData } = useStockQuote(symbol, false); // Disable auto-fetch
+  const [localData, setLocalData] = useState(null);
+  const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
     // Only fetch data when symbol is set initially
     if (symbol) {
-      fetchData();
+      fetchData().then(() => {
+        setLocalData(data);
+        setLocalError(error);
+      });
+    } else {
+      setLocalData(null);
+      setLocalError(null);
     }
-  }, [symbol, fetchData]);
+    // eslint-disable-next-line
+  }, [symbol]);
+
+  useEffect(() => {
+    setLocalData(data);
+    setLocalError(error);
+  }, [data, error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,6 +47,13 @@ const StockLTPCard = () => {
     if (symbol) {
       refresh();
     }
+  };
+
+  const handleClear = () => {
+    setSymbol('');
+    setInputValue('');
+    setLocalData(null);
+    setLocalError(null);
   };
 
   return (
@@ -52,14 +73,25 @@ const StockLTPCard = () => {
             <FontAwesomeIcon icon={faSearch} />
           </button>
           {symbol && (
-            <button 
-              type="button" 
-              className="btn btn-secondary"
-              onClick={handleRefresh}
-              disabled={loading}
-            >
-              <FontAwesomeIcon icon={faSync} spin={loading} />
-            </button>
+            <>
+              <button 
+                type="button" 
+                className="btn btn-secondary"
+                onClick={handleRefresh}
+                disabled={loading}
+              >
+                <FontAwesomeIcon icon={faSync} spin={loading} />
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleClear}
+                disabled={loading}
+                style={{ marginLeft: 4 }}
+              >
+                Clear
+              </button>
+            </>
           )}
         </div>
       </form>
@@ -67,34 +99,34 @@ const StockLTPCard = () => {
       <div className="quote-result">
         {loading && <div className="loading-spinner">Loading...</div>}
         
-        {error && !loading && (
+        {localError && !loading && (
           <div className="error-message">
             <FontAwesomeIcon icon={faExclamationTriangle} />
-            <span>{error}</span>
+            <span>{localError}</span>
           </div>
         )}
         
-        {data && !loading && !error && (
+        {localData && !loading && !localError && (
           <div className="quote-data">
             <div className="quote-header">
-              <h4>{data.name} ({data.symbol})</h4>
-              <span className="exchange-info">{data.exchange} • {data.currency}</span>
+              <h4>{localData.name} ({localData.symbol})</h4>
+              <span className="exchange-info">{localData.exchange} • {localData.currency}</span>
             </div>
             
             <div className="quote-price">
-              <span className="price">{data.price.toFixed(2)}</span>
-              <span className={`percent-change ${data.percentChange >= 0 ? 'positive' : 'negative'}`}>
-                {data.percentChange >= 0 ? '+' : ''}{data.percentChange.toFixed(2)}%
+              <span className="price">{localData.price.toFixed(2)}</span>
+              <span className={`percent-change ${localData.percentChange >= 0 ? 'positive' : 'negative'}`}>
+                {localData.percentChange >= 0 ? '+' : ''}{localData.percentChange.toFixed(2)}%
               </span>
             </div>
             
             <div className="quote-timestamp">
-              Last updated: {new Date(data.timestamp * 1000).toLocaleString()}
+              Last updated: {new Date(localData.timestamp * 1000).toLocaleString()}
             </div>
           </div>
         )}
         
-        {!data && !loading && !error && symbol && (
+        {!localData && !loading && !localError && symbol && (
           <div className="no-data-message">
             No data found for {symbol}
           </div>
