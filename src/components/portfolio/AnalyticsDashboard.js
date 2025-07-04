@@ -267,7 +267,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={gainersLosersData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="symbol" interval={0} tick={{ angle: -45, fontSize: 11, dy: 10 }} />
+              <XAxis dataKey="symbol" interval={0} tick={{ angle: 0, fontSize: 13, dy: 10 }} />
               <YAxis tickFormatter={v => v + '%'} />
               <Tooltip formatter={v => v.toFixed(2) + '%'} />
               <Legend />
