@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
@@ -11,6 +11,8 @@ const SearchFilterBar = () => {
     performanceFilter, 
     setPerformanceFilter 
   } = useContext(PortfolioContext);
+  
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   
   // Only show if there's data
   if (!portfolioData || portfolioData.length === 0) {
@@ -38,7 +40,11 @@ const SearchFilterBar = () => {
   return (
     <div className="search-filter-container">
       <div className="search-box">
-        <FontAwesomeIcon icon={faSearch} className="search-icon" />
+        <FontAwesomeIcon 
+          icon={faSearch} 
+          className="search-icon" 
+          style={{ zIndex: 10, visibility: 'visible', opacity: 1 }}
+        />
         <input 
           type="text" 
           id="stockSearch" 
@@ -46,10 +52,19 @@ const SearchFilterBar = () => {
           placeholder="Search stocks..." 
           value={searchTerm}
           onChange={handleSearchChange}
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => setIsSearchFocused(false)}
         />
-        <button className="btn btn-sm" id="clearSearch" onClick={clearSearch}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
+        {(searchTerm || isSearchFocused) && (
+          <button 
+            className="btn btn-sm" 
+            id="clearSearch" 
+            onClick={clearSearch}
+            style={{ zIndex: 10, visibility: 'visible', opacity: 1 }}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        )}
       </div>
       
       <div className="filter-options">
