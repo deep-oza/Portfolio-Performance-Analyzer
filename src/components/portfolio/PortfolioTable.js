@@ -2,6 +2,7 @@ import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faEdit, faTrashAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import AnalyticsDashboard from './AnalyticsDashboard';
 
 const DEFAULT_COLUMNS = [
   { key: 'symbol', label: 'Stock' },
@@ -59,6 +60,7 @@ const PortfolioTable = () => {
   });
 
   const [editingCell, setEditingCell] = useState({ row: null, col: null, value: '' });
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(visibleColumns));
@@ -552,7 +554,22 @@ const PortfolioTable = () => {
   }
   
   return (
-    <>
+    <div className="portfolio-table-container">
+      <button
+        className="show-analytics-btn"
+        style={{ marginBottom: '1rem', fontSize: '1rem', padding: '0.5rem 1rem' }}
+        onClick={() => setShowAnalytics((prev) => !prev)}
+      >
+        {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
+      </button>
+      {showAnalytics && (
+        <div className="analytics-dashboard-wrapper">
+          <AnalyticsDashboard
+            portfolioData={portfolioData}
+            currentPrices={currentPrices}
+          />
+        </div>
+      )}
       {/* Column settings button and bulk action controls */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
         <button
@@ -820,7 +837,7 @@ const PortfolioTable = () => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -879,4 +879,39 @@ body[data-theme="dark"] th {
     min-width: unset;
     padding: var(--space-2);
   }
-} 
+}
+
+/* Analytics Dashboard Styles */
+.show-analytics-btn {
+  background: var(--primary, #4f8cff);
+  color: var(--button-text, #fff);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.show-analytics-btn:hover {
+  background: var(--primary-dark, #2563c7);
+}
+.analytics-dashboard-wrapper {
+  margin-bottom: 2rem;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Analytics Dashboard Responsive Grid Fix */
+@media (min-width: 900px) {
+  .analytics-dashboard-wrapper > div > div {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Force analytics dashboard charts to full width, one per row */
+.analytics-dashboard-wrapper > div > div {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Responsive grid for dashboard cards is handled inline in the component for theme compatibility */ 
