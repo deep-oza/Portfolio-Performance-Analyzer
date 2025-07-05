@@ -13,7 +13,13 @@ import PortfolioTable from './components/portfolio/PortfolioTable';
 import Footer from './components/Footer';
 import StockLTPCard from './components/portfolio/StockLTPCard';
 import { TourProvider, useTour } from '@reactour/tour';
-// We'll add more imports as we create the components
+// Google Analytics import
+import ReactGA from 'react-ga';
+
+// Initialize Google Analytics
+// Replace UA-XXXXXXXX-X with your actual Google Analytics tracking ID when you get one
+const TRACKING_ID = "G-9M4XD5TLJ1";
+ReactGA.initialize(TRACKING_ID);
 
 function MainApp() {
   // Check URL parameters for tour restart
@@ -38,6 +44,13 @@ function MainApp() {
     return localStorage.getItem('theme') || 'light';
   });
 
+  // Track page view when component mounts
+  useEffect(() => {
+    // Send page view to Google Analytics
+    ReactGA.pageview(window.location.pathname + window.location.search);
+    console.log('Page view tracked');
+  }, []);
+
   // Log when tour state changes
   useEffect(() => {
     console.log('Tour component mounted');
@@ -50,12 +63,24 @@ function MainApp() {
     localStorage.setItem('tourModalShown', 'true');
     console.log('Starting tour...');
     setIsOpen(true);
+    
+    // Track tour start event
+    ReactGA.event({
+      category: 'User Engagement',
+      action: 'Started Tour'
+    });
   };
 
   // When user skips the tour, also save to localStorage
   const handleSkipTour = () => {
     setShowTourModal(false);
     localStorage.setItem('tourModalShown', 'true');
+    
+    // Track tour skip event
+    ReactGA.event({
+      category: 'User Engagement',
+      action: 'Skipped Tour'
+    });
   };
 
   // Enhanced professional modal markup
