@@ -202,7 +202,7 @@ h1 i {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
   padding: var(--space-3) var(--space-4);
@@ -212,30 +212,34 @@ h1 i {
   font-size: 0.875rem;
   box-shadow: var(--shadow-sm);
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .btn:hover {
-  background-color: var(--primary-dark);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #0d47a1 100%);
   box-shadow: var(--shadow);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: var(--neutral-100);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   color: var(--neutral-800);
   border: 1px solid var(--neutral-300);
 }
 
 .btn-secondary:hover {
-  background-color: var(--neutral-200);
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
   color: var(--neutral-900);
+  transform: translateY(-1px);
 }
 
 .btn-danger {
-  background-color: var(--danger);
+  background: linear-gradient(135deg, var(--danger) 0%, #d32f2f 100%);
 }
 
 .btn-danger:hover {
-  background-color: #D93025;
+  background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+  transform: translateY(-1px);
 }
 
 .btn-sm {

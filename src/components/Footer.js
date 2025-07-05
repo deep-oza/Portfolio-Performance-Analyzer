@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldAlt, faUserSecret, faDatabase, faUserCheck, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faShieldAlt, 
+  faUserSecret, 
+  faDatabase, 
+  faUserCheck, 
+  faEnvelope,
+  faCalculator,
+  faChartLine,
+  faPercentage,
+  faClock,
+  faArrowTrendUp,
+  faInfoCircle,
+  faPlus
+} from '@fortawesome/free-solid-svg-icons';
 
 const PrivacyPolicyModal = ({ visible, onClose }) => {
   // Get theme from body attribute
@@ -162,29 +175,233 @@ const Footer = () => {
     <div className="footer">
       <PrivacyPolicyModal visible={showPrivacy} onClose={() => setShowPrivacy(false)} />
       <div className="footer-sections">
-        <div className="footer-section">
-          <h4>Instructions</h4>
-          <p>
-            Enter current market prices in the
-            "Current Price" column and click "Calculate All Metrics" to see CAGR
-            and performance analysis.
-          </p>
+        {/* Instructions Section */}
+        <div className="footer-section" style={{
+          background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(30, 64, 175, 0.05) 100%)',
+          borderRadius: 12,
+          padding: '24px',
+          border: '1px solid rgba(37, 99, 235, 0.1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: 60,
+            height: 60,
+            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%)',
+            borderRadius: '0 12px 0 60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <FontAwesomeIcon icon={faCalculator} style={{ color: '#2563eb', fontSize: 20 }} />
+          </div>
+          
+          <h4 style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            fontSize: 18,
+            fontWeight: 700,
+            margin: '0 0 16px 0',
+            color: '#2563eb'
+          }}>
+            <FontAwesomeIcon icon={faInfoCircle} style={{ fontSize: 16 }} />
+            How to Use
+          </h4>
+          
+                    <div style={{
+            background: 'var(--bg-card)',
+            borderRadius: 8,
+            padding: '16px',
+            border: '1px solid var(--border-color)',
+            marginBottom: 12
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              marginBottom: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'var(--text-main)'
+            }}>
+              <FontAwesomeIcon icon={faPlus} style={{ color: '#2563eb', fontSize: 14 }} />
+              Step 1: Add Your Stocks
+            </div>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              Use "Add New Stock" button or import CSV file with symbol, quantity, average price, and purchase date.
+            </p>
+          </div>
+          
+          <div style={{
+            background: 'var(--bg-card)',
+            borderRadius: 8,
+            padding: '16px',
+            border: '1px solid var(--border-color)',
+            marginBottom: 12
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              marginBottom: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'var(--text-main)'
+            }}>
+              <FontAwesomeIcon icon={faChartLine} style={{ color: '#10b981', fontSize: 14 }} />
+              Step 2: Enter Current Prices
+            </div>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              Click in the "Current Price" column and enter latest market prices. Use "Refresh Prices" for automatic updates.
+            </p>
+          </div>
+          
+          <div style={{
+            background: 'var(--bg-card)',
+            borderRadius: 8,
+            padding: '16px',
+            border: '1px solid var(--border-color)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              marginBottom: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'var(--text-main)'
+            }}>
+              <FontAwesomeIcon icon={faArrowTrendUp} style={{ color: '#f59e0b', fontSize: 14 }} />
+              Step 3: View Real-Time Analysis
+            </div>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
+            </p>
+          </div>
         </div>
         
-        <div className="footer-section">
-          <h4>Metrics Explained</h4>
-          <p>
-            <strong>Return % Since Purchase:</strong> Simple return percentage
-            based on unrealized gain/loss only
-          </p>
-          <p>
-            <strong>CAGR:</strong> Compound Annual Growth Rate based on
-            unrealized gain/loss only
-          </p>
-          <p>
-            <strong>Overall Return:</strong> Total portfolio return percentage
-            based on unrealized gain/loss only
-          </p>
+        {/* Metrics Explained Section */}
+        <div className="footer-section" style={{
+          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%)',
+          borderRadius: 12,
+          padding: '24px',
+          border: '1px solid rgba(16, 185, 129, 0.1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: 60,
+            height: 60,
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%)',
+            borderRadius: '0 12px 0 60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <FontAwesomeIcon icon={faPercentage} style={{ color: '#10b981', fontSize: 20 }} />
+          </div>
+          
+          <h4 style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            fontSize: 18,
+            fontWeight: 700,
+            margin: '0 0 16px 0',
+            color: '#10b981'
+          }}>
+            <FontAwesomeIcon icon={faChartLine} style={{ fontSize: 16 }} />
+            Performance Metrics
+          </h4>
+          
+                                <div style={{
+             background: 'var(--bg-card)',
+             borderRadius: 8,
+             padding: '16px',
+             border: '1px solid var(--border-color)',
+             marginBottom: 12
+           }}>
+             <div style={{
+               display: 'flex',
+               alignItems: 'center',
+               gap: 10,
+               marginBottom: 8,
+               fontSize: 14,
+               fontWeight: 600,
+               color: 'var(--text-main)'
+             }}>
+               <FontAwesomeIcon icon={faPercentage} style={{ color: '#2563eb', fontSize: 14 }} />
+               Average Return %
+             </div>
+             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+               Portfolio-wide return: (Total Current Value - Total Invested) / Total Invested × 100
+             </p>
+           </div>
+           
+           <div style={{
+             background: 'var(--bg-card)',
+             borderRadius: 8,
+             padding: '16px',
+             border: '1px solid var(--border-color)',
+             marginBottom: 12
+           }}>
+             <div style={{
+               display: 'flex',
+               alignItems: 'center',
+               gap: 10,
+               marginBottom: 8,
+               fontSize: 14,
+               fontWeight: 600,
+               color: 'var(--text-main)'
+             }}>
+               <FontAwesomeIcon icon={faChartLine} style={{ color: '#8b5cf6', fontSize: 14 }} />
+               Average CAGR
+             </div>
+             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+               Weighted average: Σ(Invested Amount × Individual CAGR) ÷ Σ(Invested Amount)
+             </p>
+             <div style={{ 
+               marginTop: 8, 
+               padding: 8, 
+               background: 'rgba(139, 92, 246, 0.05)', 
+               borderRadius: 4, 
+               fontSize: 12, 
+               color: 'var(--text-secondary)' 
+             }}>
+               <strong>Includes:</strong> Stocks held &ge;90 days with valid prices<br/>
+               <strong>Bounds:</strong> -100% to 200% per stock, -99.99% to 999,999% overall
+             </div>
+           </div>
+           
+           <div style={{
+             background: 'var(--bg-card)',
+             borderRadius: 8,
+             padding: '16px',
+             border: '1px solid var(--border-color)'
+           }}>
+             <div style={{
+               display: 'flex',
+               alignItems: 'center',
+               gap: 10,
+               marginBottom: 8,
+               fontSize: 14,
+               fontWeight: 600,
+               color: 'var(--text-main)'
+             }}>
+               <FontAwesomeIcon icon={faClock} style={{ color: '#f59e0b', fontSize: 14 }} />
+               Average Total Return
+             </div>
+             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+               Portfolio-wide return including unrealized gains/losses, realized gains, and dividend income.
+             </p>
+           </div>
         </div>
       </div>
       
