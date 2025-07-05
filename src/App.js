@@ -16,8 +16,10 @@ import { TourProvider, useTour } from '@reactour/tour';
 // We'll add more imports as we create the components
 
 function MainApp() {
-  // Modal to introduce the tour
-  const [showTourModal, setShowTourModal] = useState(true);
+  // Modal to introduce the tour - check localStorage first
+  const [showTourModal, setShowTourModal] = useState(() => {
+    return localStorage.getItem('tourModalShown') !== 'true';
+  });
   const { setIsOpen } = useTour();
 
   // Log when tour state changes
@@ -25,13 +27,19 @@ function MainApp() {
     console.log('Tour component mounted');
   }, []);
 
-
-
   // Handle tour start
   const handleStartTour = () => {
     setShowTourModal(false);
+    // Save to localStorage that tour has been shown
+    localStorage.setItem('tourModalShown', 'true');
     console.log('Starting tour...');
     setIsOpen(true);
+  };
+
+  // When user skips the tour, also save to localStorage
+  const handleSkipTour = () => {
+    setShowTourModal(false);
+    localStorage.setItem('tourModalShown', 'true');
   };
 
   // Enhanced professional modal markup
@@ -112,7 +120,7 @@ function MainApp() {
           }}>
             <button 
               className="btn" 
-              onClick={() => setShowTourModal(false)}
+              onClick={handleSkipTour}
               style={{ 
                 padding: '10px 16px',
                 background: '#e5e7eb',
@@ -210,6 +218,12 @@ function App() {
       content: '❓ Click here anytime for help, tips, and detailed instructions about using the app.'
     },
   ];
+
+  // Function to reset tour state
+  const resetTour = () => {
+    localStorage.removeItem('tourModalShown');
+    window.location.reload(); // Reload to show the tour modal again
+  };
 
   // Simplified styles for the tour to fix the error
   const tourStyles = {

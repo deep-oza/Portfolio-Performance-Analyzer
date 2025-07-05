@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle, faRoute } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 
 const HelpModal = () => {
@@ -29,6 +29,12 @@ const HelpModal = () => {
     if (e.target.id === 'helpModal') {
       hideHelpModal();
     }
+  };
+
+  const restartTour = () => {
+    localStorage.removeItem('tourModalShown');
+    hideHelpModal();
+    window.location.reload(); // Reload to show the tour modal again
   };
   
   if (!helpModalVisible) {
@@ -88,6 +94,9 @@ const HelpModal = () => {
             </div>
           </div>
           <div className="modal-actions">
+            <button className="btn btn-secondary" onClick={restartTour} style={{ marginRight: '10px' }}>
+              <FontAwesomeIcon icon={faRoute} /> Restart Tour
+            </button>
             <button id="helpModalClose" className="btn" onClick={hideHelpModal}>
               Got it!
             </button>
