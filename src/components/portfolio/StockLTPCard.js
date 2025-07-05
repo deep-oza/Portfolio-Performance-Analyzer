@@ -57,7 +57,7 @@ const StockLTPCard = () => {
   };
 
   return (
-    <div className="stock-ltp-card">
+    <div className="stock-ltp-card" data-tour="stock-ltp-card">
       <h3>Stock Quote</h3>
       
       <form onSubmit={handleSubmit} className="stock-search-form">

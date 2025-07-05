@@ -11,7 +11,7 @@ const HelpButton = () => {
   };
   
   return (
-    <button className="help-button" onClick={showHelpModal}>
+    <button className="help-button" onClick={showHelpModal} data-tour="help-button">
       <FontAwesomeIcon icon={faQuestionCircle} />
     </button>
   );

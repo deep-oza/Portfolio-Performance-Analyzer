@@ -22,7 +22,7 @@ const SummaryCards = () => {
   };
   
   return (
-    <div className="summary-cards">
+    <div className="summary-cards" data-tour="summary-cards">
       <div className="summary-card">
         <h3>Total Invested</h3>
         <p className="value" id="totalInvested">

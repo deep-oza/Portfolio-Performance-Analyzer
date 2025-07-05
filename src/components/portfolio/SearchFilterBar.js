@@ -38,7 +38,7 @@ const SearchFilterBar = () => {
   };
   
   return (
-    <div className="search-filter-container">
+    <div className="search-filter-container" data-tour="search-filter-bar">
       <div className="search-box">
         <FontAwesomeIcon 
           icon={faSearch} 

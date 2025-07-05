@@ -554,7 +554,7 @@ const PortfolioTable = () => {
   }
   
   return (
-    <div className="portfolio-table-container">
+    <div className="portfolio-table-container" data-tour="portfolio-table">
       <button
         className="show-analytics-btn"
         style={{ marginBottom: '1rem', fontSize: '1rem', padding: '0.5rem 1rem' }}
@@ -563,12 +563,11 @@ const PortfolioTable = () => {
         {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
       </button>
       {showAnalytics && (
-        <div className="analytics-dashboard-wrapper">
-          <AnalyticsDashboard
-            portfolioData={portfolioData}
-            currentPrices={currentPrices}
-          />
-        </div>
+        <AnalyticsDashboard
+          portfolioData={portfolioData}
+          currentPrices={currentPrices}
+          onClose={() => setShowAnalytics(false)}
+        />
       )}
       {/* Column settings button and bulk action controls */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>

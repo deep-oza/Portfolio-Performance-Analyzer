@@ -7,7 +7,7 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useContext(PortfolioContext);
   
   return (
-    <button className="theme-toggle" onClick={toggleTheme}>
+    <button className="theme-toggle" onClick={toggleTheme} data-tour="theme-toggle">
       <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} />
     </button>
   );

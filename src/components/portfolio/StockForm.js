@@ -152,6 +152,7 @@ const StockForm = () => {
       className="modal-overlay" 
       style={{ display: 'flex' }}
       onClick={handleOutsideClick}
+      data-tour="stock-form"
     >
       <div className="modal-container" style={{ maxWidth: 700 }}>
         <div className="modal-content">

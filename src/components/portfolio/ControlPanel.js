@@ -137,7 +137,7 @@ const ControlPanel = () => {
   const hasData = portfolioData && portfolioData.length > 0;
   
   return (
-    <div className="controls">
+    <div className="controls" data-tour="control-panel">
       <input
         type="file"
         accept=".csv"
