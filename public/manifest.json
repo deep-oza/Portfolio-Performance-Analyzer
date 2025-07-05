@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Portfolio Analyzer",
+  "name": "Portfolio Performance Analyzer",
+  "description": "Professional investment portfolio analyzer with real-time CAGR, returns, and performance metrics",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,57 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "portrait-primary",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["finance", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Portfolio Performance Analyzer Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Stock",
+      "short_name": "Add Stock",
+      "description": "Quickly add a new stock to your portfolio",
+      "url": "/?action=add",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Import CSV",
+      "short_name": "Import",
+      "description": "Import portfolio data from CSV file",
+      "url": "/?action=import",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
 }
