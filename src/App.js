@@ -25,37 +25,7 @@ function MainApp() {
     console.log('Tour component mounted');
   }, []);
 
-  // Define Reactour steps (selector/content)
-  const steps = [
-    {
-      selector: '[data-tour="summary-cards"]',
-      content: '📊 View your portfolio overview including total invested, current value, gains/losses, CAGR, and overall returns.'
-    },
-    {
-      selector: '[data-tour="control-panel"]',
-      content: '⚙️ Manage your portfolio: Import CSV files or add new stocks. After adding stocks, you\'ll also see options to refresh prices, export data, and clear your portfolio.'
-    },
-    {
-      selector: '[data-tour="stock-ltp-card"]',
-      content: '💹 Get real-time stock quotes and current market prices for any stock symbol by entering the ticker.'
-    },
-    {
-      selector: '[data-tour="search-filter-bar"]',
-      content: '🔍 Search for specific stocks in your portfolio or filter to show only gainers or losers.'
-    },
-    {
-      selector: '[data-tour="portfolio-table"]',
-      content: '📋 View your complete portfolio with detailed metrics, sort by clicking column headers, customize visible columns, and perform bulk actions.'
-    },
-    {
-      selector: '[data-tour="theme-toggle"]',
-      content: '🌙 Toggle between light and dark themes to customize your viewing experience.'
-    },
-    {
-      selector: '[data-tour="help-button"]',
-      content: '❓ Click here anytime for help, tips, and detailed instructions about using the app.'
-    },
-  ];
+
 
   // Handle tour start
   const handleStartTour = () => {
@@ -74,7 +44,7 @@ function MainApp() {
       backgroundColor: 'rgba(0, 0, 0, 0.5)'
     }}>
       <div className="modal-container" style={{ 
-        maxWidth: 500,
+        maxWidth: 550,
         width: '90%',
         backgroundColor: '#fff',
         borderRadius: '12px',
@@ -245,9 +215,9 @@ function App() {
   const tourStyles = {
     popover: base => ({
       ...base,
-      padding: '20px',
-      maxWidth: '350px',
-      borderRadius: '8px',
+      padding: '40px',
+      maxWidth: '550px',
+      borderRadius: '10px',
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
     })
   };
@@ -259,7 +229,7 @@ function App() {
       showBadge={false}
       padding={10}
       styles={tourStyles}
-      position="center"
+      position="center-bottom"
     >
       <MainApp />
     </TourProvider>
