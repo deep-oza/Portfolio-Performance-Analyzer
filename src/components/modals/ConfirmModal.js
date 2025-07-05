@@ -60,11 +60,26 @@ const ConfirmModal = () => {
       className="modal-overlay active" 
       onClick={handleOutsideClick}
     >
-      <div className="modal-container">
-        <div className="modal-content">
-          <h3 id="modalTitle" className="modal-title">{title}</h3>
+      <div className="modal-container" style={{ maxWidth: 600, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 id="modalTitle" className="modal-title" style={{ margin: 0 }}>{title}</h3>
+          <button 
+            className="modal-close-btn" 
+            onClick={handleCancel}
+            aria-label="Close"
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+          >
+            ×
+          </button>
+        </div>
+        {/* Body */}
+        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
           <p id="modalMessage" className="modal-message">{message}</p>
-          <div className="modal-actions">
+        </div>
+        {/* Footer */}
+        <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
+          <div className="modal-actions" style={{ margin: 0 }}>
             {showCancel !== false && (
               <button 
                 id="modalCancel" 
