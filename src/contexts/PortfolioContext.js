@@ -22,7 +22,10 @@ export const PortfolioProvider = ({ children }) => {
   });
   
   // Theme state
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => {
+    const storedTheme = localStorage.getItem("theme");
+    return storedTheme || "light";
+  });
   
   // Filter state
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,15 +68,6 @@ export const PortfolioProvider = ({ children }) => {
     localStorage.setItem("theme", theme);
     document.body.setAttribute('data-theme', theme);
   }, [theme]);
-  
-  useEffect(() => {
-    // First-time user onboarding
-    const onboardingKey = 'portfolioOnboardingShown';
-    if (!localStorage.getItem(onboardingKey)) {
-      setHelpModalVisible(true);
-      localStorage.setItem(onboardingKey, 'true');
-    }
-  }, []);
   
   // Fetch latest stock prices from Yahoo Finance
   const fetchLatestPrices = useCallback(async () => {

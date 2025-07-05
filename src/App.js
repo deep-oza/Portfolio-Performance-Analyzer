@@ -16,11 +16,27 @@ import { TourProvider, useTour } from '@reactour/tour';
 // We'll add more imports as we create the components
 
 function MainApp() {
+  // Check URL parameters for tour restart
+  const urlParams = new URLSearchParams(window.location.search);
+  const restartTour = urlParams.get('restart-tour') === 'true';
+  
+  // If restart-tour parameter is present, remove it from URL without page reload
+  if (restartTour) {
+    const url = new URL(window.location);
+    url.searchParams.delete('restart-tour');
+    window.history.replaceState({}, '', url.toString());
+  }
+
   // Modal to introduce the tour - check localStorage first
   const [showTourModal, setShowTourModal] = useState(() => {
-    return localStorage.getItem('tourModalShown') !== 'true';
+    return restartTour || localStorage.getItem('tourModalShown') !== 'true';
   });
   const { setIsOpen } = useTour();
+
+  // Get current theme from localStorage
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
 
   // Log when tour state changes
   useEffect(() => {
@@ -54,7 +70,7 @@ function MainApp() {
       <div className="modal-container" style={{ 
         maxWidth: 550,
         width: '90%',
-        backgroundColor: '#fff',
+        backgroundColor: currentTheme === 'dark' ? '#3C4043' : '#fff',
         borderRadius: '12px',
         boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
         overflow: 'hidden',
@@ -85,13 +101,16 @@ function MainApp() {
           </div>
         </div>
         
-        <div className="modal-content" style={{ padding: '25px 30px' }}>
+        <div className="modal-content" style={{ 
+          padding: '25px 30px',
+          color: currentTheme === 'dark' ? '#fff' : '#111827'
+        }}>
           <div style={{ 
             display: 'flex',
             marginBottom: '20px'
           }}>
             <div style={{ 
-              backgroundColor: '#ebf5ff', 
+              backgroundColor: currentTheme === 'dark' ? '#1e3a8a' : '#ebf5ff', 
               borderRadius: '50%',
               width: '50px',
               height: '50px',
@@ -100,13 +119,22 @@ function MainApp() {
               justifyContent: 'center',
               marginRight: '15px',
               flexShrink: 0,
-              border: '1px solid #d1e6ff'
+              border: currentTheme === 'dark' ? '1px solid #2563eb' : '1px solid #d1e6ff'
             }}>
-              <i className="fas fa-route" style={{ fontSize: '24px', color: '#2563eb' }}></i>
+              <i className="fas fa-route" style={{ fontSize: '24px', color: currentTheme === 'dark' ? '#90cdf4' : '#2563eb' }}></i>
             </div>
             <div>
-              <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#111827', fontWeight: 600 }}>Take a Quick Tour</h4>
-              <p style={{ margin: 0, color: '#4b5563', lineHeight: '1.5' }}>
+              <h4 style={{ 
+                margin: '0 0 8px 0', 
+                fontSize: '18px', 
+                color: currentTheme === 'dark' ? '#fff' : '#111827', 
+                fontWeight: 600 
+              }}>Take a Quick Tour</h4>
+              <p style={{ 
+                margin: 0, 
+                color: currentTheme === 'dark' ? '#e0e0e0' : '#4b5563', 
+                lineHeight: '1.5' 
+              }}>
                 Would you like a guided tour of the main features? This will help you get familiar with the app's capabilities.
               </p>
             </div>
@@ -123,10 +151,10 @@ function MainApp() {
               onClick={handleSkipTour}
               style={{ 
                 padding: '10px 16px',
-                background: '#e5e7eb',
-                border: '1px solid #d1d5db',
+                background: currentTheme === 'dark' ? '#5F6368' : '#e5e7eb',
+                border: currentTheme === 'dark' ? '1px solid #80868B' : '1px solid #d1d5db',
                 borderRadius: '6px',
-                color: '#000000 !important',
+                color: currentTheme === 'dark' ? '#fff !important' : '#000000 !important',
                 fontWeight: 500,
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
@@ -136,7 +164,7 @@ function MainApp() {
                 textAlign: 'center'
               }}
             >
-              <span style={{ color: '#000000', fontWeight: 500 }}>Skip Tour</span>
+              <span style={{ color: currentTheme === 'dark' ? '#fff' : '#000000', fontWeight: 500 }}>Skip Tour</span>
             </button>
             <button 
               className="btn btn-primary" 
@@ -196,6 +224,10 @@ function MainApp() {
 }
 
 function App() {
+  // Get current theme from localStorage
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  const isDarkMode = currentTheme === 'dark';
+
   const steps = [
     {
       selector: '[data-tour="summary-cards"]',
@@ -225,14 +257,34 @@ function App() {
     window.location.reload(); // Reload to show the tour modal again
   };
 
-  // Simplified styles for the tour to fix the error
+  // Styles for the tour with dark mode support
   const tourStyles = {
     popover: base => ({
       ...base,
       padding: '40px',
       maxWidth: '550px',
       borderRadius: '10px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      backgroundColor: isDarkMode ? '#3C4043' : '#fff',
+      color: isDarkMode ? '#fff' : '#111827'
+    }),
+    badge: base => ({
+      ...base,
+      backgroundColor: isDarkMode ? '#2563eb' : '#1A73E8',
+      color: '#fff'
+    }),
+    controls: base => ({
+      ...base,
+      backgroundColor: isDarkMode ? '#3C4043' : '#fff',
+      color: isDarkMode ? '#fff' : '#111827'
+    }),
+    button: base => ({
+      ...base,
+      color: isDarkMode ? '#fff' : '#111827'
+    }),
+    close: base => ({
+      ...base,
+      color: isDarkMode ? '#fff' : '#111827'
     })
   };
 

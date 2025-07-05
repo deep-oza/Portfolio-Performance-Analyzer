@@ -32,9 +32,18 @@ const HelpModal = () => {
   };
 
   const restartTour = () => {
+    // Save current theme
+    const currentTheme = localStorage.getItem('theme');
+    
+    // Remove only tour-related localStorage item
     localStorage.removeItem('tourModalShown');
+    
     hideHelpModal();
-    window.location.reload(); // Reload to show the tour modal again
+    
+    // Use a more elegant approach with URL parameters instead of full page reload
+    const url = new URL(window.location);
+    url.searchParams.set('restart-tour', 'true');
+    window.location.href = url.toString();
   };
   
   if (!helpModalVisible) {
