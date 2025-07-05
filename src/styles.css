@@ -1182,6 +1182,7 @@ body[data-theme="dark"] th {
     margin: var(--space-2);
   }
   .modal-content {
+    max-height: 80vh;
     padding: var(--space-6);
   }
 
