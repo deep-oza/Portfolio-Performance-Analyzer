@@ -57,11 +57,23 @@ const HelpModal = () => {
       style={{ display: 'flex' }}
       onClick={handleOutsideClick}
     >
-      <div className="modal-container help-modal-container">
-        <div className="modal-content">
-          <h3 className="modal-title">
+      <div className="modal-container help-modal-container" style={{ maxWidth: 700, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 className="modal-title" style={{ margin: 0 }}>
             <FontAwesomeIcon icon={faQuestionCircle} /> Help & Instructions
           </h3>
+          <button 
+            className="modal-close-btn" 
+            onClick={hideHelpModal}
+            aria-label="Close"
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+          >
+            ×
+          </button>
+        </div>
+        {/* Body */}
+        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
           <div className="help-content">
             <div className="help-section">
               <h4>Getting Started</h4>
@@ -72,7 +84,6 @@ const HelpModal = () => {
                 <li>View performance metrics and charts</li>
               </ol>
             </div>
-            
             <div className="help-section">
               <h4>Key Metrics Explained</h4>
               <ul>
@@ -82,7 +93,6 @@ const HelpModal = () => {
                 <li><strong>Realized Gain:</strong> Profits already booked from partial sells</li>
               </ul>
             </div>
-            
             <div className="help-section">
               <h4>Data Management</h4>
               <ul>
@@ -91,7 +101,6 @@ const HelpModal = () => {
                 <li>Import a CSV file with your portfolio data</li>
               </ul>
             </div>
-            
             <div className="help-section">
               <h4>Tips & Tricks</h4>
               <ul>
@@ -102,7 +111,10 @@ const HelpModal = () => {
               </ul>
             </div>
           </div>
-          <div className="modal-actions">
+        </div>
+        {/* Footer */}
+        <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
+          <div className="modal-actions" style={{ margin: 0 }}>
             <button className="btn btn-secondary" onClick={restartTour} style={{ marginRight: '10px' }}>
               <FontAwesomeIcon icon={faRoute} /> Restart Tour
             </button>

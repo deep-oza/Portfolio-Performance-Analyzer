@@ -154,13 +154,25 @@ const StockForm = () => {
       onClick={handleOutsideClick}
       data-tour="stock-form"
     >
-      <div className="modal-container" style={{ maxWidth: 700 }}>
-        <div className="modal-content">
-          <h3 className="form-title" id="stockFormTitle">
+      <div className="modal-container" style={{ maxWidth: 700, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 className="form-title" id="stockFormTitle" style={{ margin: 0 }}>
             <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
             {isEditing ? ' Edit Stock' : ' Add New Stock'}
           </h3>
+          <button 
+            className="modal-close-btn" 
+            onClick={hideForm}
+            aria-label="Close"
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
 
+        {/* Body */}
+        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
           <div className="form-section">
             <h4 className="form-section-title">Stock Information</h4>
             <div className="form-grid">
@@ -261,8 +273,11 @@ const StockForm = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="form-actions">
+        {/* Footer */}
+        <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
+          <div className="form-actions" style={{ margin: 0 }}>
             <button className="btn btn-secondary" onClick={hideForm}>
               <FontAwesomeIcon icon={faTimes} /> Cancel
             </button>

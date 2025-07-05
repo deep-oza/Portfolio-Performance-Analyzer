@@ -1052,11 +1052,10 @@ body[data-theme="dark"] th {
 .help-modal-container {
   max-width: 700px;
   max-height: 90vh;
+  overflow-y: auto;
 }
 
 .help-content {
-  max-height: 60vh;
-  overflow-y: auto;
   padding-right: var(--space-3);
   margin-bottom: var(--space-4);
 }
@@ -1476,4 +1475,35 @@ body[data-theme="dark"] th {
   .summary-card {
     break-inside: avoid;
   }
+}
+
+/* Modal header, body, and footer for fixed footer layout */
+.modal-header {
+  padding: 2rem 2rem 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: none;
+  background: var(--bg-card);
+  z-index: 2;
+}
+
+.modal-body {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  padding: 2rem;
+  background: var(--bg-card);
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #eee;
+  background: var(--bg-card);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+
+body[data-theme="dark"] .modal-footer {
+  border-top: 1px solid #222;
 }
