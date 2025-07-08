@@ -201,7 +201,6 @@ const PortfolioSelector = ({
           )}
         </div>
       </div>
-      <div className="portfolio-selector-divider" role="separator" aria-orientation="horizontal" />
     </div>
   );
 };
