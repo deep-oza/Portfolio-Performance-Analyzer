@@ -13,6 +13,7 @@ import PortfolioTable from './components/portfolio/PortfolioTable';
 import Footer from './components/Footer';
 import StockLTPCard from './components/portfolio/StockLTPCard';
 import { TourProvider, useTour } from '@reactour/tour';
+import PortfolioSelector from './components/portfolio/PortfolioSelector';
 // Google Analytics import
 import ReactGA from 'react-ga';
 
@@ -81,6 +82,48 @@ function MainApp() {
       category: 'User Engagement',
       action: 'Skipped Tour'
     });
+  };
+
+  // Add state for analytics and columns controls
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showColumnDropdown, setShowColumnDropdown] = useState(false);
+  const COLUMN_STORAGE_KEY = 'portfolioTableColumns';
+  const DEFAULT_COLUMNS = [
+    { key: 'symbol', label: 'Stock' },
+    { key: 'qty', label: 'Qty' },
+    { key: 'avgPrice', label: 'Avg Price' },
+    { key: 'invested', label: 'Invested' },
+    { key: 'purchaseDate', label: 'Purchase Date' },
+    { key: 'currentPrice', label: 'Current Price' },
+    { key: 'currentValue', label: 'Current Value' },
+    { key: 'unrealizedGL', label: 'Unrealized G/L' },
+    { key: 'realizedGain', label: 'Realized Gain' },
+    { key: 'dividend', label: 'Dividend' },
+    { key: 'totalReturn', label: 'Total Return' },
+    { key: 'returnPercent', label: 'Return % Since Purchase' },
+    { key: 'cagr', label: 'CAGR %' },
+    { key: 'daysHeld', label: 'Days Held' },
+  ];
+  const [visibleColumns, setVisibleColumns] = useState(() => {
+    const stored = localStorage.getItem(COLUMN_STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return DEFAULT_COLUMNS.map(col => col.key);
+      }
+    }
+    return DEFAULT_COLUMNS.map(col => col.key);
+  });
+  useEffect(() => {
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(visibleColumns));
+  }, [visibleColumns]);
+  const handleToggleColumn = (key) => {
+    setVisibleColumns(cols =>
+      cols.includes(key)
+        ? cols.filter(col => col !== key)
+        : [...cols, key]
+    );
   };
 
   // Enhanced professional modal markup
@@ -234,8 +277,28 @@ function MainApp() {
           <StockLTPCard />
           <SearchFilterBar />
           
+          <PortfolioSelector
+            showAnalytics={showAnalytics}
+            setShowAnalytics={setShowAnalytics}
+            showColumnDropdown={showColumnDropdown}
+            setShowColumnDropdown={setShowColumnDropdown}
+            handleToggleColumn={handleToggleColumn}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            DEFAULT_COLUMNS={DEFAULT_COLUMNS}
+          />
+          
           {/* Add PortfolioTable component here */}
-          <PortfolioTable />
+          <PortfolioTable
+            showAnalytics={showAnalytics}
+            setShowAnalytics={setShowAnalytics}
+            showColumnDropdown={showColumnDropdown}
+            setShowColumnDropdown={setShowColumnDropdown}
+            handleToggleColumn={handleToggleColumn}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            DEFAULT_COLUMNS={DEFAULT_COLUMNS}
+          />
           
           <Footer />
         </div>

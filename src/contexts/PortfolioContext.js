@@ -5,11 +5,18 @@ import { batchGetLTP } from '../utils/stockUtils';
 export const PortfolioContext = createContext();
 
 export const PortfolioProvider = ({ children }) => {
-  // Main state for portfolio data, initialized from localStorage
-  const [portfolioData, setPortfolioData] = useState(() => {
-    const stored = localStorage.getItem("portfolioData");
-    return stored ? JSON.parse(stored) : [];
+  // Main state for multiple portfolios, initialized from localStorage
+  const [portfolios, setPortfolios] = useState(() => {
+    const stored = localStorage.getItem("portfolios");
+    return stored ? JSON.parse(stored) : { default: [] };
   });
+  // Track selected portfolio
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState(() => {
+    const stored = localStorage.getItem("selectedPortfolioId");
+    return stored || "default";
+  });
+  
+  // Main state for portfolio data, initialized from localStorage
   const [currentPrices, setCurrentPrices] = useState(() => {
     const stored = localStorage.getItem("currentPrices");
     return stored ? JSON.parse(stored) : {};
@@ -57,8 +64,12 @@ export const PortfolioProvider = ({ children }) => {
   
   // Save data to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("portfolioData", JSON.stringify(portfolioData));
-  }, [portfolioData]);
+    localStorage.setItem("portfolios", JSON.stringify(portfolios));
+  }, [portfolios]);
+  
+  useEffect(() => {
+    localStorage.setItem("selectedPortfolioId", selectedPortfolioId);
+  }, [selectedPortfolioId]);
   
   useEffect(() => {
     localStorage.setItem("currentPrices", JSON.stringify(currentPrices));
@@ -68,6 +79,13 @@ export const PortfolioProvider = ({ children }) => {
     localStorage.setItem("theme", theme);
     document.body.setAttribute('data-theme', theme);
   }, [theme]);
+  
+  // Helper to get current portfolio's data
+  const portfolioData = selectedPortfolioId === 'default'
+    ? Object.entries(portfolios)
+        .filter(([id]) => id !== 'default')
+        .flatMap(([, stocks]) => stocks)
+    : portfolios[selectedPortfolioId] || [];
   
   // Fetch latest stock prices from Yahoo Finance
   const fetchLatestPrices = useCallback(async () => {
@@ -92,16 +110,18 @@ export const PortfolioProvider = ({ children }) => {
       const failed = [];
       
       // Update portfolioData with latest price for each stock
-      setPortfolioData(prevData => prevData.map(stock => {
-        const ltp = stockData[stock.symbol]?.price;
-        if (ltp != null) {
-          return {
-            ...stock,
-            currentPrice: Number(ltp).toFixed(2),
-            // Optionally update other fields here if needed
-          };
-        }
-        return stock;
+      setPortfolios(prev => ({
+        ...prev,
+        [selectedPortfolioId]: (prev[selectedPortfolioId] || []).map(stock => {
+          const ltp = stockData[stock.symbol]?.price;
+          if (ltp != null) {
+            return {
+              ...stock,
+              currentPrice: Number(ltp).toFixed(2),
+            };
+          }
+          return stock;
+        })
       }));
       
       for (const symbol of symbols) {
@@ -123,7 +143,7 @@ export const PortfolioProvider = ({ children }) => {
     } finally {
       setIsLoadingPrices(false);
     }
-  }, [portfolioData, currentPrices]);
+  }, [portfolioData, currentPrices, setPortfolios]);
   
   // Calculate days held
   const calculateDaysHeld = useCallback((purchaseDate) => {
@@ -133,33 +153,35 @@ export const PortfolioProvider = ({ children }) => {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }, []);
   
-  // Add new stock
-  const addStock = (newStock) => {
-    setPortfolioData(prevData => [...prevData, {
-      ...newStock,
-      invested: newStock.qty * newStock.avgPrice
-    }]);
+  // Add new stock to selected or specified portfolio
+  const addStock = (newStock, portfolioId) => {
+    const targetId = portfolioId || selectedPortfolioId;
+    setPortfolios(prev => ({
+      ...prev,
+      [targetId]: [
+        ...(prev[targetId] || []),
+        { ...newStock, invested: newStock.qty * newStock.avgPrice }
+      ]
+    }));
   };
   
-  // Update existing stock
+  // Update existing stock in selected portfolio
   const updateStock = (index, updatedStock) => {
-    setPortfolioData(prevData => {
-      const newData = [...prevData];
-      newData[index] = {
-        ...updatedStock,
-        invested: updatedStock.qty * updatedStock.avgPrice
-      };
-      return newData;
+    setPortfolios(prev => {
+      const newPortfolio = [...(prev[selectedPortfolioId] || [])];
+      newPortfolio[index] = { ...updatedStock, invested: updatedStock.qty * updatedStock.avgPrice };
+      return { ...prev, [selectedPortfolioId]: newPortfolio };
     });
   };
   
-  // Delete stock
+  // Delete stock from selected portfolio
   const deleteStock = (index) => {
     const stock = portfolioData[index];
     const symbol = stock.symbol;
-    
-    setPortfolioData(prevData => prevData.filter((_, i) => i !== index));
-    
+    setPortfolios(prev => {
+      const newPortfolio = (prev[selectedPortfolioId] || []).filter((_, i) => i !== index);
+      return { ...prev, [selectedPortfolioId]: newPortfolio };
+    });
     setCurrentPrices(prevPrices => {
       const newPrices = { ...prevPrices };
       delete newPrices[symbol];
@@ -180,16 +202,39 @@ export const PortfolioProvider = ({ children }) => {
     setTheme(prevTheme => prevTheme === "light" ? "dark" : "light");
   };
   
-  // Import CSV
-  const importCSV = (data) => {
-    setPortfolioData(data.portfolio);
+  // Import CSV into selected or specified portfolio
+  const importCSV = (data, portfolioId) => {
+    const targetId = portfolioId || selectedPortfolioId;
+    setPortfolios(prev => ({
+      ...prev,
+      [targetId]: data.portfolio
+    }));
     setCurrentPrices(data.prices);
   };
   
-  // Clear portfolio
+  // Clear selected portfolio
   const clearPortfolio = () => {
-    setPortfolioData([]);
+    setPortfolios(prev => ({ ...prev, [selectedPortfolioId]: [] }));
     setCurrentPrices({});
+  };
+  
+  // Portfolio management functions
+  const createPortfolio = (id) => {
+    if (!id || portfolios[id]) return;
+    setPortfolios(prev => ({ ...prev, [id]: [] }));
+    setSelectedPortfolioId(id);
+  };
+  const deletePortfolio = (id) => {
+    if (id === "default") return; // Don't delete default
+    setPortfolios(prev => {
+      const newPortfolios = { ...prev };
+      delete newPortfolios[id];
+      return newPortfolios;
+    });
+    if (selectedPortfolioId === id) setSelectedPortfolioId("default");
+  };
+  const switchPortfolio = (id) => {
+    if (portfolios[id]) setSelectedPortfolioId(id);
   };
   
   // Show modal
@@ -291,8 +336,22 @@ export const PortfolioProvider = ({ children }) => {
     };
   }, [portfolioData, currentPrices, calculateDaysHeld]);
   
+  // Remove stock from a specified portfolio
+  const removeStock = (index, portfolioId) => {
+    setPortfolios(prev => {
+      const newPortfolio = (prev[portfolioId] || []).filter((_, i) => i !== index);
+      return { ...prev, [portfolioId]: newPortfolio };
+    });
+  };
+  
   return (
     <PortfolioContext.Provider value={{
+      portfolios,
+      selectedPortfolioId,
+      setSelectedPortfolioId,
+      createPortfolio,
+      deletePortfolio,
+      switchPortfolio,
       portfolioData,
       currentPrices,
       sortState,
@@ -328,7 +387,9 @@ export const PortfolioProvider = ({ children }) => {
       showError,
       calculateSummary,
       calculateDaysHeld,
-      fetchLatestPrices
+      fetchLatestPrices,
+      removeStock,
+      setPortfolios
     }}>
       {children}
       {/* Batch error modal */}

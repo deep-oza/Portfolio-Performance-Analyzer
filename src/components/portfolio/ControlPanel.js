@@ -1,8 +1,10 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faFileImport, faDownload, faTrashAlt, faSync, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faFileImport, faDownload, faTrashAlt, faSync, faFileAlt, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import { importPortfolioCSV, exportPortfolioCSV, downloadCSV } from '../../utils/csvUtils';
+import ConfirmModal from '../modals/ConfirmModal';
+import '../portfolio/StockFormPortfolioSection.css';
 
 const ControlPanel = () => {
   const { 
@@ -18,11 +20,21 @@ const ControlPanel = () => {
     fetchLatestPrices,
     isLoadingPrices,
     priceError,
-    batchErrors
+    batchErrors,
+    portfolios,
+    selectedPortfolioId,
+    setPortfolios
   } = useContext(PortfolioContext);
   
   const fileInputRef = useRef(null);
   const pendingFileRef = useRef(null);
+  const [pendingImport, setPendingImport] = useState(null);
+  const [importPortfolioId, setImportPortfolioId] = useState('');
+  const [importAddNew, setImportAddNew] = useState(false);
+  const [importNewName, setImportNewName] = useState('');
+  const importNewNameRef = useRef(null);
+  const [importError, setImportError] = useState('');
+  const [showImportModal, setShowImportModal] = useState(false);
   
   // Modal text for CSV upload confirmation
   const csvModalConfig = {
@@ -88,12 +100,14 @@ const ControlPanel = () => {
     if (!file) return;
     try {
       const result = await importPortfolioCSV(file);
-      importCSV(result);
-      let message = "✅ Imported portfolio from CSV—predefined stocks removed!";
-      if (result.warnings && result.warnings.length > 0) {
-        message += "\n\nWarnings:\n" + result.warnings.join("\n");
-      }
-      showMessage("Import Successful", message);
+      setPendingImport(result);
+      // Show local modal to select portfolio
+      const keys = Object.keys(portfolios).filter(k => k !== 'default');
+      setImportPortfolioId(keys[0] || '');
+      setImportAddNew(false);
+      setImportNewName('');
+      setImportError('');
+      setShowImportModal(true);
     } catch (error) {
       showError(error.message);
     } finally {
@@ -115,27 +129,22 @@ const ControlPanel = () => {
   const handleRefreshPrices = async () => {
     if (isLoadingPrices) return; // Prevent multiple clicks
     try {
-      await fetchLatestPrices();
-      // Check for batchErrors after refresh
-      if (batchErrors && batchErrors.length > 0) {
-        // Determine if all stocks failed
-        const allFailed = batchErrors.length === portfolioData.length;
-        const modalTitle = allFailed ? 'Failed to Update Prices' : 'Partial Success';
-        // Build a message listing failed stocks
-        const failedList = batchErrors.map(({ symbol, error }) => {
-          const stock = portfolioData.find(s => s.symbol === symbol);
-          const name = stock && stock.name ? stock.name : '';
-          let userMessage = error;
-          if (typeof error === 'string' && error.includes('No data found')) {
-            userMessage = `No data found for ${symbol}${name ? ` (${name})` : ''}. Enter the current price manually or change to a proper stock symbol.`;
-          }
-          return `<li><strong>${symbol}${name ? ` (${name})` : ''}:</strong> ${userMessage}</li>`;
-        }).join('');
-        showMessage(
-          modalTitle,
-          `<div>Some stock prices could not be updated:</div><ul style="margin-top: 10px;">${failedList}</ul><div style="margin-top: 12px;">Please enter the current price manually or correct the stock symbol for the above stocks.</div>`
-        );
+      if (selectedPortfolioId === 'default') {
+        // All Portfolios: gather all unique symbols
+        const allSymbols = Array.from(new Set(
+          Object.entries(portfolios)
+            .filter(([id]) => id !== 'default')
+            .flatMap(([, stocks]) => stocks.map(s => s.symbol))
+        ));
+        if (allSymbols.length === 0) {
+          showMessage('No stocks to update', 'There are no stocks in any portfolio.');
+          return;
+        }
+        // Simulate batch price update for all symbols
+        await fetchLatestPrices(allSymbols);
+        showMessage('Success', 'All stock prices updated successfully.');
       } else {
+        await fetchLatestPrices();
         showMessage('Success', 'Stock prices updated successfully.');
       }
     } catch (error) {
@@ -144,19 +153,39 @@ const ControlPanel = () => {
   };
   
   const confirmClearPortfolio = () => {
-    showModal({
-      title: "Clear Portfolio",
-      message: "Are you sure you want to permanently delete all stocks from your portfolio?",
-      confirmText: "Yes, Delete All",
-      onConfirm: () => {
-        clearPortfolio();
-        showMessage("Success", "Your portfolio has been cleared successfully.");
-      }
-    });
+    if (selectedPortfolioId === 'default') {
+      showModal({
+        title: "Clear All Portfolios",
+        message: "Are you sure you want to permanently delete all stocks from all portfolios?",
+        confirmText: "Yes, Delete All",
+        onConfirm: () => {
+          // Clear all portfolios except 'default'
+          setPortfolios(prev => {
+            const newPortfolios = { ...prev };
+            Object.keys(newPortfolios).forEach(id => { if (id !== 'default') newPortfolios[id] = []; });
+            return newPortfolios;
+          });
+          showMessage("Success", "All portfolios have been cleared successfully.");
+        }
+      });
+    } else {
+      showModal({
+        title: "Clear Portfolio",
+        message: "Are you sure you want to permanently delete all stocks from this portfolio?",
+        confirmText: "Yes, Delete All",
+        onConfirm: () => {
+          clearPortfolio();
+          showMessage("Success", "Your portfolio has been cleared successfully.");
+        }
+      });
+    }
   };
   
   // Only show export and clear buttons if there is data
   const hasData = portfolioData && portfolioData.length > 0;
+  
+  // Helper to get latest new portfolio name
+  const getLatestImportNewName = () => importNewNameRef.current ? importNewNameRef.current.value : importNewName;
   
   return (
     <div className="controls" data-tour="control-panel">
@@ -193,6 +222,115 @@ const ControlPanel = () => {
         <button id="clearPortfolioBtn" className="btn btn-danger" style={{ fontWeight: 600 }} onClick={confirmClearPortfolio}>
           <FontAwesomeIcon icon={faTrashAlt} /> Clear Portfolio
         </button>
+      )}
+      {/* Local Import Portfolio Modal */}
+      {showImportModal && (
+        <div className="modal-overlay active import-modal-overlay">
+          <div className="modal-container import-modal-card">
+            <div className="modal-header import-modal-header" style={{ padding: '1.2rem 1.2rem 0 1.2rem' }}>
+              <div className="import-modal-title-row" style={{ gap: 10 }}>
+                <span className="import-modal-title-icon" style={{ fontSize: '1.5rem', padding: 5 }}><FontAwesomeIcon icon={faFileImport} /></span>
+                <div>
+                  <h3 className="modal-title import-modal-title" style={{ fontSize: '1.08rem', margin: 0 }}>Import Portfolio</h3>
+                  <div className="import-modal-subtitle" style={{ fontSize: '0.97rem', marginTop: 1 }}>Select or create a portfolio to import your CSV data into.</div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-body import-modal-body" style={{ padding: '1.2rem' }}>
+              <div className="portfolio-section-row" style={{ marginBottom: 0, gap: 8 }}>
+                <label htmlFor="import-portfolio-select" className="portfolio-section-label" style={{ fontSize: '0.98rem', minWidth: 70 }}>Portfolio</label>
+                {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && !importAddNew ? (
+                  <>
+                    <select
+                      id="import-portfolio-select"
+                      value={importPortfolioId}
+                      onChange={e => {
+                        if (e.target.value === '__add_new__') {
+                          setImportAddNew(true);
+                          setImportNewName('');
+                        } else {
+                          setImportPortfolioId(e.target.value);
+                        }
+                      }}
+                      className="portfolio-section-select"
+                      style={{ fontSize: '0.98rem', padding: '7px 10px', minWidth: 120 }}
+                    >
+                      <option value="" disabled>Select portfolio</option>
+                      {Object.keys(portfolios).filter(k => k !== 'default').map(id => (
+                        <option key={id} value={id}>{id}</option>
+                      ))}
+                      <option value="__add_new__">+ Add new portfolio</option>
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="text"
+                      id="import-portfolio-input"
+                      placeholder="New portfolio name"
+                      value={importNewName}
+                      onChange={e => setImportNewName(e.target.value)}
+                      ref={importNewNameRef}
+                      className={`portfolio-section-input${importError ? ' portfolio-section-input-error' : ''}`}
+                      aria-invalid={importError ? 'true' : 'false'}
+                      style={{ fontSize: '0.98rem', padding: '7px 10px', minWidth: 120 }}
+                    />
+                    {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && (
+                      <button type="button" onClick={() => { setImportAddNew(false); setImportNewName(''); }} className="portfolio-section-cancel" style={{ fontSize: '0.98rem', padding: '0 6px 2px 6px' }}>
+                        Cancel
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+              {importError && <div className="portfolio-section-error" style={{ fontSize: '0.93rem', marginTop: 2 }}>{importError}</div>}
+              <div style={{ height: 10 }} />
+              <div className="import-modal-info" style={{ fontSize: '0.97rem', padding: '8px 10px', borderRadius: 6 }}>
+                <FontAwesomeIcon icon={faFileImport} style={{ marginRight: 6, color: '#1976d2', fontSize: '1rem' }} />
+                This will <b>replace</b> the selected portfolio's data with the imported CSV.
+              </div>
+            </div>
+            <div className="modal-footer import-modal-footer" style={{ padding: '1rem 1.2rem' }}>
+              <div className="modal-actions import-modal-actions" style={{ gap: 10 }}>
+                <button className="btn btn-secondary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => setShowImportModal(false)}>Cancel</button>
+                <button className="btn btn-primary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => {
+                  let keys = Object.keys(portfolios).filter(k => k !== 'default');
+                  let portfolioId = importPortfolioId;
+                  // If there are no portfolios, always use the new name
+                  const noPortfolios = keys.length === 0;
+                  if (importAddNew || noPortfolios) {
+                    const latestName = getLatestImportNewName();
+                    if (!latestName.trim()) {
+                      setImportError('Portfolio name is required.');
+                      return;
+                    }
+                    if (keys.includes(latestName.trim())) {
+                      setImportError('Portfolio already exists.');
+                      return;
+                    }
+                    portfolioId = latestName.trim();
+                  }
+                  if (!portfolioId) {
+                    setImportError('Portfolio name is required.');
+                    return;
+                  }
+                  importCSV(pendingImport, portfolioId);
+                  let message = '✅ Imported portfolio from CSV!';
+                  if (pendingImport.warnings && pendingImport.warnings.length > 0) {
+                    message += '\n\nWarnings:\n' + pendingImport.warnings.join('\n');
+                  }
+                  showMessage('Import Successful', message);
+                  setPendingImport(null);
+                  setImportPortfolioId('');
+                  setImportAddNew(false);
+                  setImportNewName('');
+                  setImportError('');
+                  setShowImportModal(false);
+                }}>Import</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

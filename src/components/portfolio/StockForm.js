@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import useStockQuote from '../../hooks/useStockQuote';
+import './StockFormPortfolioSection.css';
 
 const StockForm = () => {
   const { 
@@ -13,7 +14,9 @@ const StockForm = () => {
     addStock,
     updateStock,
     showError,
-    updateCurrentPrice
+    updateCurrentPrice,
+    portfolios,
+    removeStock,
   } = useContext(PortfolioContext);
   
   // Form state
@@ -37,6 +40,11 @@ const StockForm = () => {
   const [manualPrice, setManualPrice] = useState(false);
   const { data: quoteData, loading: quoteLoading, error: quoteError, fetchData: fetchQuote } = useStockQuote(symbol.trim(), false);
   
+  // Portfolio selection state
+  const [selectedPortfolio, setSelectedPortfolio] = useState('');
+  const [newPortfolio, setNewPortfolio] = useState('');
+  const [addNewPortfolio, setAddNewPortfolio] = useState(false);
+  
   // Reset form fields
   const resetFormFields = () => {
     setSymbol('');
@@ -56,18 +64,38 @@ const StockForm = () => {
   // Initialize form fields when editing
   useEffect(() => {
     if (editingStock) {
-      const stock = editingStock.stock;
-      setSymbol(stock.symbol);
-      setQty(stock.qty.toString());
-      setAvgPrice(stock.avgPrice.toString());
-      setPurchaseDate(stock.purchaseDate);
-      setRealizedGain(stock.realizedGain ? stock.realizedGain.toString() : '');
-      setDividend(stock.dividend ? stock.dividend.toString() : '');
+      // Find the portfolio containing this stock by matching symbol, purchaseDate, and avgPrice
+      let foundPortfolio = '';
+      Object.entries(portfolios).forEach(([pid, stocks]) => {
+        if (pid !== 'default') {
+          const match = stocks.find(
+            s => s.symbol === editingStock.stock.symbol &&
+                 s.purchaseDate === editingStock.stock.purchaseDate &&
+                 s.avgPrice === editingStock.stock.avgPrice
+          );
+          if (match) {
+            foundPortfolio = pid;
+          }
+        }
+      });
+      setSelectedPortfolio(foundPortfolio);
+      setAddNewPortfolio(false);
+      setNewPortfolio('');
     } else {
       // Set default date to today when adding new stock
       setPurchaseDate(new Date().toISOString().split('T')[0]);
+      // Default to current selected or first portfolio
+      const keys = Object.keys(portfolios).filter(k => k !== 'default');
+      if (keys.length > 0) {
+        setSelectedPortfolio(keys[0]);
+        setAddNewPortfolio(false);
+        setNewPortfolio('');
+      } else {
+        setSelectedPortfolio('');
+        setAddNewPortfolio(true);
+      }
     }
-  }, [editingStock]);
+  }, [editingStock, portfolios]);
   
   // Hide form
   const hideForm = () => {
@@ -95,7 +123,14 @@ const StockForm = () => {
     if (!validateForm()) {
       return;
     }
-    
+    let portfolioId = selectedPortfolio;
+    if (addNewPortfolio) {
+      if (!newPortfolio.trim()) {
+        setErrors(e => ({ ...e, portfolio: true }));
+        return;
+      }
+      portfolioId = newPortfolio.trim();
+    }
     const stockData = {
       symbol: symbol.trim().toUpperCase(),
       qty: parseFloat(qty),
@@ -106,11 +141,17 @@ const StockForm = () => {
     };
     try {
       if (editingStock) {
-        // Update existing stock
-        updateStock(editingStock.index, stockData);
+        // If portfolio changed, move stock
+        const oldPortfolioId = editingStock.portfolioId || selectedPortfolio;
+        if (portfolioId !== oldPortfolioId) {
+          removeStock(editingStock.index, oldPortfolioId);
+          addStock(stockData, portfolioId);
+        } else {
+          updateStock(editingStock.index, stockData);
+        }
       } else {
         // Check for duplicate symbols
-        addStock(stockData);
+        addStock(stockData, portfolioId);
       }
       // If quoteData is available and has price, update currentPrices context
       if (quoteData && quoteData.price) {
@@ -171,6 +212,10 @@ const StockForm = () => {
   
   const isEditing = !!editingStock;
 
+  // Portfolio selector UI
+  const portfolioKeys = Object.keys(portfolios).filter(k => k !== 'default');
+  const portfolioError = addNewPortfolio && (!newPortfolio.trim() || portfolioKeys.includes(newPortfolio.trim()));
+
   return (
     <div 
       id="stockFormModal" 
@@ -198,6 +243,62 @@ const StockForm = () => {
 
         {/* Body */}
         <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
+          {/* Portfolio selector - professional UI */}
+          <div className="portfolio-section-card">
+            <div className="portfolio-section-row">
+              <label htmlFor="portfolio-select" className="portfolio-section-label">Portfolio</label>
+              {portfolioKeys.length > 0 && !addNewPortfolio ? (
+                <>
+                  <select
+                    id="portfolio-select"
+                    value={selectedPortfolio}
+                    onChange={e => {
+                      if (e.target.value === '__add_new__') {
+                        setAddNewPortfolio(true);
+                        setNewPortfolio('');
+                      } else {
+                        setSelectedPortfolio(e.target.value);
+                      }
+                    }}
+                    className="portfolio-section-select"
+                  >
+                    <option value="" disabled>Select portfolio</option>
+                    {portfolioKeys.map(id => (
+                      <option key={id} value={id}>{id}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="portfolio-section-add-btn"
+                    onClick={() => { setAddNewPortfolio(true); setNewPortfolio(''); }}
+                    title="Add new portfolio"
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    id="portfolio-input"
+                    placeholder="New portfolio name"
+                    value={newPortfolio}
+                    onChange={e => setNewPortfolio(e.target.value)}
+                    className={`portfolio-section-input${portfolioError ? ' portfolio-section-input-error' : ''}`}
+                    aria-invalid={portfolioError}
+                  />
+                  {portfolioKeys.length > 0 && (
+                    <button type="button" onClick={() => { setAddNewPortfolio(false); setNewPortfolio(''); }} className="portfolio-section-cancel">
+                      Cancel
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+            {portfolioError && (
+              <div className="portfolio-section-error">{!newPortfolio.trim() ? 'Portfolio name is required.' : 'Portfolio already exists.'}</div>
+            )}
+          </div>
           <div className="form-section">
             <h4 className="form-section-title">Stock Information</h4>
             <div className="form-grid">

@@ -23,9 +23,17 @@ const DEFAULT_COLUMNS = [
 
 const COLUMN_STORAGE_KEY = 'portfolioTableColumns';
 
-const PortfolioTable = () => {
+const PortfolioTable = ({
+  showAnalytics,
+  setShowAnalytics,
+  showColumnDropdown,
+  setShowColumnDropdown,
+  handleToggleColumn,
+  visibleColumns,
+  setVisibleColumns
+}) => {
   const { 
-    portfolioData, 
+    portfolioData, // now only the selected portfolio's stocks
     currentPrices, 
     sortState,
     setSortState,
@@ -46,21 +54,7 @@ const PortfolioTable = () => {
   const [editQueue, setEditQueue] = useState([]);
 
   // Column customization state
-  const [showColumnDropdown, setShowColumnDropdown] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState(() => {
-    const stored = localStorage.getItem(COLUMN_STORAGE_KEY);
-    if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch {
-        return DEFAULT_COLUMNS.map(col => col.key);
-      }
-    }
-    return DEFAULT_COLUMNS.map(col => col.key);
-  });
-
   const [editingCell, setEditingCell] = useState({ row: null, col: null, value: '' });
-  const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Drag-and-drop for column reordering
   const dragColIndex = useRef(null);
@@ -89,14 +83,6 @@ const PortfolioTable = () => {
   useEffect(() => {
     localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(visibleColumns));
   }, [visibleColumns]);
-
-  const handleToggleColumn = (key) => {
-    setVisibleColumns(cols =>
-      cols.includes(key)
-        ? cols.filter(col => col !== key)
-        : [...cols, key]
-    );
-  };
 
   // Sort the portfolio data based on current sort state
   const sortedData = useMemo(() => {
@@ -579,61 +565,6 @@ const PortfolioTable = () => {
   
   return (
     <div className="portfolio-table-container" data-tour="portfolio-table">
-      <div className="table-controls-row">
-        <button
-          className="show-analytics-btn"
-          onClick={() => setShowAnalytics((prev) => !prev)}
-        >
-          {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
-        </button>
-        <div style={{ position: 'relative' }}>
-          <button
-            className="btn btn-sm btn-secondary"
-            onClick={() => setShowColumnDropdown((prev) => !prev)}
-            aria-label="Column settings"
-          >
-            <FontAwesomeIcon icon={faCog} /> Columns
-          </button>
-          {showColumnDropdown && (
-            <div className="column-dropdown">
-              <div className="column-dropdown-header">Customize Columns</div>
-              <div className="column-dropdown-list">
-                {visibleColumns.map((colKey, idx) => {
-                  const col = DEFAULT_COLUMNS.find(c => c.key === colKey);
-                  if (!col) return null;
-                  return (
-                    <label
-                      key={col.key}
-                      className="column-dropdown-checkbox"
-                      style={{ fontWeight: col.key === 'symbol' ? 600 : 400, opacity: col.key === 'symbol' ? 0.7 : 1, cursor: col.key === 'symbol' ? 'not-allowed' : 'grab', background: dragColIndex.current === idx ? 'var(--primary-100)' : undefined }}
-                      draggable={col.key !== 'symbol'}
-                      onDragStart={col.key !== 'symbol' ? () => handleDragStart(idx) : undefined}
-                      onDragOver={col.key !== 'symbol' ? (e) => handleDragOver(e, idx) : undefined}
-                      onDrop={col.key !== 'symbol' ? () => handleDrop(idx) : undefined}
-                      onDragEnd={col.key !== 'symbol' ? handleDragEnd : undefined}
-                    >
-                      {col.key !== 'symbol' && <span style={{ marginRight: 8, cursor: 'grab', opacity: 0.7 }}>☰</span>}
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns.includes(col.key)}
-                        onChange={() => handleToggleColumn(col.key)}
-                        disabled={col.key === 'symbol'}
-                      />
-                      {col.label}
-                    </label>
-                  );
-                })}
-              </div>
-              <div className="column-dropdown-actions">
-                <button className="btn btn-sm btn-secondary" onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}>
-                  Reset to Default Columns
-                </button>
-                <button className="btn btn-sm" onClick={() => setShowColumnDropdown(false)}>Close</button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
       {showAnalytics && (
         <AnalyticsDashboard
           portfolioData={portfolioData}
@@ -641,7 +572,6 @@ const PortfolioTable = () => {
           onClose={() => setShowAnalytics(false)}
         />
       )}
-      {/* Column settings dropdown and bulk action controls */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
         {selectedRows.length > 0 && (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -654,7 +584,6 @@ const PortfolioTable = () => {
           </div>
         )}
       </div>
-      {/* END Column settings dropdown */}
       <div className="table-container">
         <table id="portfolioTable">
           <thead>
