@@ -337,11 +337,20 @@ export const PortfolioProvider = ({ children }) => {
           <div className="modal-content">
             <h3>Failed to Load Data</h3>
             <ul>
-              {batchErrors.map(({ symbol, error }) => (
-                <li key={symbol}>
-                  <strong>{symbol}:</strong> {error}
-                </li>
-              ))}
+              {batchErrors.map(({ symbol, error }) => {
+                // Try to find the stock name from portfolioData
+                const stock = portfolioData.find(s => s.symbol === symbol);
+                const name = stock && stock.name ? stock.name : '';
+                let userMessage = error;
+                if (typeof error === 'string' && error.includes('No data found')) {
+                  userMessage = `No data found for ${symbol}${name ? ` (${name})` : ''}. Enter the current price manually or change to a proper stock symbol.`;
+                }
+                return (
+                  <li key={symbol}>
+                    <strong>{symbol}{name ? ` (${name})` : ''}:</strong> {userMessage}
+                  </li>
+                );
+              })}
             </ul>
             <button onClick={() => setShowBatchErrorModal(false)}>Close</button>
           </div>

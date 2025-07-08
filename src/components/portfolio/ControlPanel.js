@@ -17,7 +17,8 @@ const ControlPanel = () => {
     showError,
     fetchLatestPrices,
     isLoadingPrices,
-    priceError
+    priceError,
+    batchErrors
   } = useContext(PortfolioContext);
   
   const fileInputRef = useRef(null);
@@ -115,7 +116,28 @@ const ControlPanel = () => {
     if (isLoadingPrices) return; // Prevent multiple clicks
     try {
       await fetchLatestPrices();
-      showMessage("Success", "Stock prices updated successfully.");
+      // Check for batchErrors after refresh
+      if (batchErrors && batchErrors.length > 0) {
+        // Determine if all stocks failed
+        const allFailed = batchErrors.length === portfolioData.length;
+        const modalTitle = allFailed ? 'Failed to Update Prices' : 'Partial Success';
+        // Build a message listing failed stocks
+        const failedList = batchErrors.map(({ symbol, error }) => {
+          const stock = portfolioData.find(s => s.symbol === symbol);
+          const name = stock && stock.name ? stock.name : '';
+          let userMessage = error;
+          if (typeof error === 'string' && error.includes('No data found')) {
+            userMessage = `No data found for ${symbol}${name ? ` (${name})` : ''}. Enter the current price manually or change to a proper stock symbol.`;
+          }
+          return `<li><strong>${symbol}${name ? ` (${name})` : ''}:</strong> ${userMessage}</li>`;
+        }).join('');
+        showMessage(
+          modalTitle,
+          `<div>Some stock prices could not be updated:</div><ul style="margin-top: 10px;">${failedList}</ul><div style="margin-top: 12px;">Please enter the current price manually or correct the stock symbol for the above stocks.</div>`
+        );
+      } else {
+        showMessage('Success', 'Stock prices updated successfully.');
+      }
     } catch (error) {
       showError(`Failed to refresh prices: ${error.message || 'Unknown error'}`);
     }

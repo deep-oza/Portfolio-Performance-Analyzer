@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import useStockQuote from '../../hooks/useStockQuote';
 
 const StockForm = () => {
   const { 
@@ -11,7 +12,8 @@ const StockForm = () => {
     setEditingStock,
     addStock,
     updateStock,
-    showError
+    showError,
+    updateCurrentPrice
   } = useContext(PortfolioContext);
   
   // Form state
@@ -29,6 +31,11 @@ const StockForm = () => {
     avgPrice: false,
     purchaseDate: false
   });
+  
+  // Add state for price fetch error and manual entry
+  const [fetchTried, setFetchTried] = useState(false);
+  const [manualPrice, setManualPrice] = useState(false);
+  const { data: quoteData, loading: quoteLoading, error: quoteError, fetchData: fetchQuote } = useStockQuote(symbol.trim(), false);
   
   // Reset form fields
   const resetFormFields = () => {
@@ -97,7 +104,6 @@ const StockForm = () => {
       realizedGain: realizedGain ? parseFloat(realizedGain) : 0,
       dividend: dividend ? parseFloat(dividend) : 0
     };
-    
     try {
       if (editingStock) {
         // Update existing stock
@@ -106,7 +112,10 @@ const StockForm = () => {
         // Check for duplicate symbols
         addStock(stockData);
       }
-      
+      // If quoteData is available and has price, update currentPrices context
+      if (quoteData && quoteData.price) {
+        updateCurrentPrice(stockData.symbol, Number(quoteData.price));
+      }
       hideForm();
     } catch (error) {
       showError(error.message);
@@ -139,6 +148,22 @@ const StockForm = () => {
       hideForm();
     }
   };
+
+  // Fetch price when symbol input loses focus
+  const handleSymbolBlur = async () => {
+    if (symbol.trim()) {
+      setFetchTried(true);
+      setManualPrice(false);
+      await fetchQuote();
+    }
+  };
+
+  // If error, allow manual price entry
+  useEffect(() => {
+    if (fetchTried && quoteError) {
+      setManualPrice(true);
+    }
+  }, [quoteError, fetchTried]);
 
   if (!showAddStockForm && !editingStock) {
     return null;
@@ -184,11 +209,22 @@ const StockForm = () => {
                   className={`form-input ${errors.symbol ? 'error' : ''}`}
                   placeholder="e.g. AAPL"
                   value={symbol}
-                  onChange={(e) => setSymbol(e.target.value)}
+                  onChange={(e) => { setSymbol(e.target.value); setFetchTried(false); setManualPrice(false); }}
+                  onBlur={handleSymbolBlur}
                   onKeyPress={handleKeyPress}
                   autoComplete="off"
                 />
-                <div className="form-error">Please enter a valid stock symbol</div>
+                {fetchTried && quoteData && quoteData.price && !quoteError && (
+                  <div style={{ marginTop: 8, color: '#1976d2', fontWeight: 500, fontSize: '1rem' }}>
+                    Current Price (LTP): ₹{Number(quoteData.price).toFixed(2)}
+                  </div>
+                )}
+                {fetchTried && quoteError && (
+                  <div className="form-error" style={{ marginTop: 8, color: '#b71c1c', display: 'flex', alignItems: 'center' }}>
+                    <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: 6 }} />
+                    Stock data not available. Enter manual current price later or try proper stock symbol.
+                  </div>
+                )}
               </div>
               <div className="form-group">
                 <label className="form-label required" htmlFor="newQty">Quantity</label>
@@ -216,12 +252,11 @@ const StockForm = () => {
                   type="number"
                   id="newAvgPrice"
                   className={`form-input ${errors.avgPrice ? 'error' : ''}`}
-                  placeholder="e.g. 150.75"
-                  step="0.01"
-                  min="0"
+                  placeholder="e.g. 1000"
                   value={avgPrice}
                   onChange={(e) => setAvgPrice(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  disabled={false}
                 />
                 <div className="form-error">Price must be greater than 0</div>
               </div>
