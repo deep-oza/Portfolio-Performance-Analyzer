@@ -75,7 +75,11 @@ const ConfirmModal = () => {
         </div>
         {/* Body */}
         <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
-          <p id="modalMessage" className="modal-message" dangerouslySetInnerHTML={{ __html: message }} />
+          {typeof message === 'string' ? (
+            <p id="modalMessage" className="modal-message" dangerouslySetInnerHTML={{ __html: message }} />
+          ) : (
+            <div id="modalMessage" className="modal-message">{message}</div>
+          )}
         </div>
         {/* Footer */}
         <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
