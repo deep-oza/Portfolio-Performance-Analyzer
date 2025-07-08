@@ -1401,6 +1401,46 @@ body[data-theme="dark"] th {
   }
 }
 
+
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--space-4);
+  }
+  
+  .footer-sections {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+  
+  .footer-links {
+    justify-content: center;
+  }
+  
+  .performance-metric {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--space-3);
+  }
+  
+  .footer-section h4 {
+    font-size: clamp(1rem, 4vw, 1.1rem);
+  }
+  
+  .performance-metric {
+    padding: 10px;
+  }
+}
+
 /* Mock Data Notice */
 .mock-data-notice,
 .data-source-notice {
