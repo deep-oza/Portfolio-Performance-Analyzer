@@ -55,7 +55,7 @@ const SearchFilterBar = () => {
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
         />
-        {(searchTerm || isSearchFocused) && (
+        {/* {(searchTerm || isSearchFocused) && (
           <button 
             className="btn btn-sm" 
             id="clearSearch" 
@@ -78,7 +78,7 @@ const SearchFilterBar = () => {
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
-        )}
+        )} */}
       </div>
       
       <div className="filter-options">
