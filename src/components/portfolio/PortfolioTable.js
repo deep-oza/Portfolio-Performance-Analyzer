@@ -579,22 +579,13 @@ const PortfolioTable = () => {
   
   return (
     <div className="portfolio-table-container" data-tour="portfolio-table">
-      <button
-        className="show-analytics-btn"
-        style={{ marginBottom: '1rem', fontSize: '1rem', padding: '0.5rem 1rem' }}
-        onClick={() => setShowAnalytics((prev) => !prev)}
-      >
-        {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
-      </button>
-      {showAnalytics && (
-        <AnalyticsDashboard
-          portfolioData={portfolioData}
-          currentPrices={currentPrices}
-          onClose={() => setShowAnalytics(false)}
-        />
-      )}
-      {/* Column settings dropdown and bulk action controls */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
+      <div className="table-controls-row">
+        <button
+          className="show-analytics-btn"
+          onClick={() => setShowAnalytics((prev) => !prev)}
+        >
+          {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
+        </button>
         <div style={{ position: 'relative' }}>
           <button
             className="btn btn-sm btn-secondary"
@@ -642,6 +633,16 @@ const PortfolioTable = () => {
             </div>
           )}
         </div>
+      </div>
+      {showAnalytics && (
+        <AnalyticsDashboard
+          portfolioData={portfolioData}
+          currentPrices={currentPrices}
+          onClose={() => setShowAnalytics(false)}
+        />
+      )}
+      {/* Column settings dropdown and bulk action controls */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
         {selectedRows.length > 0 && (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <button className="btn btn-danger" onClick={handleBulkDelete}>
