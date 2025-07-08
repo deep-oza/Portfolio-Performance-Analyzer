@@ -46,7 +46,7 @@ const PortfolioTable = () => {
   const [editQueue, setEditQueue] = useState([]);
 
   // Column customization state
-  const [showColumnModal, setShowColumnModal] = useState(false);
+  const [showColumnDropdown, setShowColumnDropdown] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState(() => {
     const stored = localStorage.getItem(COLUMN_STORAGE_KEY);
     if (stored) {
@@ -569,16 +569,51 @@ const PortfolioTable = () => {
           onClose={() => setShowAnalytics(false)}
         />
       )}
-      {/* Column settings button and bulk action controls */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
-        <button
-          className="btn btn-sm btn-secondary"
-          style={{ marginRight: '1rem' }}
-          onClick={() => setShowColumnModal(true)}
-          aria-label="Column settings"
-        >
-          <FontAwesomeIcon icon={faCog} />
-        </button>
+      {/* Column settings dropdown and bulk action controls */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
+        <div style={{ position: 'relative' }}>
+          <button
+            className="btn btn-sm btn-secondary"
+            onClick={() => setShowColumnDropdown((prev) => !prev)}
+            aria-label="Column settings"
+          >
+            <FontAwesomeIcon icon={faCog} /> Columns
+          </button>
+          {showColumnDropdown && (
+            <div style={{
+              position: 'absolute',
+              top: '110%',
+              left: 0,
+              background: '#fff',
+              border: '1px solid #ccc',
+              borderRadius: 6,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+              padding: '12px 16px',
+              zIndex: 1000,
+              minWidth: 180
+            }}>
+              <div style={{ maxHeight: 260, overflowY: 'auto' }}>
+                {DEFAULT_COLUMNS.map(col => (
+                  <div key={col.key} style={{ marginBottom: 6 }}>
+                    <label style={{ fontWeight: col.key === 'symbol' ? 600 : 400 }}>
+                      <input
+                        type="checkbox"
+                        checked={visibleColumns.includes(col.key)}
+                        onChange={() => handleToggleColumn(col.key)}
+                        disabled={col.key === 'symbol'}
+                        style={{ marginRight: 6 }}
+                      />
+                      {col.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div style={{ textAlign: 'right', marginTop: 8 }}>
+                <button className="btn btn-sm" onClick={() => setShowColumnDropdown(false)}>Close</button>
+              </div>
+            </div>
+          )}
+        </div>
         {selectedRows.length > 0 && (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <button className="btn btn-danger" onClick={handleBulkDelete}>
@@ -590,34 +625,7 @@ const PortfolioTable = () => {
           </div>
         )}
       </div>
-      {/* Column settings modal */}
-      {showColumnModal && (
-        <div className="modal-overlay active" style={{ zIndex: 1000 }}>
-          <div className="modal-container" style={{ maxWidth: 400 }}>
-            <div className="modal-content">
-              <h3 className="modal-title">Column Settings</h3>
-              <div style={{ marginBottom: '1rem' }}>
-                {DEFAULT_COLUMNS.map(col => (
-                  <div key={col.key} style={{ marginBottom: 6 }}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns.includes(col.key)}
-                        onChange={() => handleToggleColumn(col.key)}
-                        disabled={col.key === 'symbol'}
-                      />
-                      {' '}{col.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="modal-actions">
-                <button className="btn" onClick={() => setShowColumnModal(false)}>Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* END Column settings dropdown */}
       <div className="table-container">
         <table id="portfolioTable">
           <thead>
