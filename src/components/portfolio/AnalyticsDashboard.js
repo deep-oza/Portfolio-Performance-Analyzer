@@ -4,20 +4,6 @@ import {
 } from 'recharts';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 
-// Helper to calculate CAGR
-function calculateCAGR(invested, currentValue, purchaseDate) {
-  if (!invested || !currentValue || !purchaseDate) return 0;
-  const start = new Date(purchaseDate);
-  const now = new Date();
-  const years = (now - start) / (1000 * 60 * 60 * 24 * 365.25);
-  if (years <= 0 || invested <= 0 || currentValue <= 0) return 0;
-  try {
-    return (Math.pow(currentValue / invested, 1 / years) - 1) * 100;
-  } catch {
-    return 0;
-  }
-}
-
 // Helper to format days as years, months, days
 function formatDuration(days) {
   const years = Math.floor(days / 365);
@@ -103,70 +89,6 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   const topGainers = sortedByReturn.slice(0, 5);
   const topLosers = sortedByReturn.slice(-5).reverse();
   const gainersLosersData = [...topGainers, ...topLosers.filter(l => !topGainers.some(g => g.symbol === l.symbol))];
-
-  // Prepare data for Short Term and Long Term Holding Period Histograms
-  const shortTermBins = [
-    { label: '0-30d', min: 0, max: 30 },
-    { label: '31-90d', min: 31, max: 90 },
-    { label: '91-180d', min: 91, max: 180 },
-    { label: '181-365d', min: 181, max: 365 },
-  ];
-  const longTermBins = [
-    { label: '1-2y', min: 366, max: 730 },
-    { label: '2y+', min: 731, max: Infinity },
-  ];
-  const shortTermHistogram = shortTermBins.map(bin => ({
-    label: bin.label,
-    count: portfolioData.filter(stock => {
-      const purchase = new Date(stock.purchaseDate);
-      const today = new Date();
-      const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-      return days >= bin.min && days <= bin.max;
-    }).length
-  }));
-  const longTermHistogram = longTermBins.map(bin => ({
-    label: bin.label,
-    count: portfolioData.filter(stock => {
-      const purchase = new Date(stock.purchaseDate);
-      const today = new Date();
-      const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-      return days >= bin.min && days <= bin.max;
-    }).length
-  }));
-
-  // Custom tooltip for holding period histogram
-  const HoldingTooltip = (bins) => ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const bin = bins.find(b => b.label === label);
-      const stocksInBin = portfolioData.filter(stock => {
-        const purchase = new Date(stock.purchaseDate);
-        const today = new Date();
-        const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-        return days >= bin.min && days <= bin.max;
-      });
-      return (
-        <div style={{ 
-          background: tooltipBackground, 
-          border: `1px solid ${tooltipBorder}`, 
-          padding: isMobile ? 6 : 10, 
-          borderRadius: 6, 
-          minWidth: isMobile ? 100 : 120,
-          fontSize: isMobile ? 11 : 'inherit',
-          color: tooltipText
-        }}>
-          <div style={{ fontWeight: 600 }}>{label}</div>
-          <div>Stocks: {payload[0].value}</div>
-          {stocksInBin.length > 0 && (
-            <div style={{ marginTop: isMobile ? 4 : 6, fontSize: isMobile ? 10 : 12 }}>
-              <div style={{ fontWeight: 500 }}>Symbols:</div>
-              <div>{stocksInBin.map(s => s.symbol).join(', ')}</div>
-            </div>
-          )}
-        </div>
-      );
-    }
-    return null;
-  };
 
   // Layout styles
   const gridStyle = {
