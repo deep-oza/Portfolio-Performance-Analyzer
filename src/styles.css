@@ -1035,16 +1035,29 @@ body[data-theme="dark"] th {
     width: 100%;
   }
 
+  .form-input {
+    width: 100% !important;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: 1rem 0.75rem;
+  }
+
   .modal-container {
-    width: 95%;
+    width: 98vw;
+    max-width: 98vw;
+    margin: var(--space-2);
+    padding: 0;
   }
-  
-  .modal-actions {
-    flex-direction: column-reverse;
+  .modal-body {
+    padding: 1.5rem 1rem;
   }
-  
-  .modal-actions .btn {
-    width: 100%;
+  .modal-header, .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .form-title {
+    font-size: 1.2rem;
   }
 }
 
