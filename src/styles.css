@@ -1732,3 +1732,86 @@ body[data-theme="dark"] th {
 body[data-theme="dark"] .modal-footer {
   border-top: 1px solid #222;
 }
+
+/* Column Settings Dropdown (PortfolioTable) */
+.column-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4) var(--space-5);
+  z-index: 1000;
+  min-width: 220px;
+  max-width: 320px;
+  min-height: 120px;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.column-dropdown-header {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-2);
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 1;
+}
+
+.column-dropdown-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  max-height: 180px;
+  margin-bottom: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.column-dropdown-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  padding: var(--space-1) var(--space-1);
+  border-radius: var(--radius);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.column-dropdown-checkbox input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: var(--space-1);
+}
+
+.column-dropdown-checkbox:disabled,
+.column-dropdown-checkbox input[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.column-dropdown-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .column-dropdown {
+    min-width: 90vw;
+    max-width: 98vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

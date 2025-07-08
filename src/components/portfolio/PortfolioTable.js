@@ -580,35 +580,25 @@ const PortfolioTable = () => {
             <FontAwesomeIcon icon={faCog} /> Columns
           </button>
           {showColumnDropdown && (
-            <div style={{
-              position: 'absolute',
-              top: '110%',
-              left: 0,
-              background: '#fff',
-              border: '1px solid #ccc',
-              borderRadius: 6,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-              padding: '12px 16px',
-              zIndex: 1000,
-              minWidth: 180
-            }}>
-              <div style={{ maxHeight: 260, overflowY: 'auto' }}>
+            <div className="column-dropdown">
+              <div className="column-dropdown-header">Customize Columns</div>
+              <div className="column-dropdown-list">
                 {DEFAULT_COLUMNS.map(col => (
-                  <div key={col.key} style={{ marginBottom: 6 }}>
-                    <label style={{ fontWeight: col.key === 'symbol' ? 600 : 400 }}>
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns.includes(col.key)}
-                        onChange={() => handleToggleColumn(col.key)}
-                        disabled={col.key === 'symbol'}
-                        style={{ marginRight: 6 }}
-                      />
-                      {col.label}
-                    </label>
-                  </div>
+                  <label key={col.key} className="column-dropdown-checkbox" style={{ fontWeight: col.key === 'symbol' ? 600 : 400 }}>
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns.includes(col.key)}
+                      onChange={() => handleToggleColumn(col.key)}
+                      disabled={col.key === 'symbol'}
+                    />
+                    {col.label}
+                  </label>
                 ))}
               </div>
-              <div style={{ textAlign: 'right', marginTop: 8 }}>
+              <div className="column-dropdown-actions">
+                <button className="btn btn-sm btn-secondary" onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}>
+                  Reset to Default Columns
+                </button>
                 <button className="btn btn-sm" onClick={() => setShowColumnDropdown(false)}>Close</button>
               </div>
             </div>
