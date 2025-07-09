@@ -512,7 +512,7 @@ const PortfolioTable = ({
           </thead>
           <tbody>
             <tr>
-              <td colSpan="15" style={{ textAlign: 'center', padding: '2rem' }}>
+              <td colSpan="15" style={{ textAlign: 'center', padding: '32px' }}>
                 No stocks in portfolio. Add a stock to get started.
               </td>
             </tr>

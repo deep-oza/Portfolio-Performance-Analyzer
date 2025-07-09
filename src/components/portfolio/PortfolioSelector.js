@@ -98,10 +98,10 @@ const PortfolioSelector = ({
       {creating && (
         <div className="modal-overlay active" style={{ zIndex: 1000 }}>
           <div className="modal-container" style={{ maxWidth: 500, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-            <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="modal-header" style={{ padding: '32px 32px 0 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <h3 className="modal-title" style={{ margin: 0 }}>Create New Portfolio</h3>
             </div>
-            <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
+            <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '32px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <label htmlFor="new-portfolio-name" style={{ marginBottom: 4, fontWeight: 500 }}>Portfolio Name</label>
                 <input
@@ -115,7 +115,7 @@ const PortfolioSelector = ({
                 />
               </div>
             </div>
-            <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2, display: 'flex', gap: 12, justifyContent: 'center' }}>
+            <div className="modal-footer" style={{ padding: '24px 32px', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2, display: 'flex', gap: 12, justifyContent: 'center' }}>
               <button className="btn btn-secondary" onClick={handleCreateCancel}>Cancel</button>
               <button className="btn btn-danger" onClick={handleCreateConfirm} disabled={!modalInput.trim() || portfolios[modalInput.trim()]}>Create</button>
             </div>

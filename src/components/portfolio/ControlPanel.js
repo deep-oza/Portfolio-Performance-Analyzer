@@ -236,7 +236,7 @@ const ControlPanel = () => {
       {showImportModal && (
         <div className="modal-overlay active import-modal-overlay">
           <div className="modal-container import-modal-card">
-            <div className="modal-header import-modal-header" style={{ padding: '1.2rem 1.2rem 0 1.2rem' }}>
+            <div className="modal-header import-modal-header" style={{ padding: '19.2px 19.2px 0 19.2px' }}>
               <div className="import-modal-title-row" style={{ gap: 10 }}>
                 <span className="import-modal-title-icon" style={{ fontSize: '1.5rem', padding: 5 }}><FontAwesomeIcon icon={faFileImport} /></span>
                 <div>
@@ -245,7 +245,7 @@ const ControlPanel = () => {
                 </div>
               </div>
             </div>
-            <div className="modal-body import-modal-body" style={{ padding: '1.2rem' }}>
+            <div className="modal-body import-modal-body" style={{ padding: '19.2px' }}>
               <div className="portfolio-section-row" style={{ marginBottom: 0, gap: 8 }}>
                 <label htmlFor="import-portfolio-select" className="portfolio-section-label" style={{ fontSize: '0.98rem', minWidth: 70 }}>Portfolio</label>
                 {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && !importAddNew ? (
@@ -299,7 +299,7 @@ const ControlPanel = () => {
                 This will <b>replace</b> the selected portfolio's data with the imported CSV.
               </div>
             </div>
-            <div className="modal-footer import-modal-footer" style={{ padding: '1rem 1.2rem' }}>
+            <div className="modal-footer import-modal-footer" style={{ padding: '16px 19.2px' }}>
               <div className="modal-actions import-modal-actions" style={{ gap: 10 }}>
                 <button className="btn btn-secondary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => setShowImportModal(false)}>Cancel</button>
                 <button className="btn btn-primary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => {

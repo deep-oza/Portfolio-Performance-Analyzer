@@ -94,8 +94,8 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   const gridStyle = {
     display: 'flex',
     flexDirection: 'column',
-    gap: isMobile ? '1.5rem' : '3rem',
-    margin: isMobile ? '1rem 0' : '2rem 0',
+    gap: isMobile ? '24px' : '48px',
+    margin: isMobile ? '16px 0' : '32px 0',
     width: '100%',
   };
   const cardStyle = {
@@ -104,7 +104,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     boxShadow: isDarkTheme 
       ? '0 2px 8px rgba(0,0,0,0.2)'
       : '0 2px 8px rgba(0,0,0,0.07)',
-    padding: isMobile ? '0.5rem' : '1rem',
+    padding: isMobile ? '8px' : '16px',
     minHeight: isMobile ? '300px' : '340px',
     display: 'flex',
     flexDirection: 'column',
@@ -121,8 +121,8 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   const holdingGridStyle = {
     display: 'grid',
     gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(320px, 1fr))',
-    gap: isMobile ? '1.5rem' : '2rem',
-    margin: isMobile ? '1rem 0' : '2rem 0',
+    gap: isMobile ? '24px' : '32px',
+    margin: isMobile ? '16px 0' : '32px 0',
     alignItems: 'start',
   };
 
@@ -240,13 +240,13 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
       </h2>
       {isMobile ? (
         <div style={{
-          margin: '2.5rem auto',
+          margin: isMobile ? '24px auto' : '24px auto',
+          padding: '40px 24px 32px 24px',
           maxWidth: 370,
           background: isDarkTheme ? 'linear-gradient(135deg, #23272f 80%, #2563c7 100%)' : 'linear-gradient(135deg, #f4f6fa 80%, #dbeafe 100%)',
           border: isDarkTheme ? '1.5px solid #2563c7' : '1.5px solid #2563c7',
           borderRadius: 18,
           boxShadow: isDarkTheme ? '0 4px 16px rgba(0,0,0,0.22)' : '0 4px 16px rgba(0,0,0,0.09)',
-          padding: '2.5rem 1.5rem 2rem 1.5rem',
           textAlign: 'center',
           color: isDarkTheme ? '#e0e6f0' : '#1e293b',
           fontSize: 17,
@@ -303,7 +303,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '1rem 0' : '2rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
         {/* Return % per Stock – Column chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Return % per Stock</div>
@@ -321,7 +321,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '1rem 0' : '2rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
         {/* Invested vs Current Value – Grouped bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Invested vs Current Value</div>
@@ -345,7 +345,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '1rem 0' : '2rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
         {/* Top Gainers & Losers – Bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>Top Gainers & Losers</div>
@@ -377,7 +377,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '1rem 0' : '2rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
         <div style={holdingGridStyle}>
           {/* Short Term Holdings – List group only, no chart */}
           <div style={cardStyle}>

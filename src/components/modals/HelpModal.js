@@ -60,7 +60,7 @@ const HelpModal = () => {
       width: '95%'
     },
     header: {
-      padding: '1.5rem',
+      padding: '24px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'
@@ -68,10 +68,10 @@ const HelpModal = () => {
     body: {
       overflowY: 'auto',
       flex: 1,
-      padding: '1.5rem'
+      padding: '24px'
     },
     footer: {
-      padding: '1rem',
+      padding: '16px',
       borderTop: '1px solid #eee',
       background: 'var(--bg-card)',
       position: 'sticky',
