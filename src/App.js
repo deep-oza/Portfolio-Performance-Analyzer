@@ -99,8 +99,7 @@ function MainApp() {
     { key: 'unrealizedGL', label: 'Unrealized G/L' },
     { key: 'realizedGain', label: 'Realized Gain' },
     { key: 'dividend', label: 'Dividend' },
-    { key: 'totalReturn', label: 'Total Return' },
-    { key: 'returnPercent', label: 'Return % Since Purchase' },
+    { key: 'totalReturnMerged', label: 'Total Return (₹, %)' },
     { key: 'cagr', label: 'CAGR %' },
     { key: 'daysHeld', label: 'Days Held' },
   ];

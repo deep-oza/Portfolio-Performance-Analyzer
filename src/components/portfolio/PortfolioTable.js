@@ -13,10 +13,9 @@ const DEFAULT_COLUMNS = [
   { key: 'currentPrice', label: 'Current Price' },
   { key: 'currentValue', label: 'Current Value' },
   { key: 'unrealizedGL', label: 'Unrealized G/L' },
+  { key: 'totalReturnMerged', label: 'Total Return' },
   { key: 'realizedGain', label: 'Realized Gain' },
   { key: 'dividend', label: 'Dividend' },
-  { key: 'totalReturn', label: 'Total Return' },
-  { key: 'returnPercent', label: 'Return % Since Purchase' },
   { key: 'cagr', label: 'CAGR %' },
   { key: 'daysHeld', label: 'Days Held' },
 ];
@@ -135,6 +134,15 @@ const PortfolioTable = ({
           valueB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0) - b.invested;
           break;
 
+        case "totalReturnMerged":
+          const unrGainA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0) - a.invested;
+          const unrGainB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0) - b.invested;
+          const currValA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0);
+          const currValB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0);
+          valueA = unrGainA + (a.realizedGain || 0) + (a.dividend || 0);
+          valueB = unrGainB + (b.realizedGain || 0) + (b.dividend || 0);
+          break;
+
         case "realizedGain":
           valueA = a.realizedGain || 0;
           valueB = b.realizedGain || 0;
@@ -143,20 +151,6 @@ const PortfolioTable = ({
         case "dividend":
           valueA = a.dividend || 0;
           valueB = b.dividend || 0;
-          break;
-
-        case "totalReturn":
-          const unrGainA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0) - a.invested;
-          const unrGainB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0) - b.invested;
-          valueA = unrGainA + (a.realizedGain || 0) + (a.dividend || 0);
-          valueB = unrGainB + (b.realizedGain || 0) + (b.dividend || 0);
-          break;
-
-        case "returnPercent":
-          const currValA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0);
-          const currValB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0);
-          valueA = a.invested > 0 ? ((currValA - a.invested) / a.invested) * 100 : 0;
-          valueB = b.invested > 0 ? ((currValB - b.invested) / b.invested) * 100 : 0;
           break;
 
         case "cagr":
@@ -508,10 +502,9 @@ const PortfolioTable = ({
               <th className="sortable">Current Price</th>
               <th className="sortable">Current Value</th>
               <th className="sortable">Unrealized G/L</th>
+              <th className="sortable">Total Return</th>
               <th className="sortable">Realized Gain</th>
               <th className="sortable">Dividend</th>
-              <th className="sortable">Total Return</th>
-              <th className="sortable">Return % Since Purchase</th>
               <th className="sortable">CAGR %</th>
               <th className="sortable">Days Held</th>
               <th>Actions</th>
@@ -544,10 +537,9 @@ const PortfolioTable = ({
               <th className="sortable">Current Price</th>
               <th className="sortable">Current Value</th>
               <th className="sortable">Unrealized G/L</th>
+              <th className="sortable">Total Return</th>
               <th className="sortable">Realized Gain</th>
               <th className="sortable">Dividend</th>
-              <th className="sortable">Total Return</th>
-              <th className="sortable">Return % Since Purchase</th>
               <th className="sortable">CAGR %</th>
               <th className="sortable">Days Held</th>
               <th>Actions</th>
@@ -726,6 +718,16 @@ const PortfolioTable = ({
                             ) : '-'}
                           </td>
                         );
+                      case 'totalReturnMerged':
+                        return (
+                          <td key="totalReturnMerged" id={`totalReturnMerged_${symbol}`}>
+                            {metrics.totalReturn !== null && metrics.returnPercent !== null ? (
+                              <span className={metrics.totalReturn >= 0 ? 'positive' : 'negative'}>
+                                {formatCurrency(metrics.totalReturn)} ({metrics.returnPercent >= 0 ? '+' : ''}{formatPercent(metrics.returnPercent)})
+                              </span>
+                            ) : '-'}
+                          </td>
+                        );
                       case 'realizedGain':
                         return (
                           <td key="realizedGain" className="positive" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
@@ -760,26 +762,6 @@ const PortfolioTable = ({
                             ) : (
                               `₹${stock.dividend.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
                             )}
-                          </td>
-                        );
-                      case 'totalReturn':
-                        return (
-                          <td key="totalReturn" id={`totalReturn_${symbol}`}>
-                            {metrics.totalReturn ? (
-                              <span className={metrics.totalReturn >= 0 ? 'positive' : 'negative'}>
-                                {formatCurrency(metrics.totalReturn)}
-                              </span>
-                            ) : '-'}
-                          </td>
-                        );
-                      case 'returnPercent':
-                        return (
-                          <td key="returnPercent" id={`returnPercent_${symbol}`}>
-                            {metrics.returnPercent ? (
-                              <span className={metrics.returnPercent >= 0 ? 'positive' : 'negative'}>
-                                {formatPercent(metrics.returnPercent)}
-                              </span>
-                            ) : '-'}
                           </td>
                         );
                       case 'cagr':

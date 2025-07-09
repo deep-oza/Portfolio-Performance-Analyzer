@@ -336,7 +336,7 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
     "current price",
     "realized gain",
     "dividend",
-    "return % since purchase",
+    "total return (₹, %)" ,
     "cagr %",
     "days held"
   ];
@@ -351,7 +351,7 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
     const rg = stock.realizedGain || 0;
     const dv = stock.dividend || 0;
     const price = parseFloat(currentPrices[symbol]) || 0;
-    let days = "", years = null, cagr = "", returnPercent = "";
+    let days = "", years = null, cagr = "", returnPercent = "", totalReturn = "";
     if (purchaseDate && price > 0 && avgPrice > 0 && qty > 0) {
       days = calculateDaysHeld(purchaseDate);
       years = days / 365.25;
@@ -367,7 +367,8 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
       }
       // Return % Since Purchase
       if (avgPrice > 0) {
-        returnPercent = (((price - avgPrice) / avgPrice) * 100).toFixed(2) + "%";
+        returnPercent = (((price - avgPrice) / avgPrice) * 100).toFixed(2);
+        totalReturn = ((qty * price - qty * avgPrice).toFixed(2)) + ' (' + (returnPercent >= 0 ? '+' : '') + returnPercent + '%)';
       }
     }
     rows.push([
@@ -379,7 +380,7 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
       price ? price.toFixed(2) : "",
       rg.toFixed(2),
       dv.toFixed(2),
-      returnPercent,
+      totalReturn,
       cagr,
       days
     ]);
