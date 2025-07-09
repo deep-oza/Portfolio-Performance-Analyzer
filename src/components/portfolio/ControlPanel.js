@@ -23,7 +23,8 @@ const ControlPanel = () => {
     batchErrors,
     portfolios,
     selectedPortfolioId,
-    setPortfolios
+    setPortfolios,
+    theme // <-- add theme from context
   } = useContext(PortfolioContext);
   
   const fileInputRef = useRef(null);
@@ -36,21 +37,29 @@ const ControlPanel = () => {
   const [importError, setImportError] = useState('');
   const [showImportModal, setShowImportModal] = useState(false);
   
+  const isDarkTheme = theme === 'dark';
   // Modal text for CSV upload confirmation
   const csvModalConfig = {
     title: "Import Portfolio from CSV",
     message: (
       <div style={{ textAlign: 'left', fontSize: '1.05em' }}>
-        <div style={{ marginBottom: 16, background: '#f8f9fa', padding: 12, borderRadius: 8, border: '1px solid #e0e0e0' }}>
+        <div style={{
+          marginBottom: 16,
+          background: isDarkTheme ? '' : '#f8f9fa',
+          padding: 12,
+          borderRadius: 8,
+          border: isDarkTheme ? '1px solid #444' : '1px solid #e0e0e0',
+          color: isDarkTheme ? '#f1f1f1' : undefined
+        }}>
           <strong>How to Import:</strong>
           <ol style={{ margin: '10px 0 0 20px' }}>
-            <li>Download the <a href="/sample_portfolio.csv" download style={{ color: '#007bff', textDecoration: 'underline' }}>Sample CSV</a> for reference.</li>
+            <li>Download the <a href="/sample_portfolio.csv" download style={{ color: isDarkTheme ? '#66bfff' : '#007bff', textDecoration: 'underline' }}>Sample CSV</a> for reference.</li>
             <li>Ensure your file includes <b>all required columns</b>:</li>
           </ol>
           <ul style={{ marginLeft: 30 }}>
-            <li><b>symbol</b> <span style={{ color: '#888' }}>(or: stock, ticker, scrip)</span></li>
-            <li><b>qty</b> <span style={{ color: '#888' }}>(or: quantity, shares, units, holding)</span></li>
-            <li><b>avg price</b> <span style={{ color: '#888' }}>(or: average price, buy price, purchase price, cost)</span></li>
+            <li><b>symbol</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: stock, ticker, scrip)</span></li>
+            <li><b>qty</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: quantity, shares, units, holding)</span></li>
+            <li><b>avg price</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: average price, buy price, purchase price, cost)</span></li>
           </ul>
           <div style={{ marginTop: 8 }}>Optional columns for enhanced analysis:</div>
           <ul style={{ marginLeft: 30 }}>
