@@ -59,34 +59,18 @@ const PortfolioSelector = ({
   const handleCreateClick = () => {
     setModalInput('');
     setCreating(true);
-    showModal({
-      title: 'Create New Portfolio',
-      message: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <label htmlFor="new-portfolio-name" style={{ marginBottom: 4, fontWeight: 500 }}>Portfolio Name</label>
-          <input
-            id="new-portfolio-name"
-            type="text"
-            autoFocus
-            value={modalInput}
-            onChange={e => setModalInput(e.target.value)}
-            placeholder="Enter portfolio name"
-            style={{ padding: '8px 12px', borderRadius: 6, border: '1.5px solid #d0d7de', fontSize: '1rem', outline: 'none' }}
-          />
-        </div>
-      ),
-      confirmText: 'Create',
-      cancelText: 'Cancel',
-      showCancel: true,
-      onConfirm: () => {
-        const name = modalInput.trim();
-        if (name && !portfolios[name]) {
-          createPortfolio(name);
-        }
-        setCreating(false);
-      },
-      onCancel: () => setCreating(false),
-    });
+  };
+
+  const handleCreateConfirm = () => {
+    const name = modalInput.trim();
+    if (name && !portfolios[name]) {
+      createPortfolio(name);
+      setCreating(false);
+    }
+  };
+
+  const handleCreateCancel = () => {
+    setCreating(false);
   };
 
   const handleDelete = (id) => {
@@ -103,6 +87,34 @@ const PortfolioSelector = ({
 
   return (
     <div className={`portfolio-selector-card${theme === 'dark' ? ' dark' : ''}`} role="region" aria-label="Portfolio selection">
+      {/* Local Create Portfolio Modal */}
+      {creating && (
+        <div className="modal-overlay active" style={{ zIndex: 1000 }}>
+          <div className="modal-container" style={{ maxWidth: 500, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+            <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <h3 className="modal-title" style={{ margin: 0 }}>Create New Portfolio</h3>
+            </div>
+            <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label htmlFor="new-portfolio-name" style={{ marginBottom: 4, fontWeight: 500 }}>Portfolio Name</label>
+                <input
+                  id="new-portfolio-name"
+                  type="text"
+                  autoFocus
+                  value={modalInput}
+                  onChange={e => setModalInput(e.target.value)}
+                  placeholder="Enter portfolio name"
+                  style={{ padding: '8px 12px', borderRadius: 6, border: '1.5px solid #d0d7de', fontSize: '1rem', outline: 'none' }}
+                />
+              </div>
+            </div>
+            <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2, display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button className="btn btn-secondary" onClick={handleCreateCancel}>Cancel</button>
+              <button className="btn btn-danger" onClick={handleCreateConfirm} disabled={!modalInput.trim() || portfolios[modalInput.trim()]}>Create</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="portfolio-selector-header">
         <h2 className="portfolio-selector-title">Portfolios</h2>
         <span className="portfolio-selector-subtitle">Manage and switch between your investment portfolios</span>
