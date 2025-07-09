@@ -18,7 +18,8 @@ const StockForm = () => {
     portfolios,
     removeStock,
     theme, // <-- Add theme from context
-    selectedPortfolioId // <-- Add selectedPortfolioId from context
+    selectedPortfolioId, // <-- Add selectedPortfolioId from context
+    currentPrices // <-- Add currentPrices from context
   } = useContext(PortfolioContext);
   
   // Form state
@@ -41,6 +42,12 @@ const StockForm = () => {
   const [fetchTried, setFetchTried] = useState(false);
   const [manualPrice, setManualPrice] = useState(false);
   const { data: quoteData, loading: quoteLoading, error: quoteError, fetchData: fetchQuote } = useStockQuote(symbol.trim(), false);
+  
+  // Add state for manual current price
+  const [currentPrice, setCurrentPrice] = useState('');
+  
+  // Track if user has manually changed the current price
+  const [currentPriceTouched, setCurrentPriceTouched] = useState(false);
   
   // Portfolio selection state
   const [selectedPortfolio, setSelectedPortfolio] = useState('');
@@ -83,6 +90,15 @@ const StockForm = () => {
       setSelectedPortfolio(foundPortfolio);
       setAddNewPortfolio(false);
       setNewPortfolio('');
+      // Prefill manual price if available in context
+      if (editingStock.stock && editingStock.stock.symbol) {
+        const symbolKey = editingStock.stock.symbol.trim().toUpperCase();
+        if (currentPrices && currentPrices[symbolKey]) {
+          setCurrentPrice(currentPrices[symbolKey].toString());
+        } else {
+          setCurrentPrice('');
+        }
+      }
     } else {
       // Set default date to today when adding new stock
       setPurchaseDate(new Date().toISOString().split('T')[0]);
@@ -102,8 +118,9 @@ const StockForm = () => {
         setSelectedPortfolio('');
         setAddNewPortfolio(true);
       }
+      setCurrentPrice('');
     }
-  }, [editingStock, portfolios, selectedPortfolioId]);
+  }, [editingStock, portfolios, selectedPortfolioId, currentPrices]);
   
   // Hide form
   const hideForm = () => {
@@ -164,6 +181,9 @@ const StockForm = () => {
       // If quoteData is available and has price, update currentPrices context
       if (quoteData && quoteData.price) {
         updateCurrentPrice(stockData.symbol, Number(quoteData.price));
+      } else if (manualPrice && currentPrice) {
+        // If manual price entry is active and value is provided
+        updateCurrentPrice(stockData.symbol, Number(currentPrice));
       }
       hideForm();
     } catch (error) {
@@ -213,6 +233,17 @@ const StockForm = () => {
       setManualPrice(true);
     }
   }, [quoteError, fetchTried]);
+
+  // When quoteData.price changes and user hasn't touched the field, update currentPrice
+  useEffect(() => {
+    if (fetchTried && quoteData && quoteData.price && !quoteError) {
+      setCurrentPrice(quoteData.price.toString());
+      setCurrentPriceTouched(false);
+    } else if (fetchTried && (!quoteData || !quoteData.price || quoteError)) {
+      setCurrentPrice('');
+      setCurrentPriceTouched(false);
+    }
+  }, [fetchTried, quoteData, quoteError, symbol]);
 
   if (!showAddStockForm && !editingStock) {
     return null;
@@ -326,13 +357,13 @@ const StockForm = () => {
                 />
                 {fetchTried && quoteData && quoteData.price && !quoteError && (
                   <div style={{ marginTop: 8, color: '#1976d2', fontWeight: 500, fontSize: '1rem' }}>
-                    Current Price (LTP): ₹{Number(quoteData.price).toFixed(2)}
+                    Fetched Price: ₹{Number(quoteData.price).toFixed(2)}
                   </div>
                 )}
                 {fetchTried && quoteError && (
                   <div className="form-error" style={{ marginTop: 8, color: '#b71c1c', display: 'flex', alignItems: 'center' }}>
                     <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: 6 }} />
-                    Stock data not available. Enter manual current price later or try proper stock symbol.
+                    Stock data not available. Enter price manually or try proper stock symbol.
                   </div>
                 )}
               </div>
@@ -349,6 +380,21 @@ const StockForm = () => {
                   onKeyPress={handleKeyPress}
                 />
                 <div className="form-error">Quantity must be greater than 0</div>
+              </div>
+              <div className="form-group">
+                <label className="form-label required" htmlFor="manualCurrentPrice">Current Price</label>
+                <input
+                  type="number"
+                  id="manualCurrentPrice"
+                  className="form-input"
+                  placeholder="Enter current price"
+                  value={currentPrice}
+                  onChange={e => { setCurrentPrice(e.target.value); setCurrentPriceTouched(true); }}
+                  min="0"
+                  step="0.01"
+                  required
+                />
+                <div className="form-helper">Latest price shown. You can edit it later if needed.</div>
               </div>
             </div>
           </div>
