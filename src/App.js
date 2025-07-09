@@ -337,10 +337,6 @@ function App() {
       content: '➕ Create a new portfolio by clicking this button. You can organize your investments by strategy, account type, or any other category.'
     },
     {
-      selector: '.show-analytics-btn',
-      content: '📈 Toggle analytics view to see detailed performance charts and visualizations of your portfolio data.'
-    },
-    {
       selector: '.btn-sm.btn-secondary',
       content: '⚙️ Customize which columns are displayed in your portfolio table. You can also drag and drop to reorder columns.'
     },

@@ -557,7 +557,7 @@ const PortfolioTable = ({
   
   return (
     <>
-      {showAnalytics && (
+      {showAnalytics && portfolioData.length > 0 && (
         <AnalyticsDashboard
           portfolioData={portfolioData}
           currentPrices={currentPrices}

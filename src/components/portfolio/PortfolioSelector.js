@@ -56,6 +56,13 @@ const PortfolioSelector = ({
     return () => document.removeEventListener('mousedown', handleClick);
   }, [showColumnDropdown, setShowColumnDropdown]);
 
+  // Get portfolio data to check if it's empty
+  const portfolioData = selectedPortfolioId === 'default'
+    ? Object.entries(portfolios)
+        .filter(([id]) => id !== 'default')
+        .flatMap(([, stocks]) => stocks)
+    : portfolios[selectedPortfolioId] || [];
+
   const handleCreateClick = () => {
     setModalInput('');
     setCreating(true);
@@ -151,14 +158,16 @@ const PortfolioSelector = ({
         >
           <FontAwesomeIcon icon={faPlus} />
         </button>
-        {/* Show Analytics and Columns buttons */}
-        <button
-          className="show-analytics-btn"
-          style={{ marginLeft: 16 }}
-          onClick={() => setShowAnalytics((prev) => !prev)}
-        >
-          {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
-        </button>
+        {/* Show Analytics button only if portfolio data is not empty */}
+        {portfolioData.length > 0 && (
+          <button
+            className="show-analytics-btn"
+            style={{ marginLeft: 16 }}
+            onClick={() => setShowAnalytics((prev) => !prev)}
+          >
+            {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
+          </button>
+        )}
         <div style={{ position: 'relative' }}>
           <button
             className="btn btn-sm btn-secondary"
