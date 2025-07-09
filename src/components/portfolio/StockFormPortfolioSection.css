@@ -86,6 +86,65 @@
   margin-left: 2px;
 }
 
+/* Dark theme styles for portfolio section */
+.portfolio-section-card.dark {
+  background: transparent;
+  border: 1.5px solid #444b5a;
+  box-shadow: none;
+}
+
+.portfolio-section-card.dark .portfolio-section-label {
+  color: #e0e6f0;
+}
+
+.portfolio-section-card.dark .portfolio-section-select,
+.portfolio-section-card.dark .portfolio-section-input {
+  background: #1e2128;
+  border-color: #444b5a;
+  color: #e0e6f0;
+}
+
+.portfolio-section-card.dark .portfolio-section-select:focus,
+.portfolio-section-card.dark .portfolio-section-input:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 2px rgba(79, 140, 255, 0.25);
+}
+
+.portfolio-section-card.dark .portfolio-section-add-btn {
+  background: #2563eb;
+}
+
+.portfolio-section-card.dark .portfolio-section-add-btn:hover,
+.portfolio-section-card.dark .portfolio-section-add-btn:focus-visible {
+  background: #1e40af;
+}
+
+.portfolio-section-card.dark .portfolio-section-cancel {
+  color: #90cdf4;
+}
+
+.portfolio-section-card.dark .portfolio-section-cancel:hover {
+  color: #4f8cff;
+  background: #2a323e;
+}
+
+.portfolio-section-card.dark .portfolio-section-input-error {
+  border-color: #e53935;
+}
+
+/* Dark theme for modal overlay */
+.modal-overlay.dark .form-section-title {
+  color: #e0e6f0;
+}
+
+.modal-overlay.dark .form-label {
+  color: #e0e6f0;
+}
+
+.modal-overlay.dark .form-helper {
+  color: #a0aec0;
+}
+
 @media (max-width: 600px) {
   .portfolio-section-row {
     flex-direction: column;

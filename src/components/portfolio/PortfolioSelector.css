@@ -136,8 +136,9 @@
 
 /* Dark theme styles for PortfolioSelector */
 .portfolio-selector-card.dark {
-  background: #23272f;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.13);
+  background: transparent;
+  border: 1.5px solid #444b5a;
+  box-shadow: none;
 }
 .portfolio-selector-card.dark .portfolio-selector-title {
   color: #e0e6f0;

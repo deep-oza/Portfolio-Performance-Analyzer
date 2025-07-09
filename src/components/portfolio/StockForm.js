@@ -17,6 +17,7 @@ const StockForm = () => {
     updateCurrentPrice,
     portfolios,
     removeStock,
+    theme // <-- Add theme from context
   } = useContext(PortfolioContext);
   
   // Form state
@@ -215,11 +216,12 @@ const StockForm = () => {
   // Portfolio selector UI
   const portfolioKeys = Object.keys(portfolios).filter(k => k !== 'default');
   const portfolioError = addNewPortfolio && (!newPortfolio.trim() || portfolioKeys.includes(newPortfolio.trim()));
+  const isDarkTheme = theme === 'dark'; // <-- Add dark theme detection
 
   return (
     <div 
       id="stockFormModal" 
-      className="modal-overlay" 
+      className={`modal-overlay${isDarkTheme ? ' dark' : ''}`} 
       style={{ display: 'flex' }}
       onClick={handleOutsideClick}
       data-tour="stock-form"
@@ -244,7 +246,7 @@ const StockForm = () => {
         {/* Body */}
         <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
           {/* Portfolio selector - professional UI */}
-          <div className="portfolio-section-card">
+          <div className={`portfolio-section-card${isDarkTheme ? ' dark' : ''}`}>
             <div className="portfolio-section-row">
               <label htmlFor="portfolio-select" className="portfolio-section-label">Portfolio</label>
               {portfolioKeys.length > 0 && !addNewPortfolio ? (
