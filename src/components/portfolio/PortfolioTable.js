@@ -556,7 +556,7 @@ const PortfolioTable = ({
   }
   
   return (
-    <div className="portfolio-table-container" data-tour="portfolio-table">
+    <>
       {showAnalytics && (
         <AnalyticsDashboard
           portfolioData={portfolioData}
@@ -564,251 +564,254 @@ const PortfolioTable = ({
           onClose={() => setShowAnalytics(false)}
         />
       )}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
-        {selectedRows.length > 0 && (
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button className="btn btn-danger" onClick={handleBulkDelete}>
-              Delete Selected
-            </button>
-            <span style={{ color: '#888', fontSize: '0.95em' }}>
-              {selectedRows.length} selected
-            </span>
-          </div>
-        )}
-      </div>
-      <div className="table-container">
-        <table id="portfolioTable">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectedRows.length === filteredData.length && filteredData.length > 0}
-                  onChange={handleSelectAll}
-                  aria-label="Select all stocks"
-                  tabIndex={0}
-                />
-              </th>
-              {visibleColumns.map(colKey => {
-                const col = DEFAULT_COLUMNS.find(c => c.key === colKey);
-                if (!col) return null;
+      
+      <div className="portfolio-table-container" data-tour="portfolio-table">
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
+          {selectedRows.length > 0 && (
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <button className="btn btn-danger" onClick={handleBulkDelete}>
+                Delete Selected
+              </button>
+              <span style={{ color: '#888', fontSize: '0.95em' }}>
+                {selectedRows.length} selected
+              </span>
+            </div>
+          )}
+        </div>
+        <div className="table-container">
+          <table id="portfolioTable">
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.length === filteredData.length && filteredData.length > 0}
+                    onChange={handleSelectAll}
+                    aria-label="Select all stocks"
+                    tabIndex={0}
+                  />
+                </th>
+                {visibleColumns.map(colKey => {
+                  const col = DEFAULT_COLUMNS.find(c => c.key === colKey);
+                  if (!col) return null;
+                  return (
+                    <th
+                      key={col.key}
+                      className={getSortClass(col.key)}
+                      onClick={() => handleSort(col.key)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {col.label}
+                    </th>
+                  );
+                })}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="portfolioBody">
+              {filteredData.map((stock, index) => {
+                const originalIndex = portfolioData.indexOf(stock);
+                const symbol = stock.symbol;
+                const metrics = calculateRowMetrics(stock);
                 return (
-                  <th
-                    key={col.key}
-                    className={getSortClass(col.key)}
-                    onClick={() => handleSort(col.key)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {col.label}
-                  </th>
+                  <tr key={symbol}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.includes(symbol)}
+                        onChange={() => handleSelectRow(symbol)}
+                        aria-label={`Select ${symbol}`}
+                        tabIndex={0}
+                      />
+                    </td>
+                    {visibleColumns.map(colKey => {
+                      switch (colKey) {
+                        case 'symbol':
+                          return (
+                            <td key="symbol" className="stock-symbol">
+                              <FontAwesomeIcon icon={faChartLine} /> {symbol}
+                            </td>
+                          );
+                        case 'qty':
+                          return (
+                            <td key="qty" onClick={() => startEditCell(originalIndex, 'qty', stock.qty)} tabIndex={0} aria-label="Edit quantity" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'qty', stock.qty); }}>
+                              {editingCell.row === originalIndex && editingCell.col === 'qty' ? (
+                                <input
+                                  type="number"
+                                  value={editingCell.value}
+                                  autoFocus
+                                  onChange={handleEditInputChange}
+                                  onBlur={() => handleEditInputBlur(originalIndex, 'qty')}
+                                  onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'qty')}
+                                  style={{ width: '70px' }}
+                                />
+                              ) : (
+                                stock.qty.toLocaleString()
+                              )}
+                            </td>
+                          );
+                        case 'avgPrice':
+                          return (
+                            <td key="avgPrice" onClick={() => startEditCell(originalIndex, 'avgPrice', stock.avgPrice)} tabIndex={0} aria-label="Edit average price" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'avgPrice', stock.avgPrice); }}>
+                              {editingCell.row === originalIndex && editingCell.col === 'avgPrice' ? (
+                                <input
+                                  type="number"
+                                  value={editingCell.value}
+                                  autoFocus
+                                  onChange={handleEditInputChange}
+                                  onBlur={() => handleEditInputBlur(originalIndex, 'avgPrice')}
+                                  onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'avgPrice')}
+                                  style={{ width: '70px' }}
+                                />
+                              ) : (
+                                `₹${stock.avgPrice.toFixed(2)}`
+                              )}
+                            </td>
+                          );
+                        case 'invested':
+                          return (
+                            <td key="invested">₹{stock.invested.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</td>
+                          );
+                        case 'purchaseDate':
+                          return (
+                            <td key="purchaseDate" onClick={() => startEditCell(originalIndex, 'purchaseDate', stock.purchaseDate)} tabIndex={0} aria-label="Edit purchase date" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'purchaseDate', stock.purchaseDate); }}>
+                              {editingCell.row === originalIndex && editingCell.col === 'purchaseDate' ? (
+                                <input
+                                  type="date"
+                                  value={editingCell.value}
+                                  autoFocus
+                                  onChange={handleEditInputChange}
+                                  onBlur={() => handleEditInputBlur(originalIndex, 'purchaseDate')}
+                                  onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'purchaseDate')}
+                                  style={{ width: '120px' }}
+                                />
+                              ) : (
+                                stock.purchaseDate
+                              )}
+                            </td>
+                          );
+                        case 'currentPrice':
+                          return (
+                            <td key="currentPrice">
+                              <input 
+                                type="number" 
+                                className="current-price-input" 
+                                id={`price_${symbol}`} 
+                                step="0.01" 
+                                placeholder="Enter price" 
+                                value={currentPrices[symbol] || ''} 
+                                onChange={(e) => handlePriceChange(e, symbol)}
+                              />
+                            </td>
+                          );
+                        case 'currentValue':
+                          return (
+                            <td key="currentValue" id={`currentValue_${symbol}`}>
+                              {metrics.currentValue ? formatCurrency(metrics.currentValue) : '-'}
+                            </td>
+                          );
+                        case 'unrealizedGL':
+                          return (
+                            <td key="unrealizedGL" id={`unrealizedGL_${symbol}`}>
+                              {metrics.unrealizedGL ? (
+                                <span className={metrics.unrealizedGL >= 0 ? 'positive' : 'negative'}>
+                                  {formatCurrency(metrics.unrealizedGL)}
+                                </span>
+                              ) : '-'}
+                            </td>
+                          );
+                        case 'totalReturnMerged':
+                          return (
+                            <td key="totalReturnMerged" id={`totalReturnMerged_${symbol}`}>
+                              {metrics.totalReturn !== null && metrics.returnPercent !== null ? (
+                                <span className={metrics.totalReturn >= 0 ? 'positive' : 'negative'}>
+                                  {formatCurrency(metrics.totalReturn)} ({metrics.returnPercent >= 0 ? '+' : ''}{formatPercent(metrics.returnPercent)})
+                                </span>
+                              ) : '-'}
+                            </td>
+                          );
+                        case 'realizedGain':
+                          return (
+                            <td key="realizedGain" className="positive" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
+                              {editingCell.row === originalIndex && editingCell.col === 'realizedGain' ? (
+                                <input
+                                  type="number"
+                                  value={editingCell.value}
+                                  autoFocus
+                                  onChange={handleEditInputChange}
+                                  onBlur={() => handleEditInputBlur(originalIndex, 'realizedGain')}
+                                  onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'realizedGain')}
+                                  style={{ width: '70px' }}
+                                />
+                              ) : (
+                                `₹${stock.realizedGain.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+                              )}
+                            </td>
+                          );
+                        case 'dividend':
+                          return (
+                            <td key="dividend" className="positive" onClick={() => startEditCell(originalIndex, 'dividend', stock.dividend)} tabIndex={0} aria-label="Edit dividend" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'dividend', stock.dividend); }}>
+                              {editingCell.row === originalIndex && editingCell.col === 'dividend' ? (
+                                <input
+                                  type="number"
+                                  value={editingCell.value}
+                                  autoFocus
+                                  onChange={handleEditInputChange}
+                                  onBlur={() => handleEditInputBlur(originalIndex, 'dividend')}
+                                  onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'dividend')}
+                                  style={{ width: '70px' }}
+                                />
+                              ) : (
+                                `₹${stock.dividend.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+                              )}
+                            </td>
+                          );
+                        case 'cagr':
+                          return (
+                            <td key="cagr" id={`cagr_${symbol}`}>
+                              {metrics.cagr ? (
+                                <span className={metrics.cagr >= 0 ? 'positive' : 'negative'}>
+                                  {formatPercent(metrics.cagr)}
+                                </span>
+                              ) : '-'}
+                            </td>
+                          );
+                        case 'daysHeld':
+                          return (
+                            <td key="daysHeld" id={`daysHeld_${symbol}`}>
+                              {calculateDaysHeld(stock.purchaseDate)}
+                            </td>
+                          );
+                        default:
+                          return null;
+                      }
+                    })}
+                    <td className="table-actions">
+                      <button 
+                        onClick={() => editStock(originalIndex)} 
+                        className="btn btn-sm btn-secondary"
+                        aria-label={`Edit ${symbol}`}
+                        tabIndex={0}
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteStock(originalIndex)} 
+                        className="btn btn-sm btn-danger"
+                        aria-label={`Delete ${symbol}`}
+                        tabIndex={0}
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </button>
+                    </td>
+                  </tr>
                 );
               })}
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="portfolioBody">
-            {filteredData.map((stock, index) => {
-              const originalIndex = portfolioData.indexOf(stock);
-              const symbol = stock.symbol;
-              const metrics = calculateRowMetrics(stock);
-              return (
-                <tr key={symbol}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedRows.includes(symbol)}
-                      onChange={() => handleSelectRow(symbol)}
-                      aria-label={`Select ${symbol}`}
-                      tabIndex={0}
-                    />
-                  </td>
-                  {visibleColumns.map(colKey => {
-                    switch (colKey) {
-                      case 'symbol':
-                        return (
-                          <td key="symbol" className="stock-symbol">
-                            <FontAwesomeIcon icon={faChartLine} /> {symbol}
-                          </td>
-                        );
-                      case 'qty':
-                        return (
-                          <td key="qty" onClick={() => startEditCell(originalIndex, 'qty', stock.qty)} tabIndex={0} aria-label="Edit quantity" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'qty', stock.qty); }}>
-                            {editingCell.row === originalIndex && editingCell.col === 'qty' ? (
-                              <input
-                                type="number"
-                                value={editingCell.value}
-                                autoFocus
-                                onChange={handleEditInputChange}
-                                onBlur={() => handleEditInputBlur(originalIndex, 'qty')}
-                                onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'qty')}
-                                style={{ width: '70px' }}
-                              />
-                            ) : (
-                              stock.qty.toLocaleString()
-                            )}
-                          </td>
-                        );
-                      case 'avgPrice':
-                        return (
-                          <td key="avgPrice" onClick={() => startEditCell(originalIndex, 'avgPrice', stock.avgPrice)} tabIndex={0} aria-label="Edit average price" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'avgPrice', stock.avgPrice); }}>
-                            {editingCell.row === originalIndex && editingCell.col === 'avgPrice' ? (
-                              <input
-                                type="number"
-                                value={editingCell.value}
-                                autoFocus
-                                onChange={handleEditInputChange}
-                                onBlur={() => handleEditInputBlur(originalIndex, 'avgPrice')}
-                                onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'avgPrice')}
-                                style={{ width: '70px' }}
-                              />
-                            ) : (
-                              `₹${stock.avgPrice.toFixed(2)}`
-                            )}
-                          </td>
-                        );
-                      case 'invested':
-                        return (
-                          <td key="invested">₹{stock.invested.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</td>
-                        );
-                      case 'purchaseDate':
-                        return (
-                          <td key="purchaseDate" onClick={() => startEditCell(originalIndex, 'purchaseDate', stock.purchaseDate)} tabIndex={0} aria-label="Edit purchase date" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'purchaseDate', stock.purchaseDate); }}>
-                            {editingCell.row === originalIndex && editingCell.col === 'purchaseDate' ? (
-                              <input
-                                type="date"
-                                value={editingCell.value}
-                                autoFocus
-                                onChange={handleEditInputChange}
-                                onBlur={() => handleEditInputBlur(originalIndex, 'purchaseDate')}
-                                onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'purchaseDate')}
-                                style={{ width: '120px' }}
-                              />
-                            ) : (
-                              stock.purchaseDate
-                            )}
-                          </td>
-                        );
-                      case 'currentPrice':
-                        return (
-                          <td key="currentPrice">
-                            <input 
-                              type="number" 
-                              className="current-price-input" 
-                              id={`price_${symbol}`} 
-                              step="0.01" 
-                              placeholder="Enter price" 
-                              value={currentPrices[symbol] || ''} 
-                              onChange={(e) => handlePriceChange(e, symbol)}
-                            />
-                          </td>
-                        );
-                      case 'currentValue':
-                        return (
-                          <td key="currentValue" id={`currentValue_${symbol}`}>
-                            {metrics.currentValue ? formatCurrency(metrics.currentValue) : '-'}
-                          </td>
-                        );
-                      case 'unrealizedGL':
-                        return (
-                          <td key="unrealizedGL" id={`unrealizedGL_${symbol}`}>
-                            {metrics.unrealizedGL ? (
-                              <span className={metrics.unrealizedGL >= 0 ? 'positive' : 'negative'}>
-                                {formatCurrency(metrics.unrealizedGL)}
-                              </span>
-                            ) : '-'}
-                          </td>
-                        );
-                      case 'totalReturnMerged':
-                        return (
-                          <td key="totalReturnMerged" id={`totalReturnMerged_${symbol}`}>
-                            {metrics.totalReturn !== null && metrics.returnPercent !== null ? (
-                              <span className={metrics.totalReturn >= 0 ? 'positive' : 'negative'}>
-                                {formatCurrency(metrics.totalReturn)} ({metrics.returnPercent >= 0 ? '+' : ''}{formatPercent(metrics.returnPercent)})
-                              </span>
-                            ) : '-'}
-                          </td>
-                        );
-                      case 'realizedGain':
-                        return (
-                          <td key="realizedGain" className="positive" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
-                            {editingCell.row === originalIndex && editingCell.col === 'realizedGain' ? (
-                              <input
-                                type="number"
-                                value={editingCell.value}
-                                autoFocus
-                                onChange={handleEditInputChange}
-                                onBlur={() => handleEditInputBlur(originalIndex, 'realizedGain')}
-                                onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'realizedGain')}
-                                style={{ width: '70px' }}
-                              />
-                            ) : (
-                              `₹${stock.realizedGain.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
-                            )}
-                          </td>
-                        );
-                      case 'dividend':
-                        return (
-                          <td key="dividend" className="positive" onClick={() => startEditCell(originalIndex, 'dividend', stock.dividend)} tabIndex={0} aria-label="Edit dividend" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'dividend', stock.dividend); }}>
-                            {editingCell.row === originalIndex && editingCell.col === 'dividend' ? (
-                              <input
-                                type="number"
-                                value={editingCell.value}
-                                autoFocus
-                                onChange={handleEditInputChange}
-                                onBlur={() => handleEditInputBlur(originalIndex, 'dividend')}
-                                onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'dividend')}
-                                style={{ width: '70px' }}
-                              />
-                            ) : (
-                              `₹${stock.dividend.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
-                            )}
-                          </td>
-                        );
-                      case 'cagr':
-                        return (
-                          <td key="cagr" id={`cagr_${symbol}`}>
-                            {metrics.cagr ? (
-                              <span className={metrics.cagr >= 0 ? 'positive' : 'negative'}>
-                                {formatPercent(metrics.cagr)}
-                              </span>
-                            ) : '-'}
-                          </td>
-                        );
-                      case 'daysHeld':
-                        return (
-                          <td key="daysHeld" id={`daysHeld_${symbol}`}>
-                            {calculateDaysHeld(stock.purchaseDate)}
-                          </td>
-                        );
-                      default:
-                        return null;
-                    }
-                  })}
-                  <td className="table-actions">
-                    <button 
-                      onClick={() => editStock(originalIndex)} 
-                      className="btn btn-sm btn-secondary"
-                      aria-label={`Edit ${symbol}`}
-                      tabIndex={0}
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button 
-                      onClick={() => handleDeleteStock(originalIndex)} 
-                      className="btn btn-sm btn-danger"
-                      aria-label={`Delete ${symbol}`}
-                      tabIndex={0}
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
