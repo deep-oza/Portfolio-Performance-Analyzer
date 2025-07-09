@@ -59,22 +59,77 @@ const HelpModal = () => {
     >
       <div className="modal-container help-modal-container" style={{ maxWidth: 700, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
-        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="modal-header" style={{ padding: '2rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h3 className="modal-title" style={{ margin: 0 }}>
             <FontAwesomeIcon icon={faQuestionCircle} /> Help & Instructions
           </h3>
-          <button 
-            className="modal-close-btn" 
-            onClick={hideHelpModal}
-            aria-label="Close"
-            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
-          >
-            ×
-          </button>
         </div>
         {/* Body */}
-        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
+        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '1rem 1.5rem' }}>
           <div className="help-content">
+            <div className="help-section">
+              <h4>How to Use</h4>
+              <h5>Creating & Managing Portfolios</h5>
+              <ol>
+                <li>Find the "Portfolios" section with the "Active Portfolio" dropdown</li>
+                <li>Click the <strong>+</strong> button next to the dropdown to create a new portfolio</li>
+                <li>Enter a unique portfolio name and click "Create"</li>
+                <li>Switch between portfolios using the dropdown selector</li>
+                <li>Delete a portfolio by selecting it and clicking the trash icon (cannot delete "All Portfolios")</li>
+              </ol>
+              
+              <h5>Adding & Managing Stocks</h5>
+              <ol>
+                <li>Click <strong>Add New Stock</strong> button in the control panel</li>
+                <li>Select a portfolio to add the stock to (defaults to currently selected portfolio)</li>
+                <li>Enter the stock symbol and click outside the field to automatically fetch current price</li>
+                <li>Fill in quantity, purchase price, and purchase date (required fields)</li>
+                <li>Optionally add realized gains and dividend information</li>
+                <li>Click <strong>Add Stock</strong> to save to your portfolio</li>
+                <li>To edit a stock, click the edit icon in the table row</li>
+                <li>To delete a stock, use the trash icon in the table row</li>
+              </ol>
+              
+              <h5>Getting Stock Quotes</h5>
+              <ol>
+                <li>Use the "Stock Quote" section to get real-time prices</li>
+                <li>Enter a stock symbol and click the search button</li>
+                <li>View current price, percent change, and other information</li>
+                <li>Click the refresh button to update the price</li>
+                <li>Click "Clear" to reset the quote search</li>
+              </ol>
+              
+              <h5>Importing & Exporting Data</h5>
+              <ol>
+                <li>Click <strong>Import CSV</strong> in the control panel</li>
+                <li>Review the import instructions and click "Confirm and Upload"</li>
+                <li>Select a portfolio to import into or create a new one</li>
+                <li>Click <strong>Export Data</strong> to download your current portfolio as a CSV file</li>
+                <li>Download the sample CSV template as a guide for formatting your import files</li>
+              </ol>
+              
+              <h5>Using Analytics</h5>
+              <ol>
+                <li>Click <strong>Show Analytics</strong> button in the portfolio section</li>
+                <li>View charts showing portfolio allocation and performance</li>
+                <li>Analyze performance metrics across different holdings</li>
+                <li>Click <strong>Hide Analytics</strong> to return to the table view</li>
+              </ol>
+              
+              <h5>Customizing Your View</h5>
+              <ol>
+                <li>Click the <strong>Columns</strong> button to open the column customization dropdown</li>
+                <li>Check/uncheck boxes to show/hide specific data columns</li>
+                <li>Drag and drop column names using the handle (☰) to reorder them</li>
+                <li>Click "Reset" to restore all default columns</li>
+                <li>Click "Close" to apply your column settings</li>
+                <li>Use the theme toggle in the top-right corner to switch between light and dark modes</li>
+                <li>Sort the table by clicking on any column header</li>
+                <li>Use the search bar to filter stocks by name or symbol</li>
+                <li>Use the dropdown filter to show all stocks, gainers only, or losers only</li>
+              </ol>
+            </div>
+
             <div className="help-section">
               <h4>Getting Started</h4>
               <p>Welcome to the Portfolio Performance Analyzer! This tool helps you track and analyze your stock investments.</p>
