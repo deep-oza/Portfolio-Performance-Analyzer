@@ -80,34 +80,68 @@ const HelpModal = () => {
               <p>Welcome to the Portfolio Performance Analyzer! This tool helps you track and analyze your stock investments.</p>
               <ol>
                 <li>Add stocks using the <strong>Add New Stock</strong> button</li>
-                <li>Enter current market prices in the table</li>
-                <li>View performance metrics and charts</li>
+                <li>Create multiple portfolios to organize your investments</li>
+                <li>Import existing portfolios from CSV files</li>
+                <li>View performance metrics and visualization charts</li>
               </ol>
             </div>
+            
+            <div className="help-section">
+              <h4>Portfolio Management</h4>
+              <ul>
+                <li><strong>Create Portfolios:</strong> Organize investments by strategy, account type, or goals</li>
+                <li><strong>Switch Portfolios:</strong> Use the dropdown to view different portfolios</li>
+                <li><strong>All Portfolios View:</strong> See combined performance across all your investments</li>
+                <li><strong>Add/Edit Stocks:</strong> Enter stock details including purchase date, price, and quantity</li>
+                <li><strong>Track Dividends:</strong> Record dividend income for each position</li>
+                <li><strong>Realized Gains:</strong> Track profits from partial sells separately</li>
+              </ul>
+            </div>
+            
             <div className="help-section">
               <h4>Key Metrics Explained</h4>
               <ul>
-                <li><strong>Return % Since Purchase:</strong> Simple return percentage based on unrealized gain/loss only</li>
+                <li><strong>Total Invested:</strong> Sum of all purchase amounts (price × quantity)</li>
+                <li><strong>Current Value:</strong> Market value based on latest prices</li>
+                <li><strong>Overall Return %:</strong> Total percentage gain/loss across your portfolio</li>
                 <li><strong>CAGR %:</strong> Compound Annual Growth Rate - annualized return over time</li>
                 <li><strong>Unrealized G/L:</strong> Current gain or loss based on market price</li>
                 <li><strong>Realized Gain:</strong> Profits already booked from partial sells</li>
+                <li><strong>Total Return:</strong> Combined realized and unrealized gains plus dividends</li>
               </ul>
             </div>
+            
+            <div className="help-section">
+              <h4>Features & Tools</h4>
+              <ul>
+                <li><strong>Real-time Quotes:</strong> Get current market prices for any stock symbol</li>
+                <li><strong>Search & Filter:</strong> Quickly find stocks or filter by performance</li>
+                <li><strong>Analytics Dashboard:</strong> View charts showing allocation and performance</li>
+                <li><strong>Column Customization:</strong> Show/hide and reorder table columns</li>
+                <li><strong>Dark/Light Theme:</strong> Toggle between viewing modes</li>
+                <li><strong>Bulk Actions:</strong> Select multiple stocks to edit or delete</li>
+                <li><strong>In-place Editing:</strong> Click on table cells to edit values directly</li>
+              </ul>
+            </div>
+            
             <div className="help-section">
               <h4>Data Management</h4>
               <ul>
-                <li>Your data is stored locally in your browser</li>
-                <li>Use <strong>Export Data</strong> to backup your portfolio</li>
-                <li>Import a CSV file with your portfolio data</li>
+                <li><strong>Local Storage:</strong> Your data is stored securely in your browser</li>
+                <li><strong>Export Data:</strong> Backup your portfolio as a CSV file</li>
+                <li><strong>Import CSV:</strong> Load portfolio data from spreadsheets</li>
+                <li><strong>Data Privacy:</strong> All data stays on your device - nothing is sent to servers</li>
               </ul>
             </div>
+            
             <div className="help-section">
               <h4>Tips & Tricks</h4>
               <ul>
-                <li>Use the search bar to quickly find stocks</li>
-                <li>Filter by gainers/losers to focus on specific stocks</li>
-                <li>Click column headers to sort the table</li>
-                <li>Use the charts to visualize your portfolio allocation and performance</li>
+                <li>Use keyboard shortcuts: <strong>Enter</strong> to save edits, <strong>Escape</strong> to cancel</li>
+                <li>Click column headers to sort the table by that metric</li>
+                <li>Create separate portfolios for different investment strategies</li>
+                <li>Use the analytics view to identify portfolio imbalances</li>
+                <li>Export your data regularly as a backup</li>
               </ul>
             </div>
           </div>
