@@ -20,7 +20,8 @@ const PortfolioSelector = ({
     switchPortfolio,
     createPortfolio,
     deletePortfolio,
-    showModal
+    showModal,
+    theme // <-- add theme from context
   } = useContext(PortfolioContext);
   const [creating, setCreating] = useState(false);
   const [modalInput, setModalInput] = useState('');
@@ -101,7 +102,7 @@ const PortfolioSelector = ({
   };
 
   return (
-    <div className="portfolio-selector-card" role="region" aria-label="Portfolio selection">
+    <div className={`portfolio-selector-card${theme === 'dark' ? ' dark' : ''}`} role="region" aria-label="Portfolio selection">
       <div className="portfolio-selector-header">
         <h2 className="portfolio-selector-title">Portfolios</h2>
         <span className="portfolio-selector-subtitle">Manage and switch between your investment portfolios</span>

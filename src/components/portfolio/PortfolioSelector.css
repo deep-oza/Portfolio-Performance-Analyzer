@@ -134,6 +134,56 @@
   box-sizing: border-box;
 }
 
+/* Dark theme styles for PortfolioSelector */
+.portfolio-selector-card.dark {
+  background: #23272f;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.13);
+}
+.portfolio-selector-card.dark .portfolio-selector-title {
+  color: #e0e6f0;
+}
+.portfolio-selector-card.dark .portfolio-selector-subtitle {
+  color: #8ca0c7;
+}
+.portfolio-selector-card.dark .portfolio-selector-label {
+  color: #e0e6f0;
+}
+.portfolio-selector-card.dark .portfolio-selector-select {
+  background: #23272f;
+  color: #e0e6f0;
+  border: 1.5px solid #444b5a;
+}
+.portfolio-selector-card.dark .portfolio-selector-add,
+.portfolio-selector-card.dark .portfolio-selector-delete {
+  background: #2563eb;
+  color: #fff;
+}
+.portfolio-selector-card.dark .portfolio-selector-add:hover,
+.portfolio-selector-card.dark .portfolio-selector-delete:hover {
+  background: #1e40af;
+}
+.portfolio-selector-card.dark .column-dropdown {
+  background: #23272f;
+  color: #e0e6f0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.33);
+}
+.portfolio-selector-card.dark .column-dropdown-header {
+  color: #90cdf4;
+}
+.portfolio-selector-card.dark .column-dropdown-checkbox {
+  color: #e0e6f0;
+}
+.portfolio-selector-card.dark .column-dropdown-actions button {
+  background: #23272f;
+  color: #e0e6f0;
+  border: 1px solid #444b5a;
+}
+.portfolio-selector-card.dark .column-dropdown-actions button.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+}
+
 @media (max-width: 600px) {
   .portfolio-selector-card {
     padding: 12px 6px 8px 6px;

@@ -62,16 +62,8 @@ const ConfirmModal = () => {
     >
       <div className="modal-container" style={{ maxWidth: 600, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
-        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="modal-header" style={{ padding: '2rem 2rem 0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <h3 id="modalTitle" className="modal-title" style={{ margin: 0 }}>{title}</h3>
-          <button 
-            className="modal-close-btn" 
-            onClick={handleCancel}
-            aria-label="Close"
-            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
-          >
-            ×
-          </button>
         </div>
         {/* Body */}
         <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '2rem' }}>
