@@ -80,7 +80,7 @@ const HelpModal = () => {
     },
     title: {
       margin: 0,
-      fontSize: 'calc(1.1rem + 0.3vw)'
+      fontSize: 'calc(13.6px + 0.2vw)'
     }
   };
   
@@ -102,8 +102,8 @@ const HelpModal = () => {
         <div className="modal-body" style={modalStyles.body}>
           <div className="help-content" style={{ fontSize: 'calc(0.85rem + 0.2vw)' }}>
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>How to Use</h4>
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Creating & Managing Portfolios</h5>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>How to Use</h4>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Creating & Managing Portfolios</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Find the "Portfolios" section with the "Active Portfolio" dropdown</li>
                 <li>Click the <strong>+</strong> button next to the dropdown to create a new portfolio</li>
@@ -112,7 +112,7 @@ const HelpModal = () => {
                 <li>Delete a portfolio by selecting it and clicking the trash icon (cannot delete "All Portfolios")</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Adding & Managing Stocks</h5>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Adding & Managing Stocks</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Add New Stock</strong> button in the control panel</li>
                 <li>Select a portfolio to add the stock to (defaults to currently selected portfolio)</li>
@@ -124,7 +124,7 @@ const HelpModal = () => {
                 <li>To delete a stock, use the trash icon in the table row</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Getting Stock Quotes</h5>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Getting Stock Quotes</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Use the "Stock Quote" section to get real-time prices</li>
                 <li>Enter a stock symbol and click the search button</li>
@@ -133,7 +133,7 @@ const HelpModal = () => {
                 <li>Click "Clear" to reset the quote search</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Importing & Exporting Data</h5>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Importing & Exporting Data</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Import CSV</strong> in the control panel</li>
                 <li>Review the import instructions and click "Confirm and Upload"</li>
@@ -142,7 +142,7 @@ const HelpModal = () => {
                 <li>Download the sample CSV template as a guide for formatting your import files</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Using Analytics</h5>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Using Analytics</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Show Analytics</strong> button in the portfolio section</li>
                 <li>View charts showing portfolio allocation and performance</li>
@@ -150,7 +150,7 @@ const HelpModal = () => {
                 <li>Click <strong>Hide Analytics</strong> to return to the table view</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(0.9rem + 0.2vw)' }}>Customizing Your View</h5>
+              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Customizing Your View</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click the <strong>Columns</strong> button to open the column customization dropdown</li>
                 <li>Check/uncheck boxes to show/hide specific data columns</li>
@@ -165,7 +165,7 @@ const HelpModal = () => {
             </div>
 
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Getting Started</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Getting Started</h4>
               <p>Welcome to the Portfolio Performance Analyzer! This tool helps you track and analyze your stock investments.</p>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Add stocks using the <strong>Add New Stock</strong> button</li>
@@ -176,7 +176,7 @@ const HelpModal = () => {
             </div>
             
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Portfolio Management</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Portfolio Management</h4>
               <ul style={{ paddingLeft: '1.2rem' }}>
                 <li><strong>Create Portfolios:</strong> Organize investments by strategy, account type, or goals</li>
                 <li><strong>Switch Portfolios:</strong> Use the dropdown to view different portfolios</li>
@@ -188,7 +188,7 @@ const HelpModal = () => {
             </div>
             
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Key Metrics Explained</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Key Metrics Explained</h4>
               <ul style={{ paddingLeft: '1.2rem' }}>
                 <li><strong>Total Invested:</strong> Sum of all purchase amounts (price × quantity)</li>
                 <li><strong>Current Value:</strong> Market value based on latest prices</li>
@@ -201,7 +201,7 @@ const HelpModal = () => {
             </div>
             
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Features & Tools</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Features & Tools</h4>
               <ul style={{ paddingLeft: '1.2rem' }}>
                 <li><strong>Real-time Quotes:</strong> Get current market prices for any stock symbol</li>
                 <li><strong>Search & Filter:</strong> Quickly find stocks or filter by performance</li>
@@ -214,7 +214,7 @@ const HelpModal = () => {
             </div>
             
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Data Management</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Data Management</h4>
               <ul style={{ paddingLeft: '1.2rem' }}>
                 <li><strong>Local Storage:</strong> Your data is stored securely in your browser</li>
                 <li><strong>Export Data:</strong> Backup your portfolio as a CSV file</li>
@@ -224,7 +224,7 @@ const HelpModal = () => {
             </div>
             
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(1rem + 0.2vw)' }}>Tips & Tricks</h4>
+              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>Tips & Tricks</h4>
               <ul style={{ paddingLeft: '1.2rem' }}>
                 <li>Use keyboard shortcuts: <strong>Enter</strong> to save edits, <strong>Escape</strong> to cancel</li>
                 <li>Click column headers to sort the table by that metric</li>
@@ -238,10 +238,10 @@ const HelpModal = () => {
         {/* Footer */}
         <div className="modal-footer" style={modalStyles.footer}>
           <div className="modal-actions" style={{ margin: 0 }}>
-            <button className="btn btn-secondary" onClick={restartTour} style={{ marginRight: '10px', fontSize: 'calc(0.85rem + 0.1vw)' }}>
+            <button className="btn btn-secondary" onClick={restartTour} style={{ marginRight: '10px', fontSize: 'calc(13.6px + 0.1vw)' }}>
               <FontAwesomeIcon icon={faRoute} /> Restart Tour
             </button>
-            <button id="helpModalClose" className="btn" onClick={hideHelpModal} style={{ fontSize: 'calc(0.85rem + 0.1vw)' }}>
+            <button id="helpModalClose" className="btn" onClick={hideHelpModal} style={{ fontSize: 'calc(13.6px + 0.1vw)' }}>
               Got it!
             </button>
           </div>
