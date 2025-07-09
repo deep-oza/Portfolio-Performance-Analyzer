@@ -17,7 +17,8 @@ const StockForm = () => {
     updateCurrentPrice,
     portfolios,
     removeStock,
-    theme // <-- Add theme from context
+    theme, // <-- Add theme from context
+    selectedPortfolioId // <-- Add selectedPortfolioId from context
   } = useContext(PortfolioContext);
   
   // Form state
@@ -85,10 +86,16 @@ const StockForm = () => {
     } else {
       // Set default date to today when adding new stock
       setPurchaseDate(new Date().toISOString().split('T')[0]);
-      // Default to current selected or first portfolio
+      // Default to current selected portfolio or first portfolio
       const keys = Object.keys(portfolios).filter(k => k !== 'default');
       if (keys.length > 0) {
-        setSelectedPortfolio(keys[0]);
+        // Use the currently selected portfolio from context if it's not 'default'
+        if (selectedPortfolioId !== 'default' && portfolios[selectedPortfolioId]) {
+          setSelectedPortfolio(selectedPortfolioId);
+        } else {
+          // Otherwise use the first available portfolio
+          setSelectedPortfolio(keys[0]);
+        }
         setAddNewPortfolio(false);
         setNewPortfolio('');
       } else {
@@ -96,7 +103,7 @@ const StockForm = () => {
         setAddNewPortfolio(true);
       }
     }
-  }, [editingStock, portfolios]);
+  }, [editingStock, portfolios, selectedPortfolioId]);
   
   // Hide form
   const hideForm = () => {
