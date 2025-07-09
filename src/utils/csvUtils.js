@@ -336,7 +336,7 @@ export const exportPortfolioCSV = (portfolioData, currentPrices, calculateDaysHe
     "current price",
     "realized gain",
     "dividend",
-    "total return (₹, %)" ,
+    "total return" ,
     "cagr %",
     "days held"
   ];
