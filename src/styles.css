@@ -1929,3 +1929,140 @@ body[data-theme="dark"] .modal-footer {
     padding: 8px 6px;
   }
 }
+
+/* Responsive font sizes for headings, body, and buttons */
+
+/* Desktop: min-width 1025px (target 1440px) */
+@media (min-width: 1025px) {
+  h1 { font-size: 40px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 24px; }
+  h4 { font-size: 20px; }
+  body, .body-text, p, li, td, th { font-size: 16px; }
+  .btn, button, input, select { font-size: 16px; }
+  .form-title { font-size: 24px; }
+}
+
+/* Tablet: 768px - 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 20px; }
+  h4 { font-size: 17px; }
+  body, .body-text, p, li, td, th { font-size: 15px; }
+  .btn, button, input, select { font-size: 15px; }
+  .form-title { font-size: 20px; }
+}
+
+/* Mobile: 390px - 767px */
+@media (max-width: 767px) {
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 17px; }
+  h4 { font-size: 15px; }
+  body, .body-text, p, li, td, th { font-size: 14px; }
+  .btn, button, input, select { font-size: 14px; }
+  .form-title { font-size: 17px; }
+}
+
+/* Summary Cards Responsive Layout */
+.summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.summary-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Font size for summary card values */
+.summary-card .value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Desktop (≥1024px): Single row with all 5 cards */
+@media (min-width: 1024px) {
+  .summary-cards {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0;
+  }
+  
+  .summary-card {
+    flex: 1 1 0;
+    min-width: 0; /* Prevents flex items from overflowing */
+    padding: 16px;
+    margin: 0;
+  }
+  
+  .summary-card .value {
+    font-size: 24px;
+  }
+}
+
+/* Tablet (768px to <1024px): 2-3 cards per row */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .summary-cards {
+    justify-content: space-between;
+    gap: 18px;
+  }
+  
+  .summary-card {
+    flex: 0 0 calc(33.333% - 12px);
+    padding: 20px;
+  }
+  
+  /* If there are 5 cards, make the last two take up half width each */
+  .summary-card:nth-last-child(1):nth-child(3n+1),
+  .summary-card:nth-last-child(2):nth-child(3n+2) {
+    flex: 0 0 calc(50% - 9px);
+  }
+  
+  .summary-card .value {
+    font-size: 22px;
+  }
+}
+
+/* Mobile (500px to <768px): 2 cards per row */
+@media (min-width: 500px) and (max-width: 767px) {
+  .summary-cards {
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    flex: 0 0 calc(50% - 8px);
+    padding: 16px;
+  }
+  
+  .summary-card .value {
+    font-size: 20px;
+  }
+}
+
+/* Small screens (<500px): Single column */
+@media (max-width: 499px) {
+  .summary-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    width: 90%;
+    /* max-width: 320px; */
+    padding: 16px;
+    margin: 0 auto;
+  }
+  
+  .summary-card .value {
+    font-size: 20px;
+  }
+}
