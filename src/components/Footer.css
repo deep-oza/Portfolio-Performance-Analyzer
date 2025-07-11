@@ -1,4 +1,4 @@
-/* Footer styles extracted from styles.css */
+/* Base Footer styles */
 .footer {
   margin-top: var(--space-4);
   padding-top: var(--space-4);
@@ -61,6 +61,8 @@
   color: var(--text-muted);
   font-size: var(--text-sm);
 }
+
+/* Tablet */
 @media (min-width: 768px) {
   .footer {
     margin-top: var(--space-5);
@@ -81,6 +83,8 @@
     justify-content: flex-end;
   }
 }
+
+/* Desktop */
 @media (min-width: 1024px) {
   .footer {
     margin-top: var(--space-6);
@@ -96,6 +100,17 @@
     font-size: 0.9rem;
   }
 }
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  .footer {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Mobile */
 @media (max-width: 767px) {
   .footer {
     padding: 12px 0 0 0;
@@ -120,9 +135,9 @@
   .footer-section p {
     font-size: 0.85rem;
   }
-} 
+}
 
-/* === Migrated from inline styles in Footer.js === */
+/* Footer Instructions Section */
 .footer-instructions-section {
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(30, 64, 175, 0.05) 100%);
   border-radius: 12px;
@@ -154,7 +169,8 @@
   font-size: 18px;
   font-weight: 700;
   margin: 0 0 16px 0;
-  color: #2563eb;
+  color: var(--primary) !important;
+  margin-bottom: 10px;
 }
 .footer-instructions-info-icon {
   font-size: 16px;
@@ -192,6 +208,7 @@
   line-height: 1.5;
 }
 
+/* Footer Metrics Section */
 .footer-metrics-section {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
   border-radius: 12px;
@@ -223,7 +240,8 @@
   font-size: 18px;
   font-weight: 700;
   margin: 0 0 16px 0;
-  color: #10b981;
+  color: var(--success) !important;
+  margin-bottom: 10px;
 }
 .footer-metrics-info-icon {
   font-size: 16px;
@@ -253,13 +271,79 @@
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.5;
-} 
+}
 
+/* Extra Mobile Enhancements */
 @media (max-width: 500px) {
-  .footer-instructions-title {
+  .footer-instructions-section,
+  .footer-metrics-section {
+    padding: 16px;
+  }
+
+  .footer-instructions-title,
+  .footer-metrics-title {
     font-size: 1rem !important;
+    flex-wrap: wrap;
   }
-  .footer-instructions-step-header {
-    font-size: 0.95rem !important;
+
+  .footer-instructions-step,
+  .footer-metrics-step {
+    padding: 12px;
   }
-} 
+
+  .footer-instructions-step-header,
+  .footer-metrics-step-header {
+    font-size: 0.9rem !important;
+    flex-wrap: wrap;
+  }
+
+  .footer-instructions-step-desc,
+  .footer-metrics-step-desc {
+    font-size: 0.85rem;
+  }
+
+  .footer-instructions-icon-bg,
+  .footer-metrics-icon-bg {
+    width: 40px;
+    height: 40px;
+    border-radius: 0 8px 0 40px;
+  }
+
+  .footer-instructions-icon,
+  .footer-metrics-icon {
+    font-size: 16px;
+  }
+}
+
+/* Ultra-narrow screens */
+@media (max-width: 400px) {
+  .footer-instructions-step-header,
+  .footer-metrics-step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .footer-instructions-step,
+  .footer-metrics-step {
+    margin-bottom: 10px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Tablet text enhancements */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer-instructions-title,
+  .footer-metrics-title {
+    font-size: 1.1rem;
+  }
+
+  .footer-instructions-step-desc,
+  .footer-metrics-step-desc {
+    font-size: 0.95rem;
+  }
+}
