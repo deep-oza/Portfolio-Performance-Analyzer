@@ -177,174 +177,67 @@ const Footer = () => {
       <PrivacyPolicyModal visible={showPrivacy} onClose={() => setShowPrivacy(false)} />
       <div className="footer-sections">
         {/* Instructions Section */}
-        <div className="footer-section" style={{
-          background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(30, 64, 175, 0.05) 100%)',
-          borderRadius: 12,
-          padding: '24px',
-          border: '1px solid rgba(37, 99, 235, 0.1)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: 60,
-            height: 60,
-            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%)',
-            borderRadius: '0 12px 0 60px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <FontAwesomeIcon icon={faCalculator} style={{ color: '#2563eb', fontSize: 20 }} />
+        <div className="footer-section footer-instructions-section">
+          <div className="footer-instructions-icon-bg">
+            <FontAwesomeIcon icon={faCalculator} className="footer-instructions-icon" />
           </div>
           
-          <h4 style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            fontSize: 18,
-            fontWeight: 700,
-            margin: '0 0 16px 0',
-            color: '#2563eb'
-          }}>
-            <FontAwesomeIcon icon={faInfoCircle} style={{ fontSize: 16 }} />
+          <h4 className="footer-instructions-title">
+            <FontAwesomeIcon icon={faInfoCircle} className="footer-instructions-info-icon" />
             How to Use
           </h4>
           
-                    <div style={{
-            background: 'var(--bg-card)',
-            borderRadius: 8,
-            padding: '16px',
-            border: '1px solid var(--border-color)',
-            marginBottom: 12
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              marginBottom: 8,
-              fontSize: 14,
-              fontWeight: 600,
-              color: 'var(--text-main)'
-            }}>
-              <FontAwesomeIcon icon={faPlus} style={{ color: '#2563eb', fontSize: 14 }} />
+          <div className="footer-instructions-step footer-instructions-step1">
+            <div className="footer-instructions-step-header">
+              <FontAwesomeIcon icon={faPlus} className="footer-instructions-step-icon" />
               Step 1: Add Your Stocks
             </div>
-            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            <p className="footer-instructions-step-desc">
               Use "Add New Stock" button or import CSV file with symbol, quantity, average price, and purchase date.
             </p>
           </div>
           
-          <div style={{
-            background: 'var(--bg-card)',
-            borderRadius: 8,
-            padding: '16px',
-            border: '1px solid var(--border-color)',
-            marginBottom: 12
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              marginBottom: 8,
-              fontSize: 14,
-              fontWeight: 600,
-              color: 'var(--text-main)'
-            }}>
-              <FontAwesomeIcon icon={faChartLine} style={{ color: '#10b981', fontSize: 14 }} />
+          <div className="footer-instructions-step footer-instructions-step2">
+            <div className="footer-instructions-step-header">
+              <FontAwesomeIcon icon={faChartLine} className="footer-instructions-step-icon step2" />
               Step 2: Enter Current Prices
             </div>
-            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            <p className="footer-instructions-step-desc">
               Click in the "Current Price" column and enter latest market prices. Use "Refresh Prices" for automatic updates.
             </p>
           </div>
           
-          <div style={{
-            background: 'var(--bg-card)',
-            borderRadius: 8,
-            padding: '16px',
-            border: '1px solid var(--border-color)'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              marginBottom: 8,
-              fontSize: 14,
-              fontWeight: 600,
-              color: 'var(--text-main)'
-            }}>
-              <FontAwesomeIcon icon={faArrowTrendUp} style={{ color: '#f59e0b', fontSize: 14 }} />
+          <div className="footer-instructions-step footer-instructions-step3">
+            <div className="footer-instructions-step-header">
+              <FontAwesomeIcon icon={faArrowTrendUp} className="footer-instructions-step-icon step3" />
               Step 3: View Real-Time Analysis
             </div>
-            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            <p className="footer-instructions-step-desc">
               All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
             </p>
           </div>
         </div>
         
         {/* Metrics Explained Section */}
-        <div className="footer-section" style={{
-          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%)',
-          borderRadius: 12,
-          padding: '24px',
-          border: '1px solid rgba(16, 185, 129, 0.1)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: 60,
-            height: 60,
-            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%)',
-            borderRadius: '0 12px 0 60px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <FontAwesomeIcon icon={faPercentage} style={{ color: '#10b981', fontSize: 20 }} />
+        <div className="footer-section footer-metrics-section">
+          <div className="footer-metrics-icon-bg">
+            <FontAwesomeIcon icon={faPercentage} className="footer-metrics-icon" />
           </div>
           
-          <h4 style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            fontSize: 18,
-            fontWeight: 700,
-            margin: '0 0 16px 0',
-            color: '#10b981'
-          }}>
-            <FontAwesomeIcon icon={faChartLine} style={{ fontSize: 16 }} />
+          <h4 className="footer-metrics-title">
+            <FontAwesomeIcon icon={faChartLine} className="footer-metrics-info-icon" />
             Performance Metrics
           </h4>
           
-                                <div style={{
-             background: 'var(--bg-card)',
-             borderRadius: 8,
-             padding: '16px',
-             border: '1px solid var(--border-color)',
-             marginBottom: 12
-           }}>
-             <div style={{
-               display: 'flex',
-               alignItems: 'center',
-               gap: 10,
-               marginBottom: 8,
-               fontSize: 14,
-               fontWeight: 600,
-               color: 'var(--text-main)'
-             }}>
-               <FontAwesomeIcon icon={faPercentage} style={{ color: '#2563eb', fontSize: 14 }} />
-               Average Return %
-             </div>
-             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-               Portfolio-wide return: (Total Current Value - Total Invested) / Total Invested × 100
-             </p>
-           </div>
+          <div className="footer-metrics-step footer-metrics-step1">
+            <div className="footer-metrics-step-header">
+              <FontAwesomeIcon icon={faPercentage} className="footer-metrics-step-icon" />
+              Average Return %
+            </div>
+            <p className="footer-metrics-step-desc">
+              Portfolio-wide return: (Total Current Value - Total Invested) / Total Invested × 100
+            </p>
+          </div>
            
            <div style={{
              background: 'var(--bg-card)',

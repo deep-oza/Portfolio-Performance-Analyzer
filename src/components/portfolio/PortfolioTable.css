@@ -102,6 +102,14 @@ tr:hover {
   box-shadow: 0 0 0 3px var(--primary-100);
 }
 
+/* === Migrated from inline styles in PortfolioTable.js === */
+.table-edit-input {
+  width: 70px;
+}
+.table-edit-input-purchaseDate {
+  width: 120px;
+}
+
 @media (max-width: 600px) {
   .table-container {
     width: 100vw;

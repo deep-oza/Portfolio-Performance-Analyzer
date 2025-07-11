@@ -61,13 +61,13 @@ const ConfirmModal = () => {
       className="modal-overlay active" 
       onClick={handleOutsideClick}
     >
-      <div className="modal-container" style={{ maxWidth: 600, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+      <div className="modal-container confirm-modal-container">
         {/* Header */}
-        <div className="modal-header" style={{ padding: '32px 32px 0 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h3 id="modalTitle" className="modal-title" style={{ margin: 0 }}>{title}</h3>
+        <div className="modal-header confirm-modal-header">
+          <h3 id="modalTitle" className="modal-title confirm-modal-title">{title}</h3>
         </div>
         {/* Body */}
-        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '32px' }}>
+        <div className="modal-body confirm-modal-body">
           {typeof message === 'string' ? (
             <p id="modalMessage" className="modal-message" dangerouslySetInnerHTML={{ __html: message }} />
           ) : (
@@ -75,8 +75,8 @@ const ConfirmModal = () => {
           )}
         </div>
         {/* Footer */}
-        <div className="modal-footer" style={{ padding: '24px 32px', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
-          <div className="modal-actions" style={{ margin: 0 }}>
+        <div className="modal-footer confirm-modal-footer">
+          <div className="modal-actions confirm-modal-actions">
             {showCancel !== false && (
               <button 
                 id="modalCancel" 

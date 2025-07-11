@@ -231,62 +231,28 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   };
 
   return (
-    <div style={{ width: '100%' }}>
-      <h2 style={{ 
-        textAlign: 'center', 
-        margin: isMobile ? '1rem 0 0.25rem' : '1.5rem 0 0.5rem', 
-        fontSize: isMobile ? '1.2rem' : '1.5rem' 
-      }}>
+    <div className="analytics-dashboard-wrapper">
+      <h2 className="analytics-dashboard-title">
         📊 Portfolio Analytics
       </h2>
       {isMobile ? (
-        <div style={{
-          margin: isMobile ? '24px auto' : '24px auto',
-          padding: '40px 24px 32px 24px',
-          maxWidth: 370,
-          background: isDarkTheme ? 'linear-gradient(135deg, #23272f 80%, #2563c7 100%)' : 'linear-gradient(135deg, #f4f6fa 80%, #dbeafe 100%)',
-          border: isDarkTheme ? '1.5px solid #2563c7' : '1.5px solid #2563c7',
-          borderRadius: 18,
-          boxShadow: isDarkTheme ? '0 4px 16px rgba(0,0,0,0.22)' : '0 4px 16px rgba(0,0,0,0.09)',
-          textAlign: 'center',
-          color: isDarkTheme ? '#e0e6f0' : '#1e293b',
-          fontSize: 17,
-          fontWeight: 500,
-          letterSpacing: 0.01,
-          position: 'relative',
-        }}>
-          <div style={{
-            fontSize: 48,
-            marginBottom: 18,
-            color: '#2563c7',
-            filter: isDarkTheme ? 'drop-shadow(0 2px 6px #111)' : 'drop-shadow(0 2px 6px #b6c6e6)'
-          }}>📊</div>
-          <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+        <div className="analytics-dashboard-mobile-info">
+          <div className="analytics-dashboard-mobile-icon">📊</div>
+          <div className="analytics-dashboard-mobile-title">
             Analytics Available on Desktop
           </div>
-          <div style={{ fontSize: 15, color: isDarkTheme ? '#b6c6e6' : '#334155', marginBottom: 22 }}>
+          <div className="analytics-dashboard-mobile-desc">
             For the best experience, please use a desktop or tablet device to view detailed portfolio analytics and charts.
           </div>
           <button
-            style={{
-              background: '#2563c7',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              padding: '10px 22px',
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: isDarkTheme ? '0 2px 8px #111' : '0 2px 8px #b6c6e6',
-              transition: 'background 0.2s',
-            }}
+            className="analytics-dashboard-mobile-btn"
             onClick={() => window.location.href = '/'}
           >
             Back to Portfolio
           </button>
         </div>
       ) : (
-        <div style={gridStyle}>
+        <div className="analytics-dashboard-grid">
         {/* CAGR by Stock – Column/Vertical bar chart */}
         <div style={cardStyle}>
           <div style={titleStyle}>CAGR by Stock</div>

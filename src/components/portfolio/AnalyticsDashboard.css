@@ -50,3 +50,76 @@
   flex-direction: column;
   gap: var(--space-6);
 } 
+
+/* === Migrated from inline styles in AnalyticsDashboard.js === */
+.analytics-dashboard-title {
+  text-align: center;
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.5rem;
+}
+@media (max-width: 767px) {
+  .analytics-dashboard-title {
+    margin: 1rem 0 0.25rem;
+    font-size: 1.2rem;
+  }
+}
+.analytics-dashboard-mobile-info {
+  margin: 24px auto;
+  padding: 40px 24px 32px 24px;
+  max-width: 370px;
+  background: linear-gradient(135deg, #f4f6fa 80%, #dbeafe 100%);
+  border: 1.5px solid #2563c7;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  text-align: center;
+  color: #1e293b;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: relative;
+}
+body[data-theme="dark"] .analytics-dashboard-mobile-info {
+  background: linear-gradient(135deg, #23272f 80%, #2563c7 100%);
+  color: #e0e6f0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+}
+.analytics-dashboard-mobile-icon {
+  font-size: 48px;
+  margin-bottom: 18px;
+  color: #2563c7;
+  filter: drop-shadow(0 2px 6px #b6c6e6);
+}
+body[data-theme="dark"] .analytics-dashboard-mobile-icon {
+  filter: drop-shadow(0 2px 6px #111);
+}
+.analytics-dashboard-mobile-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.analytics-dashboard-mobile-desc {
+  font-size: 15px;
+  color: #334155;
+  margin-bottom: 22px;
+}
+body[data-theme="dark"] .analytics-dashboard-mobile-desc {
+  color: #b6c6e6;
+}
+.analytics-dashboard-mobile-btn {
+  background: #2563c7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #b6c6e6;
+  transition: background 0.2s;
+}
+body[data-theme="dark"] .analytics-dashboard-mobile-btn {
+  box-shadow: 0 2px 8px #111;
+}
+.analytics-dashboard-grid {
+  /* Add grid or flex styles as needed for desktop layout */
+} 

@@ -259,23 +259,21 @@ const StockForm = () => {
   return (
     <div 
       id="stockFormModal" 
-      className={`modal-overlay${isDarkTheme ? ' dark' : ''}`} 
-      style={{ display: 'flex' }}
+      className={`modal-overlay${isDarkTheme ? ' dark' : ''} stock-form-modal-overlay`} 
       onClick={handleOutsideClick}
       data-tour="stock-form"
     >
-      <div className="modal-container" style={{ maxWidth: 700, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+      <div className="modal-container stock-form-modal-container">
         {/* Header */}
-        <div className="modal-header" style={{ padding: '32px 32px 0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h3 className="form-title" id="stockFormTitle" style={{ margin: 0 }}>
+        <div className="modal-header stock-form-modal-header">
+          <h3 className="form-title stock-form-modal-title" id="stockFormTitle">
             <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
             {isEditing ? ' Edit Stock' : ' Add New Stock'}
           </h3>
           <button 
-            className="modal-close-btn" 
+            className="modal-close-btn stock-form-modal-close-btn" 
             onClick={hideForm}
             aria-label="Close"
-            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
@@ -356,13 +354,13 @@ const StockForm = () => {
                   autoComplete="off"
                 />
                 {fetchTried && quoteData && quoteData.price && !quoteError && (
-                  <div style={{ marginTop: 8, color: '#1976d2', fontWeight: 500, fontSize: '1rem' }}>
+                  <div className="stock-form-fetched-price">
                     Fetched Price: ₹{Number(quoteData.price).toFixed(2)}
                   </div>
                 )}
                 {fetchTried && quoteError && (
-                  <div className="form-error" style={{ marginTop: 8, color: '#b71c1c', display: 'flex', alignItems: 'center' }}>
-                    <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: 6 }} />
+                  <div className="form-error stock-form-error">
+                    <FontAwesomeIcon icon={faExclamationTriangle} className="stock-form-error-icon" />
                     Stock data not available. Enter price manually or try proper stock symbol.
                   </div>
                 )}

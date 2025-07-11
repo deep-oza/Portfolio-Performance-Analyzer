@@ -213,3 +213,8 @@
     font-size: 13.6px;
   }
 } 
+
+/* === Migrated from inline styles in StockLTPCard.js === */
+.stock-ltp-clear-btn {
+  margin-left: 4px;
+} 

@@ -81,6 +81,39 @@
   margin: var(--space-1) 0;
 }
 
+/* === Migrated from inline styles in ConfirmModal.js === */
+.confirm-modal-container {
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+.confirm-modal-header {
+  padding: 32px 32px 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.confirm-modal-title {
+  margin: 0;
+}
+.confirm-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 32px;
+}
+.confirm-modal-footer {
+  padding: 24px 32px;
+  border-top: 1px solid #eee;
+  background: var(--bg-card);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+.confirm-modal-actions {
+  margin: 0;
+}
+
 @media (max-width: 767px) {
   .modal-actions {
     flex-direction: column;

@@ -96,14 +96,14 @@ const PortfolioSelector = ({
     <div className={`portfolio-selector-card${theme === 'dark' ? ' dark' : ''}`} role="region" aria-label="Portfolio selection">
       {/* Local Create Portfolio Modal */}
       {creating && (
-        <div className="modal-overlay active" style={{ zIndex: 1000 }}>
-          <div className="modal-container" style={{ maxWidth: 500, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-            <div className="modal-header" style={{ padding: '32px 32px 0 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <h3 className="modal-title" style={{ margin: 0 }}>Create New Portfolio</h3>
+        <div className="modal-overlay active portfolio-selector-modal-overlay">
+          <div className="modal-container portfolio-selector-modal-container">
+            <div className="modal-header portfolio-selector-modal-header">
+              <h3 className="modal-title portfolio-selector-modal-title">Create New Portfolio</h3>
             </div>
-            <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '32px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <label htmlFor="new-portfolio-name" style={{ marginBottom: 4, fontWeight: 500 }}>Portfolio Name</label>
+            <div className="modal-body portfolio-selector-modal-body">
+              <div className="portfolio-selector-modal-body-inner">
+                <label htmlFor="new-portfolio-name" className="portfolio-selector-modal-label">Portfolio Name</label>
                 <input
                   id="new-portfolio-name"
                   type="text"
@@ -111,11 +111,11 @@ const PortfolioSelector = ({
                   value={modalInput}
                   onChange={e => setModalInput(e.target.value)}
                   placeholder="Enter portfolio name"
-                  style={{ padding: '8px 12px', borderRadius: 6, border: '1.5px solid #d0d7de', fontSize: '1rem', outline: 'none' }}
+                  className="portfolio-selector-modal-input"
                 />
               </div>
             </div>
-            <div className="modal-footer" style={{ padding: '24px 32px', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2, display: 'flex', gap: 12, justifyContent: 'center' }}>
+            <div className="modal-footer portfolio-selector-modal-footer">
               <button className="btn btn-secondary" onClick={handleCreateCancel}>Cancel</button>
               <button className="btn btn-danger" onClick={handleCreateConfirm} disabled={!modalInput.trim() || portfolios[modalInput.trim()]}>Create</button>
             </div>
@@ -126,7 +126,7 @@ const PortfolioSelector = ({
         <h2 className="portfolio-selector-title">Portfolios</h2>
         <span className="portfolio-selector-subtitle">Manage and switch between your investment portfolios</span>
       </div>
-      <div className="portfolio-selector-row" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div className="portfolio-selector-row">
         <label htmlFor="portfolio-select" className="portfolio-selector-label">Active Portfolio</label>
         <select
           id="portfolio-select"
@@ -154,7 +154,6 @@ const PortfolioSelector = ({
           title="Create new portfolio"
           aria-label="Create new portfolio"
           onClick={handleCreateClick}
-          style={{ marginLeft: 8 }}
         >
           <FontAwesomeIcon icon={faPlus} />
         </button>
@@ -162,37 +161,34 @@ const PortfolioSelector = ({
         {portfolioData.length > 0 && (
           <button
             className="show-analytics-btn"
-            style={{ marginLeft: 16 }}
             onClick={() => setShowAnalytics((prev) => !prev)}
           >
             {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
           </button>
         )}
-        <div style={{ position: 'relative' }}>
+        <div className="portfolio-selector-column-dropdown-wrapper">
           <button
-            className="btn btn-sm btn-secondary"
-            style={{ marginLeft: 8 }}
+            className="btn btn-sm btn-secondary portfolio-selector-column-dropdown-btn"
             onClick={() => setShowColumnDropdown((prev) => !prev)}
             aria-label="Column settings"
           >
             <FontAwesomeIcon icon={faCog} /> Columns
           </button>
           {showColumnDropdown && (
-            <div className="column-dropdown" ref={dropdownRef} style={{ position: 'absolute', right: 0, zIndex: 100 }}>
+            <div className="column-dropdown portfolio-selector-column-dropdown">
               <div className="column-dropdown-header">Customize Columns</div>
               <div className="column-dropdown-list">
                 {DEFAULT_COLUMNS.map((col, idx) => (
                   <label
                     key={col.key}
-                    className="column-dropdown-checkbox"
-                    style={{ fontWeight: col.key === 'symbol' ? 600 : 400, opacity: col.key === 'symbol' ? 0.7 : 1, cursor: col.key === 'symbol' ? 'not-allowed' : 'grab', background: dragColIndex.current === idx ? 'var(--primary-100)' : undefined }}
+                    className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}${dragColIndex.current === idx ? ' dragging' : ''}`}
                     draggable={col.key !== 'symbol'}
                     onDragStart={col.key !== 'symbol' ? () => handleDragStart(idx) : undefined}
                     onDragOver={col.key !== 'symbol' ? (e) => handleDragOver(e, idx) : undefined}
                     onDrop={col.key !== 'symbol' ? () => handleDrop(idx) : undefined}
                     onDragEnd={col.key !== 'symbol' ? handleDragEnd : undefined}
                   >
-                    {col.key !== 'symbol' && <span style={{ marginRight: 8, cursor: 'grab', opacity: 0.7 }}>☰</span>}
+                    {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle">☰</span>}
                     <input
                       type="checkbox"
                       checked={visibleColumns.includes(col.key)}
@@ -203,17 +199,15 @@ const PortfolioSelector = ({
                   </label>
                 ))}
               </div>
-              <div className="column-dropdown-actions" style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+              <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
                 <button
                   className="btn btn-sm btn-secondary"
-                  style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', padding: '8px 10px', fontSize: 14 }}
                   onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}
                 >
                   Reset
                 </button>
                 <button
                   className="btn btn-sm btn-primary"
-                  style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', padding: '8px 10px', fontSize: 14 }}
                   onClick={() => setShowColumnDropdown(false)}
                 >
                   Close

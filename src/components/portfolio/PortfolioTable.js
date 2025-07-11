@@ -644,7 +644,7 @@ const PortfolioTable = ({
                                   onChange={handleEditInputChange}
                                   onBlur={() => handleEditInputBlur(originalIndex, 'qty')}
                                   onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'qty')}
-                                  style={{ width: '70px' }}
+                                  className="table-edit-input table-edit-input-qty"
                                 />
                               ) : (
                                 stock.qty.toLocaleString()
@@ -662,7 +662,7 @@ const PortfolioTable = ({
                                   onChange={handleEditInputChange}
                                   onBlur={() => handleEditInputBlur(originalIndex, 'avgPrice')}
                                   onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'avgPrice')}
-                                  style={{ width: '70px' }}
+                                  className="table-edit-input table-edit-input-avgPrice"
                                 />
                               ) : (
                                 `₹${stock.avgPrice.toFixed(2)}`
@@ -684,7 +684,7 @@ const PortfolioTable = ({
                                   onChange={handleEditInputChange}
                                   onBlur={() => handleEditInputBlur(originalIndex, 'purchaseDate')}
                                   onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'purchaseDate')}
-                                  style={{ width: '120px' }}
+                                  className="table-edit-input table-edit-input-purchaseDate"
                                 />
                               ) : (
                                 stock.purchaseDate
@@ -742,7 +742,7 @@ const PortfolioTable = ({
                                   onChange={handleEditInputChange}
                                   onBlur={() => handleEditInputBlur(originalIndex, 'realizedGain')}
                                   onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'realizedGain')}
-                                  style={{ width: '70px' }}
+                                  className="table-edit-input table-edit-input-realizedGain"
                                 />
                               ) : (
                                 `₹${stock.realizedGain.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
@@ -760,7 +760,7 @@ const PortfolioTable = ({
                                   onChange={handleEditInputChange}
                                   onBlur={() => handleEditInputBlur(originalIndex, 'dividend')}
                                   onKeyDown={e => handleEditInputKeyDown(e, originalIndex, 'dividend')}
-                                  style={{ width: '70px' }}
+                                  className="table-edit-input table-edit-input-dividend"
                                 />
                               ) : (
                                 `₹${stock.dividend.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`

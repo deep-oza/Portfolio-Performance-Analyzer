@@ -85,10 +85,9 @@ const StockLTPCard = () => {
               </button>
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger stock-ltp-clear-btn"
                 onClick={handleClear}
                 disabled={loading}
-                style={{ marginLeft: 4 }}
               >
                 Clear
               </button>

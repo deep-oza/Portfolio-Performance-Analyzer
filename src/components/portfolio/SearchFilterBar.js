@@ -44,7 +44,6 @@ const SearchFilterBar = () => {
         <FontAwesomeIcon 
           icon={faSearch} 
           className="search-icon" 
-          style={{ zIndex: 10, visibility: 'visible', opacity: 1 }}
         />
         <input 
           type="text" 
@@ -56,30 +55,15 @@ const SearchFilterBar = () => {
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
         />
-        {/* {(searchTerm || isSearchFocused) && (
+        {(searchTerm || isSearchFocused) && (
           <button 
-            className="btn btn-sm" 
+            className="btn btn-sm search-clear-btn" 
             id="clearSearch" 
             onClick={clearSearch}
-            style={{ 
-              zIndex: 10, 
-              visibility: 'visible', 
-              opacity: 1,
-              color: '#333',
-              background: 'rgba(0,0,0,0.08)',
-              borderRadius: '50%',
-              padding: '5px',
-              width: '22px',
-              height: '22px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '10px'
-            }}
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
-        )} */}
+        )}
       </div>
       
       <div className="filter-options">
