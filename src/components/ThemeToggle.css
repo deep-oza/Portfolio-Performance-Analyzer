@@ -22,4 +22,11 @@
   transform: scale(1.1);
   box-shadow: var(--shadow-lg);
   background: var(--bg-hover);
+}
+@media (max-width: 500px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
 } 
