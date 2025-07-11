@@ -1,0 +1,123 @@
+/* HelpModal styles */
+.help-modal-container {
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.help-content {
+  padding-right: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.help-section {
+  margin-bottom: var(--space-5);
+}
+
+.help-section h4 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-3);
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-2);
+}
+
+.help-section p {
+  margin-bottom: var(--space-3);
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.help-section ul,
+.help-section ol {
+  margin-left: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.help-section li {
+  margin-bottom: var(--space-2);
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Modal overlay and container styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 700px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.modal-content {
+  padding: var(--space-5);
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+.modal-header {
+  padding: var(--space-5) var(--space-5) 0 var(--space-5);
+  border-bottom: 1px solid var(--border-color);
+}
+.modal-title {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  color: var(--text-main);
+  font-size: 1.25rem;
+}
+.modal-body {
+  padding: var(--space-5);
+}
+.modal-message {
+  margin-bottom: var(--space-5);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.modal-footer {
+  padding: var(--space-5);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+.modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+}
+@media (max-width: 767px) {
+  .modal-actions {
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+  }
+  .modal-actions .btn {
+    width: 100%;
+    min-width: auto;
+    padding: var(--space-2) var(--space-4);
+    margin: var(--space-2) 0;
+  }
+  .modal-footer {
+    flex-direction: column;
+  }
+} 

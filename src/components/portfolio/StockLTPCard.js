@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSync, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import useStockQuote from '../../hooks/useStockQuote';
+import './StockLTPCard.css';
 
 /**
  * Component to display stock Last Traded Price (LTP) data

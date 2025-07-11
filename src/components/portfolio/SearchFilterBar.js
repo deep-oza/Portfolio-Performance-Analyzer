@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import './SearchFilterBar.css';
 
 const SearchFilterBar = () => {
   const { 

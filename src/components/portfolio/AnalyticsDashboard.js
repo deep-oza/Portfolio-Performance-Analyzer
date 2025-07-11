@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
 } from 'recharts';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import './AnalyticsDashboard.css';
 
 // Helper to format days as years, months, days
 function formatDuration(days) {

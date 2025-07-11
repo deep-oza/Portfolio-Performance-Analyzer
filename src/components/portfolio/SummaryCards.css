@@ -1,0 +1,152 @@
+/* Enhanced Summary Cards */
+.summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  width: 100%;
+  justify-content: space-between;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+  opacity: 0.8;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.summary-card h3 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-card .value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-main);
+  line-height: var(--leading-tight);
+}
+
+/* Card Variations */
+.summary-card:nth-child(1)::before {
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+}
+
+.summary-card:nth-child(2)::before {
+  background: linear-gradient(90deg, var(--success-500), var(--success-600));
+}
+
+.summary-card:nth-child(3)::before {
+  background: linear-gradient(90deg, var(--warning-500), var(--warning-600));
+}
+
+.summary-card:nth-child(4)::before {
+  background: linear-gradient(90deg, var(--primary-700), var(--primary-800));
+}
+
+.summary-card:nth-child(5)::before {
+  background: linear-gradient(90deg, var(--neutral-600), var(--neutral-700));
+}
+
+/* Desktop (≥1024px): Single row with all 5 cards */
+@media (min-width: 1024px) {
+  .summary-cards {
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    padding: var(--space-5);
+  }
+  
+  .summary-card .value {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* Tablet (768px to <1024px): 3 cards in first row, 2 in second */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .summary-cards {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  
+  .summary-card {
+    flex: 0 0 calc(33.333% - 12px);
+    padding: var(--space-4);
+  }
+  
+  /* Make the last two cards take up half width each */
+  .summary-card:nth-child(4),
+  .summary-card:nth-child(5) {
+    flex: 0 0 calc(50% - 9px);
+  }
+  
+  .summary-card .value {
+    font-size: var(--text-xl);
+  }
+}
+
+/* Mobile (500px to <768px): 2 cards per row */
+@media (min-width: 500px) and (max-width: 767px) {
+  .summary-cards {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    flex: 0 0 calc(50% - 8px);
+    padding: var(--space-3);
+  }
+  
+  .summary-card .value {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Small screens (<500px): Single column */
+@media (max-width: 499px) {
+  .summary-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    width: 95%;
+    padding: var(--space-3);
+    margin: 0 auto;
+  }
+  
+  .summary-card .value {
+    font-size: var(--text-lg);
+  }
+} 

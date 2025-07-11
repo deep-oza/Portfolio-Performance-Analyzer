@@ -1,0 +1,52 @@
+/* AnalyticsDashboard styles */
+.show-analytics-btn {
+  background: linear-gradient(135deg, var(--success-600), var(--success-700));
+  color: white;
+  border: none;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  width: auto;
+  margin: var(--space-1) 0;
+}
+
+@media (max-width: 767px) {
+  .show-analytics-btn {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    margin: var(--space-2) 0;
+  }
+}
+
+.show-analytics-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.analytics-dashboard-wrapper {
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 900px) {
+  .analytics-dashboard-wrapper > div > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--space-6);
+  }
+}
+
+.analytics-dashboard-wrapper > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+} 

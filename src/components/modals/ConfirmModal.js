@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import './ConfirmModal.css';
 
 const ConfirmModal = () => {
   const { modalConfig, hideModal } = useContext(PortfolioContext);

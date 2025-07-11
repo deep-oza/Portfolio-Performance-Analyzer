@@ -1,0 +1,215 @@
+/* StockLTPCard styles */
+.stock-ltp-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  border: 1px solid var(--border-color);
+  margin-bottom: var(--space-4);
+}
+
+.stock-ltp-card h3 {
+  margin-bottom: var(--space-3);
+  color: var(--text-main);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.stock-search-form {
+  margin-bottom: var(--space-4);
+}
+
+.stock-ltp-card .input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.stock-ltp-card .input-group input {
+  flex: 1 1 100%;
+  padding: var(--space-3) var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  background: var(--bg-input);
+  color: var(--text-main);
+  min-height: 44px;
+}
+
+.stock-ltp-card .input-group button {
+  flex: 1 1 auto;
+  padding: var(--space-2) var(--space-4);
+  background: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  min-height: 44px;
+  min-width: 44px;
+  margin: var(--space-1) 0;
+}
+
+@media (max-width: 767px) {
+  .stock-ltp-card .input-group {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .stock-ltp-card .input-group button {
+    width: 100%;
+    padding: var(--space-2) var(--space-4);
+    margin: var(--space-2) 0;
+  }
+}
+
+.stock-ltp-card .btn-primary {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+}
+
+.stock-ltp-card .btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.stock-ltp-card .loading-spinner {
+  text-align: center;
+  padding: var(--space-3);
+  color: var(--text-muted);
+}
+
+.stock-ltp-card .error-message {
+  color: var(--danger-600);
+  background: var(--danger-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--danger-200);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.stock-ltp-card .quote-data {
+  background: var(--bg-hover);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  border: 1px solid var(--border-color);
+}
+
+.stock-ltp-card .quote-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.stock-ltp-card .quote-header h4 {
+  margin: 0;
+  color: var(--text-main);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.stock-ltp-card .exchange-info {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.stock-ltp-card .quote-price {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.stock-ltp-card .price {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stock-ltp-card .percent-change {
+  font-size: var(--text-base);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  display: inline-block;
+}
+
+.stock-ltp-card .percent-change.positive {
+  color: var(--success-600);
+  background: var(--success-50);
+}
+
+.stock-ltp-card .percent-change.negative {
+  color: var(--danger-600);
+  background: var(--danger-50);
+}
+
+.stock-ltp-card .quote-timestamp {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  margin-top: var(--space-2);
+}
+
+.stock-ltp-card .no-data-message,
+.stock-ltp-card .instructions,
+.stock-ltp-card .loading-message {
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 768px) {
+  .stock-ltp-card {
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+  .stock-ltp-card h3 {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-lg);
+  }
+  .stock-search-form {
+    margin-bottom: var(--space-5);
+  }
+  .stock-ltp-card .input-group {
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .stock-ltp-card .input-group input {
+    flex: 1;
+    font-size: var(--text-base);
+  }
+  .stock-ltp-card .input-group button {
+    flex: 0 0 auto;
+  }
+  .stock-ltp-card .quote-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .stock-ltp-card .quote-price {
+    flex-direction: row;
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stock-ltp-card {
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+  .stock-ltp-card .quote-data {
+    padding: var(--space-4);
+  }
+  .stock-ltp-card .price {
+    font-size: 19.2px;
+  }
+  .stock-ltp-card .percent-change {
+    font-size: 13.6px;
+  }
+} 

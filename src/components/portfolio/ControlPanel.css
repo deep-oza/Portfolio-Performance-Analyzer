@@ -175,6 +175,7 @@
   font-weight: 600;
   min-width: 110px;
   transition: background 0.18s, box-shadow 0.18s;
+  margin: var(--space-1) 0;
 }
 .import-modal-btn.btn-primary:hover, .import-modal-btn.btn-primary:focus {
   background: #1251a3;
@@ -201,5 +202,16 @@
   .import-modal-select, .import-modal-input {
     width: 100%;
     min-width: 0;
+  }
+  .import-modal-actions {
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+  .import-modal-btn {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 28px;
+    margin: var(--space-2) 0;
   }
 } 

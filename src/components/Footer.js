@@ -15,6 +15,7 @@ import {
   faInfoCircle,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
+import './Footer.css';
 
 const PrivacyPolicyModal = ({ visible, onClose }) => {
   // Get theme from body attribute

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle, faRoute } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import './HelpModal.css';
 
 const HelpModal = () => {
   const { helpModalVisible, setHelpModalVisible } = useContext(PortfolioContext);

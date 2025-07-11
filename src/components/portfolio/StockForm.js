@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import useStockQuote from '../../hooks/useStockQuote';
-import './StockFormPortfolioSection.css';
+import './StockForm.css';
 
 const StockForm = () => {
   const { 

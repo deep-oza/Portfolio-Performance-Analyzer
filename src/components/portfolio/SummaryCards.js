@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import './SummaryCards.css';
 
 const SummaryCards = () => {
   const { calculateSummary } = useContext(PortfolioContext);

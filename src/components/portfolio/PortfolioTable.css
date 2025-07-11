@@ -1,0 +1,117 @@
+/* PortfolioTable styles */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.table-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+}
+
+th, td {
+  padding: var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+}
+
+th {
+  background: var(--bg-hover);
+  color: var(--text-main);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+tr:hover {
+  background: var(--bg-hover);
+}
+
+/* Table sorting and cell styles */
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: var(--space-5);
+}
+.sortable:hover {
+  background: var(--border-color);
+}
+.sortable::after {
+  content: "↕";
+  position: absolute;
+  right: var(--space-3);
+  opacity: 0.5;
+  font-size: var(--text-xs);
+}
+.sort-asc::after {
+  content: "↑";
+  opacity: 1;
+  color: var(--primary-600);
+}
+.sort-desc::after {
+  content: "↓";
+  opacity: 1;
+  color: var(--primary-600);
+}
+.sorted {
+  background: var(--primary-50);
+  color: var(--primary-700);
+}
+.stock-symbol {
+  font-weight: 600;
+  color: var(--primary-600);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+}
+.positive {
+  color: var(--success-600);
+  font-weight: 600;
+}
+.negative {
+  color: var(--danger-600);
+  font-weight: 600;
+}
+.current-price-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-main);
+  transition: all var(--transition-normal);
+  width: 100px;
+  text-align: center;
+}
+.current-price-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+@media (max-width: 600px) {
+  .table-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: auto;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  th, td {
+    padding: var(--space-2);
+    font-size: 12px;
+  }
+} 

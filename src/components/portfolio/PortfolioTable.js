@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faEdit, faTrashAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import AnalyticsDashboard from './AnalyticsDashboard';
+import './PortfolioTable.css';
 
 const DEFAULT_COLUMNS = [
   { key: 'symbol', label: 'Stock' },

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../contexts/PortfolioContext';
+import './ThemeToggle.css';
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useContext(PortfolioContext);
