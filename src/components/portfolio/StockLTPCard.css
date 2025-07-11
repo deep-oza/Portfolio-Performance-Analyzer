@@ -1,10 +1,11 @@
 /* StockLTPCard styles */
 .stock-ltp-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  border: 1px solid var(--border-color);
+  margin-top: var(--space-4);
   margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
 }
 
 .stock-ltp-card h3 {
@@ -27,7 +28,7 @@
 
 .stock-ltp-card .input-group input {
   flex: 1 1 100%;
-  padding: var(--space-3) var(--space-3);
+  padding: var(--space-3);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   font-size: var(--text-sm);
@@ -37,7 +38,6 @@
 }
 
 .stock-ltp-card .input-group button {
-  flex: 1 1 auto;
   padding: var(--space-2) var(--space-4);
   background: var(--primary-600);
   color: white;
@@ -48,22 +48,7 @@
   transition: all var(--transition-normal);
   min-height: 44px;
   min-width: 44px;
-  margin: var(--space-1) 0;
 }
-
-@media (max-width: 767px) {
-  .stock-ltp-card .input-group {
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  
-  .stock-ltp-card .input-group button {
-    width: 100%;
-    padding: var(--space-2) var(--space-4);
-    margin: var(--space-2) 0;
-  }
-}
-
 .stock-ltp-card .btn-primary {
   background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
 }
@@ -74,10 +59,15 @@
   border: 1px solid var(--border-color);
 }
 
-.stock-ltp-card .loading-spinner {
+.stock-ltp-card .loading-spinner,
+.stock-ltp-card .no-data-message,
+.stock-ltp-card .instructions,
+.stock-ltp-card .loading-message {
   text-align: center;
-  padding: var(--space-3);
+  padding: var(--space-4);
   color: var(--text-muted);
+  font-style: italic;
+  font-size: var(--text-sm);
 }
 
 .stock-ltp-card .error-message {
@@ -153,68 +143,116 @@
   margin-top: var(--space-2);
 }
 
-.stock-ltp-card .no-data-message,
-.stock-ltp-card .instructions,
-.stock-ltp-card .loading-message {
-  text-align: center;
-  padding: var(--space-4);
-  color: var(--text-muted);
-  font-style: italic;
-  font-size: var(--text-sm);
+/* Clear button fix */
+.stock-ltp-clear-btn {
+  margin-left: 4px;
 }
 
-@media (min-width: 768px) {
+/* Mobile (<=767px) */
+@media (max-width: 767px) {
+  .stock-ltp-card .input-group {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 767px) {
+    .stock-ltp-card .input-group {
+      flex-direction: column;
+    }
+  
+    .stock-ltp-card .input-group button {
+      width: 100%;
+      margin: var(--space-2) 0 0 0; /* spacing from input */
+    }
+  }
+
+  .stock-ltp-card .quote-header {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .stock-ltp-card .quote-price {
+    flex-direction: column;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
   .stock-ltp-card {
     border-radius: var(--radius-xl);
     padding: var(--space-5);
     margin-bottom: var(--space-5);
   }
+
   .stock-ltp-card h3 {
-    margin-bottom: var(--space-4);
     font-size: var(--text-lg);
-  }
-  .stock-search-form {
-    margin-bottom: var(--space-5);
-  }
-  .stock-ltp-card .input-group {
-    gap: var(--space-3);
     margin-bottom: var(--space-4);
   }
-  .stock-ltp-card .input-group input {
-    flex: 1;
-    font-size: var(--text-base);
+
+  @media (min-width: 768px) {
+    .stock-ltp-card .input-group {
+      flex-direction: row;
+      align-items: center;
+    }
+  
+    .stock-ltp-card .input-group input {
+      flex: 1 1 auto;
+    }
+  
+    .stock-ltp-card .input-group button {
+      flex: 0 0 auto;
+      margin-left: var(--space-2);
+      width: auto;
+    }
   }
-  .stock-ltp-card .input-group button {
-    flex: 0 0 auto;
-  }
+
   .stock-ltp-card .quote-header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
+
   .stock-ltp-card .quote-price {
     flex-direction: row;
     align-items: baseline;
   }
 }
 
+/* Desktop & Laptop (>=1024px) */
 @media (min-width: 1024px) {
   .stock-ltp-card {
     padding: var(--space-6);
     margin-bottom: var(--space-6);
   }
+
   .stock-ltp-card .quote-data {
     padding: var(--space-4);
   }
+
   .stock-ltp-card .price {
     font-size: 19.2px;
   }
+
   .stock-ltp-card .percent-change {
     font-size: 13.6px;
   }
-} 
+}
 
-/* === Migrated from inline styles in StockLTPCard.js === */
-.stock-ltp-clear-btn {
-  margin-left: 4px;
-} 
+/* Large Desktop (>=1440px) – Optional enhancement */
+@media (min-width: 1440px) {
+  .stock-ltp-card {
+    padding: var(--space-6);
+  }
+
+  .stock-ltp-card .price {
+    font-size: 20px;
+  }
+
+  .stock-ltp-card .percent-change {
+    font-size: 14px;
+  }
+
+  .stock-ltp-card h3 {
+    font-size: var(--text-xl);
+  }
+}
