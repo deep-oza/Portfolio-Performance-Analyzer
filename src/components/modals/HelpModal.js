@@ -85,6 +85,9 @@ const HelpModal = () => {
     }
   };
   
+  // Responsive font size helpers
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 500px)').matches;
+  
   return (
     <div 
       id="helpModal" 
@@ -101,10 +104,10 @@ const HelpModal = () => {
         </div>
         {/* Body */}
         <div className="modal-body" style={modalStyles.body}>
-          <div className="help-content" style={{ fontSize: 'calc(0.85rem + 0.2vw)' }}>
+          <div className="help-content" style={{ fontSize: isMobile ? '0.8rem' : 'calc(0.85rem + 0.2vw)' }}>
             <div className="help-section">
-              <h4 style={{ fontSize: 'calc(16px + 0.2vw)' }}>How to Use</h4>
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Creating & Managing Portfolios</h5>
+              <h4 style={{ fontSize: isMobile ? '1rem' : 'calc(16px + 0.2vw)' }}>How to Use</h4>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Creating & Managing Portfolios</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Find the "Portfolios" section with the "Active Portfolio" dropdown</li>
                 <li>Click the <strong>+</strong> button next to the dropdown to create a new portfolio</li>
@@ -113,7 +116,7 @@ const HelpModal = () => {
                 <li>Delete a portfolio by selecting it and clicking the trash icon (cannot delete "All Portfolios")</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Adding & Managing Stocks</h5>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Adding & Managing Stocks</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Add New Stock</strong> button in the control panel</li>
                 <li>Select a portfolio to add the stock to (defaults to currently selected portfolio)</li>
@@ -125,7 +128,7 @@ const HelpModal = () => {
                 <li>To delete a stock, use the trash icon in the table row</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Getting Stock Quotes</h5>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Getting Stock Quotes</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Use the "Stock Quote" section to get real-time prices</li>
                 <li>Enter a stock symbol and click the search button</li>
@@ -134,7 +137,7 @@ const HelpModal = () => {
                 <li>Click "Clear" to reset the quote search</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Importing & Exporting Data</h5>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Importing & Exporting Data</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Import CSV</strong> in the control panel</li>
                 <li>Review the import instructions and click "Confirm and Upload"</li>
@@ -143,7 +146,7 @@ const HelpModal = () => {
                 <li>Download the sample CSV template as a guide for formatting your import files</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Using Analytics</h5>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Using Analytics</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click <strong>Show Analytics</strong> button in the portfolio section</li>
                 <li>View charts showing portfolio allocation and performance</li>
@@ -151,7 +154,7 @@ const HelpModal = () => {
                 <li>Click <strong>Hide Analytics</strong> to return to the table view</li>
               </ol>
               
-              <h5 style={{ fontSize: 'calc(14.4px + 0.2vw)' }}>Customizing Your View</h5>
+              <h5 style={{ fontSize: isMobile ? '0.95rem' : 'calc(14.4px + 0.2vw)' }}>Customizing Your View</h5>
               <ol style={{ paddingLeft: '1.2rem' }}>
                 <li>Click the <strong>Columns</strong> button to open the column customization dropdown</li>
                 <li>Check/uncheck boxes to show/hide specific data columns</li>

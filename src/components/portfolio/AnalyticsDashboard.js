@@ -32,7 +32,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   
   // Add responsive state
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const isMobile = windowWidth <= 767;
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 500px)').matches;
   const isTablet = windowWidth > 767 && windowWidth <= 1023;
 
   // Add window resize listener
@@ -113,7 +113,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   };
   const titleStyle = {
     fontWeight: 600,
-    fontSize: isMobile ? '0.95rem' : '1.1rem',
+    fontSize: isMobile ? '0.85rem' : '1.1rem',
     marginBottom: '0.5rem',
     color: isDarkTheme ? '#f5f5f5' : 'var(--text-primary, #222)'
   };

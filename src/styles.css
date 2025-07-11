@@ -278,6 +278,24 @@ h4 {
   font-weight: 600;
 }
 
+@media (max-width: 500px) {
+  h2 {
+    font-size: 1.1rem;
+  }
+  h3 {
+    font-size: 1rem;
+  }
+  h4 {
+    font-size: 0.95rem;
+  }
+  h5 {
+    font-size: 0.9rem;
+  }
+  h6 {
+    font-size: 0.85rem;
+  }
+}
+
 /* Professional Button Styles */
 .btn {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
