@@ -96,28 +96,29 @@
   padding: var(--space-5);
   border-top: 1px solid var(--border-color);
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
   gap: var(--space-3);
 }
 .modal-actions {
   display: flex;
+  flex-direction: row;
   gap: var(--space-3);
   justify-content: flex-end;
   margin-top: var(--space-4);
+  width: 100%;
+}
+.modal-actions .btn {
+  width: 100%;
+  min-width: auto;
+  padding: var(--space-3) var(--space-4);
+  margin: 0;
 }
 @media (max-width: 767px) {
-  .modal-actions {
-    flex-direction: column;
-    gap: var(--space-3);
-    width: 100%;
-  }
-  .modal-actions .btn {
-    width: 100%;
-    min-width: auto;
-    padding: var(--space-2) var(--space-4);
-    margin: var(--space-2) 0;
-  }
   .modal-footer {
+    flex-direction: column;
+  }
+  .modal-actions {
     flex-direction: column;
   }
 } 

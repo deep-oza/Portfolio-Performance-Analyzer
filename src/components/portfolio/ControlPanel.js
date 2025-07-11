@@ -205,16 +205,15 @@ const ControlPanel = () => {
         style={{ display: 'none' }}
         ref={fileInputRef}
       />
-      <button className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleImportClick}>
+      <button className="btn btn-primary control-btn" onClick={handleImportClick}>
         <FontAwesomeIcon icon={faFileImport} /> Import Portfolio (CSV)
       </button>
-      <button className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleAddClick}>
+      <button className="btn btn-primary control-btn" onClick={handleAddClick}>
         <FontAwesomeIcon icon={faPlus} /> Add New Stock
       </button>
       {hasData && (
         <button 
-          className="btn btn-primary"
-          style={{ fontWeight: 600, marginRight: 10 }}
+          className="btn btn-primary control-btn"
           onClick={handleRefreshPrices}
           disabled={isLoadingPrices}
         >
@@ -223,12 +222,12 @@ const ControlPanel = () => {
         </button>
       )}
       {hasData && (
-        <button id="exportDataBtn" className="btn btn-primary" style={{ fontWeight: 600, marginRight: 10 }} onClick={handleExportClick}>
+        <button id="exportDataBtn" className="btn btn-primary control-btn" onClick={handleExportClick}>
           <FontAwesomeIcon icon={faDownload} /> Export Data
         </button>
       )}
       {hasData && (
-        <button id="clearPortfolioBtn" className="btn btn-danger" style={{ fontWeight: 600 }} onClick={confirmClearPortfolio}>
+        <button id="clearPortfolioBtn" className="btn btn-danger control-btn" onClick={confirmClearPortfolio}>
           <FontAwesomeIcon icon={faTrashAlt} /> Clear Portfolio
         </button>
       )}

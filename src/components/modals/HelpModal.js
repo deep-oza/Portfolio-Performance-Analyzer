@@ -239,10 +239,10 @@ const HelpModal = () => {
         {/* Footer */}
         <div className="modal-footer" style={modalStyles.footer}>
           <div className="modal-actions" style={{ margin: 0 }}>
-            <button className="btn btn-secondary" onClick={restartTour} style={{ marginRight: '10px', fontSize: 'calc(13.6px + 0.1vw)' }}>
+            <button className="btn btn-secondary" onClick={restartTour}>
               <FontAwesomeIcon icon={faRoute} /> Restart Tour
             </button>
-            <button id="helpModalClose" className="btn" onClick={hideHelpModal} style={{ fontSize: 'calc(13.6px + 0.1vw)' }}>
+            <button id="helpModalClose" className="btn" onClick={hideHelpModal}>
               Got it!
             </button>
           </div>
