@@ -127,96 +127,101 @@ const PortfolioSelector = ({
         <span className="portfolio-selector-subtitle">Manage and switch between your investment portfolios</span>
       </div>
       <div className="portfolio-selector-row">
-        <label htmlFor="portfolio-select" className="portfolio-selector-label">Active Portfolio</label>
-        <select
-          id="portfolio-select"
-          value={selectedPortfolioId}
-          onChange={e => switchPortfolio(e.target.value)}
-          className="portfolio-selector-select"
-          aria-label="Select portfolio"
-        >
-          {Object.keys(portfolios).map(id => (
-            <option key={id} value={id}>{id === 'default' ? 'All Portfolios' : id}</option>
+  <label htmlFor="portfolio-select" className="portfolio-selector-label">Active Portfolio</label>
+  <select
+    id="portfolio-select"
+    value={selectedPortfolioId}
+    onChange={e => switchPortfolio(e.target.value)}
+    className="portfolio-selector-select"
+    aria-label="Select portfolio"
+  >
+    {Object.keys(portfolios).map(id => (
+      <option key={id} value={id}>{id === 'default' ? 'All Portfolios' : id}</option>
+    ))}
+  </select>
+
+  {selectedPortfolioId !== 'default' && (
+    <button
+      className="portfolio-selector-delete"
+      title="Delete this portfolio"
+      aria-label="Delete selected portfolio"
+      onClick={() => handleDelete(selectedPortfolioId)}
+    >
+      <FontAwesomeIcon icon={faTrash} />
+    </button>
+  )}
+
+  <button
+    className="portfolio-selector-add"
+    title="Create new portfolio"
+    aria-label="Create new portfolio"
+    onClick={handleCreateClick}
+  >
+    <FontAwesomeIcon icon={faPlus} />
+  </button>
+
+  <div className="portfolio-selector-column-dropdown-wrapper">
+    <button
+      className="btn btn-sm btn-secondary portfolio-selector-column-dropdown-btn"
+      onClick={() => setShowColumnDropdown((prev) => !prev)}
+      aria-label="Column settings"
+    >
+<FontAwesomeIcon icon={faCog} className="column-icon" />
+<span className="column-text">Columns</span>    </button>
+    {showColumnDropdown && (
+      <div className="column-dropdown portfolio-selector-column-dropdown">
+        <div className="column-dropdown-header">Customize Columns</div>
+        <div className="column-dropdown-list">
+          {DEFAULT_COLUMNS.map((col, idx) => (
+            <label
+              key={col.key}
+              className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}${dragColIndex.current === idx ? ' dragging' : ''}`}
+              draggable={col.key !== 'symbol'}
+              onDragStart={col.key !== 'symbol' ? () => handleDragStart(idx) : undefined}
+              onDragOver={col.key !== 'symbol' ? (e) => handleDragOver(e, idx) : undefined}
+              onDrop={col.key !== 'symbol' ? () => handleDrop(idx) : undefined}
+              onDragEnd={col.key !== 'symbol' ? handleDragEnd : undefined}
+            >
+              {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle">☰</span>}
+              <input
+                type="checkbox"
+                checked={visibleColumns.includes(col.key)}
+                onChange={() => handleToggleColumn(col.key)}
+                disabled={col.key === 'symbol'}
+              />
+              {col.label}
+            </label>
           ))}
-        </select>
-        {selectedPortfolioId !== 'default' && (
+        </div>
+        <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
           <button
-            className="portfolio-selector-delete"
-            title="Delete this portfolio"
-            aria-label="Delete selected portfolio"
-            onClick={() => handleDelete(selectedPortfolioId)}
+            className="btn btn-sm btn-secondary"
+            onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}
           >
-            <FontAwesomeIcon icon={faTrash} />
+            Reset
           </button>
-        )}
-        <button
-          className="portfolio-selector-add"
-          title="Create new portfolio"
-          aria-label="Create new portfolio"
-          onClick={handleCreateClick}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
-        {/* Show Analytics button only if portfolio data is not empty */}
-        {portfolioData.length > 0 && (
           <button
-            className="show-analytics-btn"
-            onClick={() => setShowAnalytics((prev) => !prev)}
+            className="btn btn-sm btn-primary"
+            onClick={() => setShowColumnDropdown(false)}
           >
-            {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
+            Close
           </button>
-        )}
-        <div className="portfolio-selector-column-dropdown-wrapper">
-          <button
-            className="btn btn-sm btn-secondary portfolio-selector-column-dropdown-btn"
-            onClick={() => setShowColumnDropdown((prev) => !prev)}
-            aria-label="Column settings"
-          >
-            <FontAwesomeIcon icon={faCog} /> Columns
-          </button>
-          {showColumnDropdown && (
-            <div className="column-dropdown portfolio-selector-column-dropdown">
-              <div className="column-dropdown-header">Customize Columns</div>
-              <div className="column-dropdown-list">
-                {DEFAULT_COLUMNS.map((col, idx) => (
-                  <label
-                    key={col.key}
-                    className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}${dragColIndex.current === idx ? ' dragging' : ''}`}
-                    draggable={col.key !== 'symbol'}
-                    onDragStart={col.key !== 'symbol' ? () => handleDragStart(idx) : undefined}
-                    onDragOver={col.key !== 'symbol' ? (e) => handleDragOver(e, idx) : undefined}
-                    onDrop={col.key !== 'symbol' ? () => handleDrop(idx) : undefined}
-                    onDragEnd={col.key !== 'symbol' ? handleDragEnd : undefined}
-                  >
-                    {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle">☰</span>}
-                    <input
-                      type="checkbox"
-                      checked={visibleColumns.includes(col.key)}
-                      onChange={() => handleToggleColumn(col.key)}
-                      disabled={col.key === 'symbol'}
-                    />
-                    {col.label}
-                  </label>
-                ))}
-              </div>
-              <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
-                <button
-                  className="btn btn-sm btn-secondary"
-                  onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}
-                >
-                  Reset
-                </button>
-                <button
-                  className="btn btn-sm btn-primary"
-                  onClick={() => setShowColumnDropdown(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+    )}
+  </div>
+
+  {/* 📊 Show Analytics Button - moved to the end */}
+  {portfolioData.length > 0 && (
+    <button
+      className="show-analytics-btn"
+      onClick={() => setShowAnalytics((prev) => !prev)}
+    >
+      {showAnalytics ? '📊 Hide Analytics' : '📊 Show Analytics'}
+    </button>
+  )}
+</div>
+
     </div>
   );
 };

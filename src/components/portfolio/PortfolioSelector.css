@@ -345,3 +345,117 @@
     margin-bottom: 6px;
   }
 } 
+/* === Responsive Breakpoints === */
+
+/* 📱 Mobile: max-width 767px */
+@media (max-width: 767px) {
+  .portfolio-selector-card {
+    padding: 12px 10px;
+    font-size: 0.95em;
+  }
+
+  .portfolio-selector-header {
+    margin-bottom: 6px;
+  }
+
+  .portfolio-selector-title {
+    font-size: 1.05em;
+  }
+
+  .portfolio-selector-subtitle {
+    font-size: 0.95em;
+    margin-bottom: 6px;
+  }
+
+  .portfolio-selector-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .portfolio-selector-label {
+    margin-right: 0;
+    margin-bottom: 4px;
+    font-size: 1em;
+  }
+
+  .portfolio-selector-select {
+    width: 100%;
+    font-size: 1em;
+    margin-right: 0;
+  }
+
+  .portfolio-selector-add,
+  .portfolio-selector-delete,
+  .show-analytics-btn,
+  .btn.btn-sm.btn-secondary {
+    width: 100%;
+    font-size: 1em;
+    padding: 10px 0;
+    margin: 0 !important;
+  }
+
+  .portfolio-selector-divider {
+    display: none;
+  }
+}
+
+/* 💊 Tablet: 768px to 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .portfolio-selector-card {
+    padding: 16px 24px;
+  }
+
+  .portfolio-selector-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .portfolio-selector-select {
+    min-width: 160px;
+  }
+
+  .portfolio-selector-add,
+  .portfolio-selector-delete {
+    padding: 8px 16px;
+  }
+
+  .portfolio-selector-divider {
+    margin: 0 12px;
+  }
+}
+
+/* 🖥️ Desktop: 1024px and above */
+@media (min-width: 1024px) {
+  .portfolio-selector-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+  }
+
+  .portfolio-selector-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .portfolio-selector-add,
+  .portfolio-selector-delete {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 750px) {
+  .column-text {
+    display: none;
+  }
+}
+
+/* Show full text below 750px */
+@media (max-width: 749px) {
+  .column-icon {
+    margin-right: 6px;
+  }
+}
