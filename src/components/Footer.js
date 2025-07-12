@@ -339,7 +339,7 @@ const Footer = () => {
             </div>
             
             <div className="footer-social">
-              <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+              <a href="https://github.com/deep-oza" target="_blank" rel="noopener noreferrer" className="footer-social-link">
                 <FontAwesomeIcon icon={faGithubBrand} />
               </a>
               <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="footer-social-link">
