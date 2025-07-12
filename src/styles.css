@@ -192,6 +192,8 @@ body {
 }
 
 .card {
+  width: 100%;
+  max-width: 100%;
   background-color: var(--bg-card);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
@@ -472,3 +474,38 @@ button:focus, input:focus, [tabindex]:focus {
 
 
 
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-4) var(--space-4) 0 var(--space-4); /* Reduce padding on smaller screens */
+    margin-bottom: var(--space-4);
+  }
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--text-2xl);
+  }
+  h2 {
+    font-size: var(--text-xl);
+  }
+  h3 {
+    font-size: var(--text-lg);
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-4);
+  }
+}
+@media (max-width: 500px) {
+  .container {
+    padding: var(--space-3);
+  }
+}
+@media (max-width: 425px) {
+  .btn,
+  .btn-secondary,
+  .btn-danger {
+    width: 100% !important;
+    display: block;
+  }
+}
