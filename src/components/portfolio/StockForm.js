@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faEdit, faTimes, faCheck, faSearch, faSync, faExclamationTriangle, faPlus, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import useStockQuote from '../../hooks/useStockQuote';
 import './StockForm.css';
@@ -17,9 +17,9 @@ const StockForm = () => {
     updateCurrentPrice,
     portfolios,
     removeStock,
-    theme, // <-- Add theme from context
-    selectedPortfolioId, // <-- Add selectedPortfolioId from context
-    currentPrices // <-- Add currentPrices from context
+    theme,
+    selectedPortfolioId,
+    currentPrices
   } = useContext(PortfolioContext);
   
   // Form state
@@ -54,6 +54,9 @@ const StockForm = () => {
   const [newPortfolio, setNewPortfolio] = useState('');
   const [addNewPortfolio, setAddNewPortfolio] = useState(false);
   
+  // Form submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   // Reset form fields
   const resetFormFields = () => {
     setSymbol('');
@@ -62,17 +65,30 @@ const StockForm = () => {
     setPurchaseDate(new Date().toISOString().split('T')[0]);
     setRealizedGain('');
     setDividend('');
+    setCurrentPrice('');
     setErrors({
       symbol: false,
       qty: false,
       avgPrice: false,
       purchaseDate: false
     });
+    setFetchTried(false);
+    setManualPrice(false);
+    setCurrentPriceTouched(false);
+    setIsSubmitting(false);
   };
   
   // Initialize form fields when editing
   useEffect(() => {
     if (editingStock) {
+      // Pre-fill all form fields with existing stock data
+      setSymbol(editingStock.stock.symbol || '');
+      setQty(editingStock.stock.qty ? editingStock.stock.qty.toString() : '');
+      setAvgPrice(editingStock.stock.avgPrice ? editingStock.stock.avgPrice.toString() : '');
+      setPurchaseDate(editingStock.stock.purchaseDate || '');
+      setRealizedGain(editingStock.stock.realizedGain ? editingStock.stock.realizedGain.toString() : '');
+      setDividend(editingStock.stock.dividend ? editingStock.stock.dividend.toString() : '');
+      
       // Find the portfolio containing this stock by matching symbol, purchaseDate, and avgPrice
       let foundPortfolio = '';
       Object.entries(portfolios).forEach(([pid, stocks]) => {
@@ -90,6 +106,7 @@ const StockForm = () => {
       setSelectedPortfolio(foundPortfolio);
       setAddNewPortfolio(false);
       setNewPortfolio('');
+      
       // Prefill manual price if available in context
       if (editingStock.stock && editingStock.stock.symbol) {
         const symbolKey = editingStock.stock.symbol.trim().toUpperCase();
@@ -99,9 +116,24 @@ const StockForm = () => {
           setCurrentPrice('');
         }
       }
+      
+      // Reset validation errors
+      setErrors({
+        symbol: false,
+        qty: false,
+        avgPrice: false,
+        purchaseDate: false
+      });
     } else {
-      // Set default date to today when adding new stock
+      // Reset form fields for new stock
+      setSymbol('');
+      setQty('');
+      setAvgPrice('');
       setPurchaseDate(new Date().toISOString().split('T')[0]);
+      setRealizedGain('');
+      setDividend('');
+      setCurrentPrice('');
+      
       // Default to current selected portfolio or first portfolio
       const keys = Object.keys(portfolios).filter(k => k !== 'default');
       if (keys.length > 0) {
@@ -118,7 +150,14 @@ const StockForm = () => {
         setSelectedPortfolio('');
         setAddNewPortfolio(true);
       }
-      setCurrentPrice('');
+      
+      // Reset validation errors
+      setErrors({
+        symbol: false,
+        qty: false,
+        avgPrice: false,
+        purchaseDate: false
+      });
     }
   }, [editingStock, portfolios, selectedPortfolioId, currentPrices]);
   
@@ -144,27 +183,33 @@ const StockForm = () => {
   };
   
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
-    let portfolioId = selectedPortfolio;
-    if (addNewPortfolio) {
-      if (!newPortfolio.trim()) {
-        setErrors(e => ({ ...e, portfolio: true }));
-        return;
-      }
-      portfolioId = newPortfolio.trim();
-    }
-    const stockData = {
-      symbol: symbol.trim().toUpperCase(),
-      qty: parseFloat(qty),
-      avgPrice: parseFloat(avgPrice),
-      purchaseDate,
-      realizedGain: realizedGain ? parseFloat(realizedGain) : 0,
-      dividend: dividend ? parseFloat(dividend) : 0
-    };
+    
+    setIsSubmitting(true);
+    
     try {
+      let portfolioId = selectedPortfolio;
+      if (addNewPortfolio) {
+        if (!newPortfolio.trim()) {
+          setErrors(e => ({ ...e, portfolio: true }));
+          setIsSubmitting(false);
+          return;
+        }
+        portfolioId = newPortfolio.trim();
+      }
+      
+      const stockData = {
+        symbol: symbol.trim().toUpperCase(),
+        qty: parseFloat(qty),
+        avgPrice: parseFloat(avgPrice),
+        purchaseDate,
+        realizedGain: realizedGain ? parseFloat(realizedGain) : 0,
+        dividend: dividend ? parseFloat(dividend) : 0
+      };
+      
       if (editingStock) {
         // If portfolio changed, move stock
         const oldPortfolioId = editingStock.portfolioId || selectedPortfolio;
@@ -178,6 +223,7 @@ const StockForm = () => {
         // Check for duplicate symbols
         addStock(stockData, portfolioId);
       }
+      
       // If quoteData is available and has price, update currentPrices context
       if (quoteData && quoteData.price) {
         updateCurrentPrice(stockData.symbol, Number(quoteData.price));
@@ -185,15 +231,18 @@ const StockForm = () => {
         // If manual price entry is active and value is provided
         updateCurrentPrice(stockData.symbol, Number(currentPrice));
       }
+      
       hideForm();
     } catch (error) {
       showError(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
   // Keyboard handler for Enter key
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !isSubmitting) {
       e.preventDefault();
       handleSubmit();
     }
@@ -254,33 +303,26 @@ const StockForm = () => {
   // Portfolio selector UI
   const portfolioKeys = Object.keys(portfolios).filter(k => k !== 'default');
   const portfolioError = addNewPortfolio && (!newPortfolio.trim() || portfolioKeys.includes(newPortfolio.trim()));
-  const isDarkTheme = theme === 'dark'; // <-- Add dark theme detection
+  const isDarkTheme = theme === 'dark';
 
   return (
     <div 
       id="stockFormModal" 
-      className={`modal-overlay${isDarkTheme ? ' dark' : ''} stock-form-modal-overlay`} 
+      className={`stock-form-modal-overlay${isDarkTheme ? ' dark' : ''}`} 
       onClick={handleOutsideClick}
       data-tour="stock-form"
     >
-      <div className="modal-container stock-form-modal-container">
+      <div className="stock-form-modal-container">
         {/* Header */}
-        <div className="modal-header stock-form-modal-header">
-          <h3 className="form-title stock-form-modal-title" id="stockFormTitle">
+        <div className="stock-form-modal-header">
+          <h3 className="stock-form-modal-title">
             <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
             {isEditing ? ' Edit Stock' : ' Add New Stock'}
           </h3>
-          <button 
-            className="modal-close-btn stock-form-modal-close-btn" 
-            onClick={hideForm}
-            aria-label="Close"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
         </div>
 
         {/* Body */}
-        <div className="modal-body" style={{ overflowY: 'auto', flex: 1, padding: '32px' }}>
+        <div className="modal-body">
           {/* Portfolio selector - professional UI */}
           <div className={`portfolio-section-card${isDarkTheme ? ' dark' : ''}`}>
             <div className="portfolio-section-row">
@@ -299,6 +341,7 @@ const StockForm = () => {
                       }
                     }}
                     className="portfolio-section-select"
+                    disabled={isSubmitting}
                   >
                     <option value="" disabled>Select portfolio</option>
                     {portfolioKeys.map(id => (
@@ -310,6 +353,7 @@ const StockForm = () => {
                     className="portfolio-section-add-btn"
                     onClick={() => { setAddNewPortfolio(true); setNewPortfolio(''); }}
                     title="Add new portfolio"
+                    disabled={isSubmitting}
                   >
                     <FontAwesomeIcon icon={faPlus} />
                   </button>
@@ -324,9 +368,15 @@ const StockForm = () => {
                     onChange={e => setNewPortfolio(e.target.value)}
                     className={`portfolio-section-input${portfolioError ? ' portfolio-section-input-error' : ''}`}
                     aria-invalid={portfolioError}
+                    disabled={isSubmitting}
                   />
                   {portfolioKeys.length > 0 && (
-                    <button type="button" onClick={() => { setAddNewPortfolio(false); setNewPortfolio(''); }} className="portfolio-section-cancel">
+                    <button 
+                      type="button" 
+                      onClick={() => { setAddNewPortfolio(false); setNewPortfolio(''); }} 
+                      className="portfolio-section-cancel"
+                      disabled={isSubmitting}
+                    >
                       Cancel
                     </button>
                   )}
@@ -334,9 +384,13 @@ const StockForm = () => {
               )}
             </div>
             {portfolioError && (
-              <div className="portfolio-section-error">{!newPortfolio.trim() ? 'Portfolio name is required.' : 'Portfolio already exists.'}</div>
+              <div className="portfolio-section-error">
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+                {!newPortfolio.trim() ? 'Portfolio name is required.' : 'Portfolio already exists.'}
+              </div>
             )}
           </div>
+
           <div className="form-section">
             <h4 className="form-section-title">Stock Information</h4>
             <div className="form-grid">
@@ -346,25 +400,33 @@ const StockForm = () => {
                   type="text"
                   id="newSymbol"
                   className={`form-input ${errors.symbol ? 'error' : ''}`}
-                  placeholder="e.g. AAPL"
+                  placeholder="e.g. AAPL, MSFT"
                   value={symbol}
                   onChange={(e) => { setSymbol(e.target.value); setFetchTried(false); setManualPrice(false); }}
                   onBlur={handleSymbolBlur}
                   onKeyPress={handleKeyPress}
                   autoComplete="off"
+                  disabled={isSubmitting}
                 />
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Stock ticker symbol (e.g., TCS for Tata Consultancy, RELIANCE for Reliance Industries, INFY for Infosys)
+                </div>
                 {fetchTried && quoteData && quoteData.price && !quoteError && (
                   <div className="stock-form-fetched-price">
+                    <FontAwesomeIcon icon={faCheck} />
                     Fetched Price: ₹{Number(quoteData.price).toFixed(2)}
                   </div>
                 )}
                 {fetchTried && quoteError && (
-                  <div className="form-error stock-form-error">
+                  <div className="stock-form-error">
                     <FontAwesomeIcon icon={faExclamationTriangle} className="stock-form-error-icon" />
                     Stock data not available. Enter price manually or try proper stock symbol.
                   </div>
                 )}
+                {errors.symbol && <div className="form-error">Stock symbol is required</div>}
               </div>
+              
               <div className="form-group">
                 <label className="form-label required" htmlFor="newQty">Quantity</label>
                 <input
@@ -373,12 +435,19 @@ const StockForm = () => {
                   className={`form-input ${errors.qty ? 'error' : ''}`}
                   placeholder="e.g. 10"
                   min="0"
+                  step="1"
                   value={qty}
                   onChange={(e) => setQty(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  disabled={isSubmitting}
                 />
-                <div className="form-error">Quantity must be greater than 0</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Number of shares you own
+                </div>
+                {errors.qty && <div className="form-error">Quantity must be greater than 0</div>}
               </div>
+              
               <div className="form-group">
                 <label className="form-label required" htmlFor="manualCurrentPrice">Current Price</label>
                 <input
@@ -391,8 +460,12 @@ const StockForm = () => {
                   min="0"
                   step="0.01"
                   required
+                  disabled={isSubmitting}
                 />
-                <div className="form-helper">Latest price shown. You can edit it later if needed.</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Latest market price per share (auto-fetched when available)
+                </div>
               </div>
             </div>
           </div>
@@ -407,13 +480,19 @@ const StockForm = () => {
                   id="newAvgPrice"
                   className={`form-input ${errors.avgPrice ? 'error' : ''}`}
                   placeholder="e.g. 1000"
+                  min="0"
+                  step="0.01"
                   value={avgPrice}
                   onChange={(e) => setAvgPrice(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  disabled={false}
+                  disabled={isSubmitting}
                 />
-                <div className="form-error">Price must be greater than 0</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Stock Purchase Average Price                </div>
+                {errors.avgPrice && <div className="form-error">Price must be greater than 0</div>}
               </div>
+              
               <div className="form-group">
                 <label className="form-label required" htmlFor="newPurchaseDate">Purchase Date</label>
                 <input 
@@ -422,9 +501,13 @@ const StockForm = () => {
                   className={`form-input ${errors.purchaseDate ? 'error' : ''}`}
                   value={purchaseDate}
                   onChange={(e) => setPurchaseDate(e.target.value)}
+                  disabled={isSubmitting}
                 />
-                <div className="form-helper">Date when you purchased the stock</div>
-                <div className="form-error">Please select a valid date</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Date when you purchased the shares
+                </div>
+                {errors.purchaseDate && <div className="form-error">Please select a valid date</div>}
               </div>
             </div>
           </div>
@@ -443,9 +526,14 @@ const StockForm = () => {
                   value={realizedGain}
                   onChange={(e) => setRealizedGain(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  disabled={isSubmitting}
                 />
-                <div className="form-helper">Profits already realized from this stock</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Total profits from selling shares (leave empty if none)
+                </div>
               </div>
+              
               <div className="form-group">
                 <label className="form-label" htmlFor="newDividend">Dividend</label>
                 <input
@@ -457,21 +545,35 @@ const StockForm = () => {
                   value={dividend}
                   onChange={(e) => setDividend(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  disabled={isSubmitting}
                 />
-                <div className="form-helper">Total dividends received</div>
+                <div className="form-helper">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Total dividends received from this stock
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="modal-footer" style={{ padding: '24px 32px', borderTop: '1px solid #eee', background: 'var(--bg-card)', position: 'sticky', bottom: 0, zIndex: 2 }}>
-          <div className="form-actions" style={{ margin: 0 }}>
-            <button className="btn btn-secondary" onClick={hideForm}>
+        <div className="modal-footer">
+          <div className="form-actions">
+            <button 
+              className="btn btn-secondary" 
+              onClick={hideForm}
+              disabled={isSubmitting}
+            >
               <FontAwesomeIcon icon={faTimes} /> Cancel
             </button>
-            <button className="btn" onClick={handleSubmit} id="saveStockBtn">
-              <FontAwesomeIcon icon={faCheck} /> {isEditing ? 'Update Stock' : 'Add Stock'}
+            <button 
+              className={`btn ${isSubmitting ? 'btn-loading' : ''}`} 
+              onClick={handleSubmit} 
+              id="saveStockBtn"
+              disabled={isSubmitting}
+            >
+              {!isSubmitting && <FontAwesomeIcon icon={faCheck} />}
+              {isSubmitting ? 'Saving...' : (isEditing ? 'Update Stock' : 'Add Stock')}
             </button>
           </div>
         </div>
