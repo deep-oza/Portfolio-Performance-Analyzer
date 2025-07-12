@@ -9,9 +9,104 @@
   border: 1px solid var(--border-color);
 }
 
+/* Professional, compact action buttons for table */
 .table-actions {
   display: flex;
-  gap: var(--space-2);
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 70px;
+  padding: 0.25rem 0 0.25rem 0.25rem;
+  z-index: 1;
+}
+
+.table-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 32px;
+  width: 32px;
+  padding: 0;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: none;
+  margin: 0;
+  border: none;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
+}
+
+.table-actions .btn-secondary {
+  background: #f4f4f4;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.table-actions .btn-secondary:hover {
+  background: #e0e0e0;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(60,60,100,0.08);
+  transform: translateY(-1px);
+}
+
+.table-actions .btn-danger {
+  background: #f44336;
+  color: #fff;
+  border: 1px solid #e57373;
+}
+
+.table-actions .btn-danger:hover {
+  background: #d32f2f;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.12);
+  transform: translateY(-1px);
+}
+
+.table-actions .btn svg {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .table-actions {
+    min-width: 56px;
+    gap: 6px;
+  }
+  .table-actions .btn {
+    height: 28px;
+    min-width: 28px;
+    width: 28px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .table-actions {
+    min-width: 44px;
+    gap: 4px;
+    padding: 0.15rem 0 0.15rem 0.15rem;
+  }
+  .table-actions .btn {
+    height: 24px;
+    min-width: 24px;
+    width: 24px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .table-actions {
+    min-width: 36px;
+    gap: 2px;
+    padding: 0.1rem 0 0.1rem 0.1rem;
+  }
+  .table-actions .btn {
+    height: 20px;
+    min-width: 20px;
+    width: 20px;
+    font-size: 0.75rem;
+  }
 }
 
 table {
@@ -121,5 +216,22 @@ tr:hover {
   th, td {
     padding: var(--space-2);
     font-size: 12px;
+  }
+}
+
+/* Add right padding to the last cell in each row for actions */
+tr td:last-child, tr th:last-child {
+  padding-right: 2.5rem;
+}
+
+@media (max-width: 600px) {
+  tr td:last-child, tr th:last-child {
+    padding-right: 1.2rem;
+  }
+}
+
+@media (max-width: 425px) {
+  tr td:last-child, tr th:last-child {
+    padding-right: 0.5rem;
   }
 } 
