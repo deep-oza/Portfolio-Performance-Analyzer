@@ -306,31 +306,40 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Links & Copyright */}
+        {/* Bottom Section - Copyright Only */}
         <div className="footer-bottom">
-          <div className="footer-bottom-content">
-            <div className="footer-links">
-              <button onClick={openPrivacyPolicy} className="footer-link">
-                Privacy Policy
-              </button>
-              <a href="mailto:ozadeep70@gmail.com" className="footer-link">
-                <FontAwesomeIcon icon={faEnvelopeSolid} />
-                Contact
-              </a>
-            </div>
-            
-            <div className="footer-social">
-              <a href="https://github.com/deep-oza" target="_blank" rel="noopener noreferrer" className="footer-social-link">
-                <FontAwesomeIcon icon={faGithubBrand} />
-              </a>
-              <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="footer-social-link">
-                <FontAwesomeIcon icon={faLinkedinBrand} />
-              </a>
-            </div>
-          </div>
-          
           <div className="footer-copyright">
-            <p>© {new Date().getFullYear()} Portfolio Performance Analyzer. All rights reserved.</p>
+            <div className="copyright-container">
+              <div className="copyright-content">
+                <div className="copyright-info">
+                  <div className="copyright-icon">
+                    <FontAwesomeIcon icon={faShieldAlt} />
+                  </div>
+                  <div className="copyright-text">
+                    <p className="copyright-main">© {new Date().getFullYear()} Portfolio Performance Analyzer</p>
+                    <p className="copyright-subtitle">Built with React • Secure • Privacy-First</p>
+                  </div>
+                </div>
+                <div className="copyright-links">
+                  <span className="copyright-divider">•</span>
+                  <a href="mailto:ozadeep70@gmail.com" className="copyright-link">
+                    <FontAwesomeIcon icon={faEnvelopeSolid} />
+                    Support
+                  </a>
+                  <span className="copyright-divider">•</span>
+                  <button onClick={openPrivacyPolicy} className="copyright-link">
+                    <FontAwesomeIcon icon={faShieldAlt} />
+                    Privacy
+                  </button>
+                </div>
+              </div>
+              <div className="copyright-badge">
+                <div className="badge-content">
+                  <FontAwesomeIcon icon={faCheckCircle} className="badge-icon" />
+                  <span className="badge-text">Open Source</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
