@@ -13,8 +13,15 @@ import {
   faClock,
   faArrowTrendUp,
   faInfoCircle,
-  faPlus
+  faPlus,
+  faGithub,
+  faLinkedin,
+  faEnvelope as faEnvelopeSolid,
+  faPlay,
+  faCheckCircle,
+  faLightbulb
 } from '@fortawesome/free-solid-svg-icons';
+import { faGithub as faGithubBrand, faLinkedin as faLinkedinBrand } from '@fortawesome/free-brands-svg-icons';
 import './Footer.css';
 
 const PrivacyPolicyModal = ({ visible, onClose }) => {
@@ -173,143 +180,180 @@ const Footer = () => {
   };
 
   return (
-    <div className="footer">
+    <footer className="footer">
       <PrivacyPolicyModal visible={showPrivacy} onClose={() => setShowPrivacy(false)} />
-      <div className="footer-sections">
-        {/* Instructions Section */}
-        <div className="footer-section footer-instructions-section">
-          <div className="footer-instructions-icon-bg">
-            <FontAwesomeIcon icon={faCalculator} className="footer-instructions-icon" />
-          </div>
-          
-          <h4 className="footer-instructions-title">
-            <FontAwesomeIcon icon={faInfoCircle} className="footer-instructions-info-icon" />
-            How to Use
-          </h4>
-          
-          <div className="footer-instructions-step footer-instructions-step1">
-            <div className="footer-instructions-step-header">
-              <FontAwesomeIcon icon={faPlus} className="footer-instructions-step-icon" />
-              Step 1: Add Your Stocks
-            </div>
-            <p className="footer-instructions-step-desc">
-              Use "Add New Stock" button or import CSV file with symbol, quantity, average price, and purchase date.
-            </p>
-          </div>
-          
-          <div className="footer-instructions-step footer-instructions-step2">
-            <div className="footer-instructions-step-header">
-              <FontAwesomeIcon icon={faChartLine} className="footer-instructions-step-icon step2" />
-              Step 2: Enter Current Prices
-            </div>
-            <p className="footer-instructions-step-desc">
-              Click in the "Current Price" column and enter latest market prices. Use "Refresh Prices" for automatic updates.
-            </p>
-          </div>
-          
-          <div className="footer-instructions-step footer-instructions-step3">
-            <div className="footer-instructions-step-header">
-              <FontAwesomeIcon icon={faArrowTrendUp} className="footer-instructions-step-icon step3" />
-              Step 3: View Real-Time Analysis
-            </div>
-            <p className="footer-instructions-step-desc">
-              All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
-            </p>
-          </div>
-        </div>
-        
-        {/* Metrics Explained Section */}
-        <div className="footer-section footer-metrics-section">
-          <div className="footer-metrics-icon-bg">
-            <FontAwesomeIcon icon={faPercentage} className="footer-metrics-icon" />
-          </div>
-          
-          <h4 className="footer-metrics-title">
-            <FontAwesomeIcon icon={faChartLine} className="footer-metrics-info-icon" />
-            Performance Metrics
-          </h4>
-          
-          <div className="footer-metrics-step footer-metrics-step1">
-            <div className="footer-metrics-step-header">
-              <FontAwesomeIcon icon={faPercentage} className="footer-metrics-step-icon" />
-              Average Return %
-            </div>
-            <p className="footer-metrics-step-desc">
-              Portfolio-wide return: (Total Current Value - Total Invested) / Total Invested × 100
-            </p>
-          </div>
-           
-           <div style={{
-             background: 'var(--bg-card)',
-             borderRadius: 8,
-             padding: '16px',
-             border: '1px solid var(--border-color)',
-             marginBottom: 12
-           }}>
-             <div style={{
-               display: 'flex',
-               alignItems: 'center',
-               gap: 10,
-               marginBottom: 8,
-               fontSize: 14,
-               fontWeight: 600,
-               color: 'var(--text-main)'
-             }}>
-               <FontAwesomeIcon icon={faChartLine} style={{ color: '#8b5cf6', fontSize: 14 }} />
-               Average CAGR
-             </div>
-             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-               Weighted average: Σ(Invested Amount × Individual CAGR) ÷ Σ(Invested Amount)
-             </p>
-             <div style={{ 
-               marginTop: 8, 
-               padding: 8, 
-               background: 'rgba(139, 92, 246, 0.05)', 
-               borderRadius: 4, 
-               fontSize: 12, 
-               color: 'var(--text-secondary)' 
-             }}>
-               <strong>Includes:</strong> Stocks held &ge;90 days with valid prices<br/>
-               <strong>Bounds:</strong> -100% to 200% per stock, -99.99% to 999,999% overall
-             </div>
-           </div>
-           
-           <div style={{
-             background: 'var(--bg-card)',
-             borderRadius: 8,
-             padding: '16px',
-             border: '1px solid var(--border-color)'
-           }}>
-             <div style={{
-               display: 'flex',
-               alignItems: 'center',
-               gap: 10,
-               marginBottom: 8,
-               fontSize: 14,
-               fontWeight: 600,
-               color: 'var(--text-main)'
-             }}>
-               <FontAwesomeIcon icon={faClock} style={{ color: '#f59e0b', fontSize: 14 }} />
-               Average Total Return
-             </div>
-             <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-               Portfolio-wide return including unrealized gains/losses, realized gains, and dividend income.
-             </p>
-           </div>
-        </div>
-      </div>
       
-      <div className="footer-bottom">
-        <p className="footer-links">
-          <button onClick={openPrivacyPolicy} className="link-button">
-            Privacy Policy
-          </button>
-        </p>
-        <p className="copyright">
-          © {new Date().getFullYear()} Portfolio Performance Analyzer
-        </p>
+      {/* Main Footer Content */}
+      <div className="footer-container">
+        {/* Top Section - Features & Info */}
+        <div className="footer-main">
+          {/* How to Use Section */}
+          <div className="footer-section">
+            <div className="footer-section-header">
+              <div className="footer-icon-wrapper">
+                <FontAwesomeIcon icon={faCalculator} className="footer-icon" />
+              </div>
+              <div className="footer-section-title-wrapper">
+                <h3 className="footer-section-title">
+                  Getting Started
+                </h3>
+                <p className="footer-section-subtitle">Follow these simple steps to analyze your portfolio</p>
+              </div>
+            </div>
+            
+            <div className="footer-steps">
+              <div className="footer-step">
+                <div className="footer-step-number">1</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faPlus} className="footer-step-icon" />
+                    <span>Add Your Stocks</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    Use the "Add New Stock" button or import a CSV file containing symbol, quantity, average price, and purchase date.
+                  </p>
+                  <div className="footer-step-tip">
+                    <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
+                    <span>Tip: You can also drag and drop CSV files directly onto the page</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="footer-step">
+                <div className="footer-step-number">2</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faChartLine} className="footer-step-icon step2" />
+                    <span>Enter Current Prices</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    Click in the "Current Price" column and enter the latest market prices. Use "Refresh Prices" for automatic updates.
+                  </p>
+                  <div className="footer-step-tip">
+                    <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
+                    <span>Tip: Prices update in real-time as you type</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="footer-step">
+                <div className="footer-step-number">3</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faArrowTrendUp} className="footer-step-icon step3" />
+                    <span>View Real-Time Analysis</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
+                  </p>
+                  <div className="footer-step-tip">
+                    <FontAwesomeIcon icon={faCheckCircle} className="footer-tip-icon success" />
+                    <span>All calculations happen instantly - no waiting required</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Performance Metrics Section */}
+          <div className="footer-section">
+            <div className="footer-section-header">
+              <div className="footer-icon-wrapper metrics">
+                <FontAwesomeIcon icon={faPercentage} className="footer-icon" />
+              </div>
+              <div className="footer-section-title-wrapper">
+                <h3 className="footer-section-title">
+                  Performance Metrics
+                </h3>
+                <p className="footer-section-subtitle">Understanding your portfolio's key performance indicators</p>
+              </div>
+            </div>
+            
+            <div className="footer-steps">
+              <div className="footer-step">
+                <div className="footer-step-number">1</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faPercentage} className="footer-step-icon" />
+                    <span>Average Return %</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    Portfolio-wide return calculated as: (Total Current Value - Total Invested) ÷ Total Invested × 100
+                  </p>
+                  <div className="footer-step-formula">
+                    <strong>Formula:</strong> (Current Value - Invested Amount) ÷ Invested Amount × 100
+                  </div>
+                </div>
+              </div>
+              
+              <div className="footer-step">
+                <div className="footer-step-number">2</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faChartLine} className="footer-step-icon step2" />
+                    <span>Average CAGR</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    Weighted average Compound Annual Growth Rate across all holdings in your portfolio.
+                  </p>
+                  <div className="footer-step-formula">
+                    <strong>Formula:</strong> Σ(Invested Amount × Individual CAGR) ÷ Σ(Invested Amount)
+                  </div>
+                  <div className="footer-step-note">
+                    <strong>Requirements:</strong> Stocks held ≥90 days with valid prices<br/>
+                    <strong>Limits:</strong> -100% to 200% per stock, -99.99% to 999,999% overall
+                  </div>
+                </div>
+              </div>
+              
+              <div className="footer-step">
+                <div className="footer-step-number">3</div>
+                <div className="footer-step-content">
+                  <div className="footer-step-header">
+                    <FontAwesomeIcon icon={faClock} className="footer-step-icon step3" />
+                    <span>Average Total Return</span>
+                  </div>
+                  <p className="footer-step-desc">
+                    Comprehensive portfolio return including unrealized gains/losses, realized gains, and dividend income.
+                  </p>
+                  <div className="footer-step-formula">
+                    <strong>Includes:</strong> Unrealized gains + Realized gains + Dividends
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section - Links & Copyright */}
+        <div className="footer-bottom">
+          <div className="footer-bottom-content">
+            <div className="footer-links">
+              <button onClick={openPrivacyPolicy} className="footer-link">
+                Privacy Policy
+              </button>
+              <a href="mailto:ozadeep70@gmail.com" className="footer-link">
+                <FontAwesomeIcon icon={faEnvelopeSolid} />
+                Contact
+              </a>
+            </div>
+            
+            <div className="footer-social">
+              <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                <FontAwesomeIcon icon={faGithubBrand} />
+              </a>
+              <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                <FontAwesomeIcon icon={faLinkedinBrand} />
+              </a>
+            </div>
+          </div>
+          
+          <div className="footer-copyright">
+            <p>© {new Date().getFullYear()} Portfolio Performance Analyzer. All rights reserved.</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
