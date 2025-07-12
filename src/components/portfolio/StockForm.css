@@ -164,33 +164,47 @@
   box-shadow: var(--shadow-md);
 }
 
-.portfolio-section-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  flex-wrap: wrap;
+.portfolio-section-header {
+  margin-bottom: var(--space-4);
 }
 
 .portfolio-section-label {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-main);
-  font-size: var(--text-sm);
-  min-width: 80px;
+  font-size: var(--text-base);
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
 .portfolio-section-label::before {
   content: '📁';
+  font-size: var(--text-base);
+}
+
+.portfolio-section-description {
+  color: var(--text-muted);
   font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+}
+
+.portfolio-selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.portfolio-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .portfolio-section-select {
-  flex: 1;
-  min-width: 200px;
+  width: 100%;
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   background: var(--bg-input);
   color: var(--text-main);
@@ -211,56 +225,44 @@
   cursor: not-allowed;
 }
 
-.portfolio-section-add-btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: var(--space-3) var(--space-4);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.portfolio-selected-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  position: relative;
-  overflow: hidden;
-  min-width: 44px;
+  gap: var(--space-2);
+  color: var(--success);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  background: var(--success-light);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--success);
 }
 
-.portfolio-section-add-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+.portfolio-create-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.portfolio-section-add-btn:hover::before {
-  left: 100%;
+.portfolio-create-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: var(--text-sm);
 }
 
-.portfolio-section-add-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.portfolio-section-add-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+.portfolio-input-group {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
 }
 
 .portfolio-section-input {
   flex: 1;
-  min-width: 200px;
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   background: var(--bg-input);
   color: var(--text-main);
@@ -302,7 +304,10 @@
   transition: all var(--transition-fast);
   font-size: var(--text-sm);
   font-weight: 500;
-  min-width: 80px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
 }
 
 .portfolio-section-cancel:hover {
@@ -313,6 +318,19 @@
 .portfolio-section-cancel:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.portfolio-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  background: var(--primary-light);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary);
 }
 
 .portfolio-section-error {
@@ -327,6 +345,52 @@
   border-radius: var(--radius-md);
   border-left: 3px solid var(--danger);
   animation: slideIn 0.3s ease-out;
+}
+
+.portfolio-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.portfolio-empty-state svg {
+  font-size: var(--text-2xl);
+  color: var(--primary);
+}
+
+.portfolio-empty-state div {
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+}
+
+.portfolio-create-first-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-6);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.portfolio-create-first-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.portfolio-create-first-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Form Sections */
@@ -669,9 +733,22 @@
     font-size: var(--text-xs);
   }
   
+  .portfolio-section-description {
+    font-size: 10px;
+  }
+  
   .portfolio-section-select {
     font-size: var(--text-xs);
     padding: var(--space-2) var(--space-3);
+  }
+  
+  .portfolio-selected-info {
+    font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-2);
+  }
+  
+  .portfolio-create-header {
+    font-size: var(--text-xs);
   }
   
   .portfolio-section-input {
@@ -684,16 +761,40 @@
     padding: var(--space-2) var(--space-3);
   }
   
+  .portfolio-preview {
+    font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-2);
+  }
+  
   .portfolio-section-error {
     font-size: var(--text-xs);
   }
   
-  .stock-form-fetched-price {
+  .portfolio-empty-state {
+    padding: var(--space-4);
+  }
+  
+  .portfolio-empty-state svg {
+    font-size: var(--text-xl);
+  }
+  
+  .portfolio-empty-state div {
     font-size: var(--text-xs);
   }
   
-  .stock-form-error {
+  .portfolio-create-first-btn {
     font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-4);
+  }
+  
+  .portfolio-input-group {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .portfolio-section-cancel {
+    width: 100%;
+    justify-content: center;
   }
   
   .form-grid {
@@ -812,9 +913,22 @@
     font-size: 10px;
   }
   
+  .portfolio-section-description {
+    font-size: 9px;
+  }
+  
   .portfolio-section-select {
     font-size: 10px;
     padding: var(--space-2) var(--space-2);
+  }
+  
+  .portfolio-selected-info {
+    font-size: 10px;
+    padding: var(--space-2) var(--space-2);
+  }
+  
+  .portfolio-create-header {
+    font-size: 10px;
   }
   
   .portfolio-section-input {
@@ -827,16 +941,79 @@
     padding: var(--space-2) var(--space-2);
   }
   
+  .portfolio-preview {
+    font-size: 10px;
+    padding: var(--space-2) var(--space-2);
+  }
+  
   .portfolio-section-error {
     font-size: 10px;
   }
   
-  .stock-form-fetched-price {
+  .portfolio-empty-state {
+    padding: var(--space-3);
+  }
+  
+  .portfolio-empty-state svg {
+    font-size: var(--text-lg);
+  }
+  
+  .portfolio-empty-state div {
     font-size: 10px;
   }
   
-  .stock-form-error {
+  .portfolio-create-first-btn {
     font-size: 10px;
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .portfolio-input-group {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .portfolio-section-cancel {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .portfolio-section-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  
+  .portfolio-section-label {
+    min-width: auto;
+  }
+  
+  .portfolio-section-select {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .portfolio-section-input {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .portfolio-section-add-btn {
+    width: 100%;
+    min-width: auto;
+    height: 48px;
+    border-radius: var(--radius-lg);
+  }
+  
+  .portfolio-section-cancel {
+    width: 100%;
+    min-width: auto;
+    height: 48px;
+    border-radius: var(--radius-lg);
   }
   
   .form-actions {

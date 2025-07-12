@@ -325,10 +325,16 @@ const StockForm = () => {
         <div className="modal-body">
           {/* Portfolio selector - professional UI */}
           <div className={`portfolio-section-card${isDarkTheme ? ' dark' : ''}`}>
-            <div className="portfolio-section-row">
-              <label htmlFor="portfolio-select" className="portfolio-section-label">Portfolio</label>
-              {portfolioKeys.length > 0 && !addNewPortfolio ? (
-                <>
+            <div className="portfolio-section-header">
+              <label className="portfolio-section-label">Select Portfolio</label>
+              <div className="portfolio-section-description">
+                Choose an existing portfolio or create a new one
+              </div>
+            </div>
+            
+            {portfolioKeys.length > 0 && !addNewPortfolio ? (
+              <div className="portfolio-selection-container">
+                <div className="portfolio-select-group">
                   <select
                     id="portfolio-select"
                     value={selectedPortfolio}
@@ -343,33 +349,41 @@ const StockForm = () => {
                     className="portfolio-section-select"
                     disabled={isSubmitting}
                   >
-                    <option value="" disabled>Select portfolio</option>
+                    <option value="" disabled>Choose a portfolio...</option>
                     {portfolioKeys.map(id => (
                       <option key={id} value={id}>{id}</option>
                     ))}
+                    <option value="__add_new__">➕ Create New Portfolio</option>
                   </select>
-                  <button
-                    type="button"
-                    className="portfolio-section-add-btn"
-                    onClick={() => { setAddNewPortfolio(true); setNewPortfolio(''); }}
-                    title="Add new portfolio"
-                    disabled={isSubmitting}
-                  >
-                    <FontAwesomeIcon icon={faPlus} />
-                  </button>
-                </>
-              ) : (
-                <>
+                </div>
+                
+                {selectedPortfolio && (
+                  <div className="portfolio-selected-info">
+                    <FontAwesomeIcon icon={faCheck} />
+                    Selected: <strong>{selectedPortfolio}</strong>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="portfolio-create-container">
+                <div className="portfolio-create-header">
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>Create New Portfolio</span>
+                </div>
+                
+                <div className="portfolio-input-group">
                   <input
                     type="text"
                     id="portfolio-input"
-                    placeholder="New portfolio name"
+                    placeholder="Enter portfolio name (e.g., My Stocks, Long Term)"
                     value={newPortfolio}
                     onChange={e => setNewPortfolio(e.target.value)}
                     className={`portfolio-section-input${portfolioError ? ' portfolio-section-input-error' : ''}`}
                     aria-invalid={portfolioError}
                     disabled={isSubmitting}
+                    autoFocus
                   />
+                  
                   {portfolioKeys.length > 0 && (
                     <button 
                       type="button" 
@@ -377,16 +391,40 @@ const StockForm = () => {
                       className="portfolio-section-cancel"
                       disabled={isSubmitting}
                     >
+                      <FontAwesomeIcon icon={faTimes} />
                       Cancel
                     </button>
                   )}
-                </>
-              )}
-            </div>
+                </div>
+                
+                {newPortfolio.trim() && (
+                  <div className="portfolio-preview">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    New portfolio: <strong>{newPortfolio.trim()}</strong>
+                  </div>
+                )}
+              </div>
+            )}
+            
             {portfolioError && (
               <div className="portfolio-section-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
                 {!newPortfolio.trim() ? 'Portfolio name is required.' : 'Portfolio already exists.'}
+              </div>
+            )}
+            
+            {portfolioKeys.length === 0 && !addNewPortfolio && (
+              <div className="portfolio-empty-state">
+                <FontAwesomeIcon icon={faPlus} />
+                <div>No portfolios yet. Create your first portfolio to get started!</div>
+                <button
+                  type="button"
+                  className="portfolio-create-first-btn"
+                  onClick={() => { setAddNewPortfolio(true); setNewPortfolio(''); }}
+                  disabled={isSubmitting}
+                >
+                  Create First Portfolio
+                </button>
               </div>
             )}
           </div>
