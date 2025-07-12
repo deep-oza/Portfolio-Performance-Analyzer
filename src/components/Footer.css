@@ -316,16 +316,18 @@
 
 .copyright-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  justify-content: center;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
 .copyright-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-3);
   flex: 1;
   flex-wrap: wrap;
 }
@@ -333,7 +335,9 @@
 .copyright-info {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
+  text-align: center;
+  gap:0px;
 }
 
 .copyright-icon {
@@ -345,6 +349,7 @@
   align-items: center;
   justify-content: center;
   color: #2563eb;
+  margin-bottom: var(--space-4);
   font-size: 18px;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
@@ -421,7 +426,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-3);
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.12) 100%);
   border-radius: 20px;
   border: 1px solid rgba(16, 185, 129, 0.2);
@@ -471,11 +476,15 @@
   }
   
   .copyright-container {
+    flex-direction: column;
+    align-items: center;
     gap: var(--space-3);
   }
   
   .copyright-content {
-    gap: var(--space-4);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
   }
 }
 
@@ -514,7 +523,7 @@
   }
   
   .copyright-content {
-    gap: var(--space-6);
+    /* gap: var(--space-6); */
   }
   
   .copyright-main {
@@ -625,7 +634,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: var(--space-2);
+    /* gap: var(--space-2); */
   }
   
   .copyright-links {
@@ -693,7 +702,7 @@
   }
   
   .copyright-content {
-    gap: var(--space-2);
+    /* gap: var(--space-2); */
   }
   
   .copyright-info {
@@ -704,6 +713,7 @@
     width: 32px;
     height: 32px;
     font-size: 14px;
+    /* gap: var(--space-3); */
   }
   
   .copyright-main {
@@ -724,7 +734,7 @@
   }
   
   .badge-content {
-    padding: var(--space-1);
+    padding: var(--space-2);
   }
   
   .badge-text {
