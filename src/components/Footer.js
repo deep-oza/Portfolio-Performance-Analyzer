@@ -23,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub as faGithubBrand, faLinkedin as faLinkedinBrand } from '@fortawesome/free-brands-svg-icons';
 import './Footer.css';
+import CollapsibleSection from './CollapsibleSection';
 
 const PrivacyPolicyModal = ({ visible, onClose }) => {
   // Get theme from body attribute
@@ -170,6 +171,9 @@ const PrivacyPolicyModal = ({ visible, onClose }) => {
 
 const Footer = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
+  // Accordion state for each section
+  const [openGettingStarted, setOpenGettingStarted] = useState(0); // 0,1,2 or null (first open by default)
+  const [openMetrics, setOpenMetrics] = useState(0); // 0,1,2 or null (first open by default)
 
   const openPrivacyPolicy = () => {
     ReactGA.event({
@@ -194,67 +198,55 @@ const Footer = () => {
                 <FontAwesomeIcon icon={faCalculator} className="footer-icon" />
               </div>
               <div className="footer-section-title-wrapper">
-                <h3 className="footer-section-title">
-                  Getting Started
-                </h3>
+                <h3 className="footer-section-title">Getting Started</h3>
                 <p className="footer-section-subtitle">Follow these simple steps to analyze your portfolio</p>
               </div>
             </div>
-            
             <div className="footer-steps">
-              <div className="footer-step">
-                <div className="footer-step-number">1</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faPlus} className="footer-step-icon" />
-                    <span>Add Your Stocks</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    Use the "Add New Stock" button or import a CSV file containing symbol, quantity, average price, and purchase date.
-                  </p>
-                  <div className="footer-step-tip">
-                    <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
-                    <span>Tip: You can also drag and drop CSV files directly onto the page</span>
-                  </div>
+              <CollapsibleSection
+                title="Add Your Stocks"
+                icon={<FontAwesomeIcon icon={faPlus} />} 
+                expanded={openGettingStarted === 0}
+                onToggle={() => setOpenGettingStarted(openGettingStarted === 0 ? null : 0)}
+              >
+                <p className="footer-step-desc">
+                  Use the "Add New Stock" button or import a CSV file containing symbol, quantity, average price, and purchase date.
+                </p>
+                <div className="footer-step-tip">
+                  <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
+                  <span>Tip: You can also drag and drop CSV files directly onto the page</span>
                 </div>
-              </div>
-              
-              <div className="footer-step">
-                <div className="footer-step-number">2</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faChartLine} className="footer-step-icon step2" />
-                    <span>Enter Current Prices</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    Click in the "Current Price" column and enter the latest market prices. Use "Refresh Prices" for automatic updates.
-                  </p>
-                  <div className="footer-step-tip">
-                    <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
-                    <span>Tip: Prices update in real-time as you type</span>
-                  </div>
+              </CollapsibleSection>
+              <CollapsibleSection
+                title="Enter Current Prices"
+                icon={<FontAwesomeIcon icon={faChartLine} />} 
+                expanded={openGettingStarted === 1}
+                onToggle={() => setOpenGettingStarted(openGettingStarted === 1 ? null : 1)}
+              >
+                <p className="footer-step-desc">
+                  Click in the "Current Price" column and enter the latest market prices. Use "Refresh Prices" for automatic updates.
+                </p>
+                <div className="footer-step-tip">
+                  <FontAwesomeIcon icon={faLightbulb} className="footer-tip-icon" />
+                  <span>Tip: Prices update in real-time as you type</span>
                 </div>
-              </div>
-              
-              <div className="footer-step">
-                <div className="footer-step-number">3</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faArrowTrendUp} className="footer-step-icon step3" />
-                    <span>View Real-Time Analysis</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
-                  </p>
-                  <div className="footer-step-tip">
-                    <FontAwesomeIcon icon={faCheckCircle} className="footer-tip-icon success" />
-                    <span>All calculations happen instantly - no waiting required</span>
-                  </div>
+              </CollapsibleSection>
+              <CollapsibleSection
+                title="View Real-Time Analysis"
+                icon={<FontAwesomeIcon icon={faArrowTrendUp} />} 
+                expanded={openGettingStarted === 2}
+                onToggle={() => setOpenGettingStarted(openGettingStarted === 2 ? null : 2)}
+              >
+                <p className="footer-step-desc">
+                  All metrics update automatically! See returns, CAGR, and performance analysis instantly as you enter prices.
+                </p>
+                <div className="footer-step-tip">
+                  <FontAwesomeIcon icon={faCheckCircle} className="footer-tip-icon success" />
+                  <span>All calculations happen instantly - no waiting required</span>
                 </div>
-              </div>
+              </CollapsibleSection>
             </div>
           </div>
-          
           {/* Performance Metrics Section */}
           <div className="footer-section">
             <div className="footer-section-header">
@@ -262,65 +254,54 @@ const Footer = () => {
                 <FontAwesomeIcon icon={faPercentage} className="footer-icon" />
               </div>
               <div className="footer-section-title-wrapper">
-                <h3 className="footer-section-title">
-                  Performance Metrics
-                </h3>
+                <h3 className="footer-section-title">Performance Metrics</h3>
                 <p className="footer-section-subtitle">Understanding your portfolio's key performance indicators</p>
               </div>
             </div>
-            
             <div className="footer-steps">
-              <div className="footer-step">
-                <div className="footer-step-number">1</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faPercentage} className="footer-step-icon" />
-                    <span>Average Return %</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    Portfolio-wide return calculated as: (Total Current Value - Total Invested) ÷ Total Invested × 100
-                  </p>
-                  <div className="footer-step-formula">
-                    <strong>Formula:</strong> (Current Value - Invested Amount) ÷ Invested Amount × 100
-                  </div>
+              <CollapsibleSection
+                title="Average Return %"
+                icon={<FontAwesomeIcon icon={faPercentage} />} 
+                expanded={openMetrics === 0}
+                onToggle={() => setOpenMetrics(openMetrics === 0 ? null : 0)}
+              >
+                <p className="footer-step-desc">
+                  Portfolio-wide return calculated as: (Total Current Value - Total Invested) ÷ Total Invested × 100
+                </p>
+                <div className="footer-step-formula">
+                  <strong>Formula:</strong> (Current Value - Invested Amount) ÷ Invested Amount × 100
                 </div>
-              </div>
-              
-              <div className="footer-step">
-                <div className="footer-step-number">2</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faChartLine} className="footer-step-icon step2" />
-                    <span>Average CAGR</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    Weighted average Compound Annual Growth Rate across all holdings in your portfolio.
-                  </p>
-                  <div className="footer-step-formula">
-                    <strong>Formula:</strong> Σ(Invested Amount × Individual CAGR) ÷ Σ(Invested Amount)
-                  </div>
-                  <div className="footer-step-note">
-                    <strong>Requirements:</strong> Stocks held ≥90 days with valid prices<br/>
-                    <strong>Limits:</strong> -100% to 200% per stock, -99.99% to 999,999% overall
-                  </div>
+              </CollapsibleSection>
+              <CollapsibleSection
+                title="Average CAGR"
+                icon={<FontAwesomeIcon icon={faChartLine} />} 
+                expanded={openMetrics === 1}
+                onToggle={() => setOpenMetrics(openMetrics === 1 ? null : 1)}
+              >
+                <p className="footer-step-desc">
+                  Weighted average Compound Annual Growth Rate across all holdings in your portfolio.
+                </p>
+                <div className="footer-step-formula">
+                  <strong>Formula:</strong> Σ(Invested Amount × Individual CAGR) ÷ Σ(Invested Amount)
                 </div>
-              </div>
-              
-              <div className="footer-step">
-                <div className="footer-step-number">3</div>
-                <div className="footer-step-content">
-                  <div className="footer-step-header">
-                    <FontAwesomeIcon icon={faClock} className="footer-step-icon step3" />
-                    <span>Average Total Return</span>
-                  </div>
-                  <p className="footer-step-desc">
-                    Comprehensive portfolio return including unrealized gains/losses, realized gains, and dividend income.
-                  </p>
-                  <div className="footer-step-formula">
-                    <strong>Includes:</strong> Unrealized gains + Realized gains + Dividends
-                  </div>
+                <div className="footer-step-note">
+                  <strong>Requirements:</strong> Stocks held ≥90 days with valid prices<br/>
+                  <strong>Limits:</strong> -100% to 200% per stock, -99.99% to 999,999% overall
                 </div>
-              </div>
+              </CollapsibleSection>
+              <CollapsibleSection
+                title="Average Total Return"
+                icon={<FontAwesomeIcon icon={faClock} />} 
+                expanded={openMetrics === 2}
+                onToggle={() => setOpenMetrics(openMetrics === 2 ? null : 2)}
+              >
+                <p className="footer-step-desc">
+                  Comprehensive portfolio return including unrealized gains/losses, realized gains, and dividend income.
+                </p>
+                <div className="footer-step-formula">
+                  <strong>Includes:</strong> Unrealized gains + Realized gains + Dividends
+                </div>
+              </CollapsibleSection>
             </div>
           </div>
         </div>
