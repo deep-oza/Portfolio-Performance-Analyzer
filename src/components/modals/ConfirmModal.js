@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import './ConfirmModal.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 const ConfirmModal = () => {
   const { modalConfig, hideModal } = useContext(PortfolioContext);
@@ -61,26 +63,31 @@ const ConfirmModal = () => {
       className="modal-overlay active" 
       onClick={handleOutsideClick}
     >
-      <div className="modal-container confirm-modal-container">
+      <div className="modal-container pro-modal confirm-modal-pro-modal">
         {/* Header */}
-        <div className="modal-header confirm-modal-header">
-          <h3 id="modalTitle" className="modal-title confirm-modal-title">{title}</h3>
+        <div className="pro-modal-header confirm-modal-header">
+          <span className="pro-modal-icon confirm-modal-icon" aria-hidden="true">
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+          </span>
+          <div>
+            <h3 id="modalTitle" className="modal-title pro-modal-title confirm-modal-title">{title}</h3>
+          </div>
         </div>
         {/* Body */}
-        <div className="modal-body confirm-modal-body">
+        <div className="pro-modal-body confirm-modal-body">
           {typeof message === 'string' ? (
-            <p id="modalMessage" className="modal-message" dangerouslySetInnerHTML={{ __html: message }} />
+            <p id="modalMessage" className="modal-message pro-modal-message">{message}</p>
           ) : (
-            <div id="modalMessage" className="modal-message">{message}</div>
+            <div id="modalMessage" className="modal-message pro-modal-message">{message}</div>
           )}
         </div>
         {/* Footer */}
-        <div className="modal-footer confirm-modal-footer">
-          <div className="modal-actions confirm-modal-actions">
+        <div className="pro-modal-footer confirm-modal-footer">
+          <div className="modal-actions pro-modal-actions confirm-modal-actions">
             {showCancel !== false && (
               <button 
                 id="modalCancel" 
-                className="btn btn-secondary" 
+                className="btn btn-secondary pro-modal-btn" 
                 onClick={handleCancel}
               >
                 {cancelText || 'Cancel'}
@@ -88,7 +95,7 @@ const ConfirmModal = () => {
             )}
             <button 
               id="modalConfirm" 
-              className={`btn ${confirmButtonClass || 'btn-danger'}`} 
+              className={`btn pro-modal-btn ${confirmButtonClass || 'btn-primary'}`} 
               onClick={handleConfirm}
             >
               {confirmText || 'Confirm'}
