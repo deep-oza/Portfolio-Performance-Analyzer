@@ -9,6 +9,41 @@ A professional, modern web application for tracking and analyzing your stock por
 
 **Portfolio Performance Analyzer** is a feature-rich, React-based platform designed for investors who demand both powerful analytics and a seamless, professional user experience. The application combines robust portfolio management tools with a polished, responsive UI, ensuring accessibility and ease of use across all devices.
 
+## Key Features
+
+- **Multi-Portfolio Management:** Organize investments by strategy, account, or goal with easy portfolio creation, switching, and deletion.
+- **Advanced Performance Metrics:** Instantly calculate CAGR, total returns, realized/unrealized gains, and more.
+- **Professional Analytics Dashboard:** Interactive charts and visualizations for deep insights (CAGR, returns, gainers/losers, holding periods).
+- **CSV Import/Export:** Effortlessly migrate data using flexible CSV tools (see `public/sample_portfolio.csv`).
+- **Real-Time Stock Quotes:** Fetch live prices from Yahoo Finance for accurate, up-to-date analysis.
+- **Customizable Table:** Show/hide, reorder, and sort columns; search and filter stocks with ease.
+- **Guided Onboarding & Help:** Built-in guided tour, contextual help, and detailed instructions for new and advanced users.
+- **Privacy-First:** All data is securely stored in your browser (localStorage); no server-side storage or tracking.
+- **Dark/Light Mode:** Instantly toggle between elegant light and dark themes for optimal viewing comfort.
+- **Mobile-First Responsive Design:** Fully responsive layout and touch-friendly controls for desktop, tablet, and mobile.
+
+## Technologies Used
+
+- **React 18** – UI library for building interactive interfaces
+- **Recharts** – Data visualization and analytics charts
+- **FontAwesome** – Iconography
+- **@reactour/tour** – Guided tours and onboarding
+- **Custom CSS** – Modern, maintainable styling (no inline styles)
+- **Yahoo Finance API (via AllOrigins CORS proxy)** – Real-time stock price data
+- **Jest & React Testing Library** – (Optional) Unit and integration testing
+
+## Accessibility
+
+Portfolio Performance Analyzer is designed with accessibility and inclusivity in mind:
+
+- **Keyboard Navigation:** All interactive elements (buttons, forms, modals, tables) are accessible via keyboard (Tab, Enter, Space, Arrow keys).
+- **ARIA Labels:** Important UI elements include ARIA attributes for improved screen reader support.
+- **Color Contrast:** The app uses high-contrast color palettes and supports both light and dark themes for readability.
+- **Responsive Design:** The layout adapts to all screen sizes, ensuring usability on desktop, tablet, and mobile devices.
+- **Focus Indicators:** Clear focus outlines help users track navigation.
+- **Semantic HTML:** Proper use of headings, lists, and roles for better accessibility.
+- **Accessible Modals:** Modals can be closed with Escape and are focus-trapped.
+
 ## Project Structure
 
 ```
@@ -39,32 +74,6 @@ Portfolio-Performance-Analyzer/
 - **src/utils/**: Utility modules for CSV handling and stock data fetching.
 - **src/styles.css**: Global CSS variables and base styles for theming.
 - **App.js / index.js**: Main app logic and entry point.
-
-## Key Features
-
-- **Multi-Portfolio Management:** Organize investments by strategy, account, or goal with easy portfolio creation, switching, and deletion.
-- **Advanced Performance Metrics:** Instantly calculate CAGR, total returns, realized/unrealized gains, and more.
-- **Professional Analytics Dashboard:** Interactive charts and visualizations for deep insights (CAGR, returns, gainers/losers, holding periods).
-- **CSV Import/Export:** Effortlessly migrate data using flexible CSV tools (see `public/sample_portfolio.csv`).
-- **Real-Time Stock Quotes:** Fetch live prices from Yahoo Finance for accurate, up-to-date analysis.
-- **Customizable Table:** Show/hide, reorder, and sort columns; search and filter stocks with ease.
-- **Guided Onboarding & Help:** Built-in guided tour, contextual help, and detailed instructions for new and advanced users.
-- **Privacy-First:** All data is securely stored in your browser (localStorage); no server-side storage or tracking.
-- **Dark/Light Mode:** Instantly toggle between elegant light and dark themes for optimal viewing comfort.
-- **Mobile-First Responsive Design:** Fully responsive layout and touch-friendly controls for desktop, tablet, and mobile.
-
-## Professional UI/UX
-
-- **Modern Design System:** Utilizes a clean, contemporary design language with consistent color palettes, spacing, and typography.
-- **Component-Based Architecture:** All UI elements are modular React components, styled for clarity and usability.
-- **Accessibility:** Keyboard navigation, ARIA labels, and high-contrast themes ensure inclusivity for all users.
-- **Intuitive Interactions:** Drag-and-drop, in-place editing, tooltips, and modals provide a smooth, frictionless workflow.
-- **Visual Feedback:** Real-time updates, loading indicators, and confirmation dialogs keep users informed and confident.
-- **Technologies Used:**
-  - React 18
-  - FontAwesome for icons
-  - Recharts for analytics and data visualization
-  - Custom CSS (no inline styles) for maintainable, scalable theming
 
 ## Main Components
 
@@ -171,28 +180,6 @@ Yes. All data remains on your device and is never uploaded or shared.
 
 **How do I switch between light and dark mode?**  
 Click the theme toggle button in the top-right corner to instantly switch between light and dark themes.
-
-## Technologies Used
-
-- **React 18** – UI library for building interactive interfaces
-- **Recharts** – Data visualization and analytics charts
-- **FontAwesome** – Iconography
-- **@reactour/tour** – Guided tours and onboarding
-- **Custom CSS** – Modern, maintainable styling (no inline styles)
-- **Yahoo Finance API (via AllOrigins CORS proxy)** – Real-time stock price data
-- **Jest & React Testing Library** – (Optional) Unit and integration testing
-
-## Accessibility
-
-Portfolio Performance Analyzer is designed with accessibility and inclusivity in mind:
-
-- **Keyboard Navigation:** All interactive elements (buttons, forms, modals, tables) are accessible via keyboard (Tab, Enter, Space, Arrow keys).
-- **ARIA Labels:** Important UI elements include ARIA attributes for improved screen reader support.
-- **Color Contrast:** The app uses high-contrast color palettes and supports both light and dark themes for readability.
-- **Responsive Design:** The layout adapts to all screen sizes, ensuring usability on desktop, tablet, and mobile devices.
-- **Focus Indicators:** Clear focus outlines help users track navigation.
-- **Semantic HTML:** Proper use of headings, lists, and roles for better accessibility.
-- **Accessible Modals:** Modals can be closed with Escape and are focus-trapped.
 
 ## License & Credits
 
