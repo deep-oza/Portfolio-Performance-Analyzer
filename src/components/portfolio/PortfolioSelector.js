@@ -96,14 +96,20 @@ const PortfolioSelector = ({
     <div className={`portfolio-selector-card${theme === 'dark' ? ' dark' : ''}`} role="region" aria-label="Portfolio selection">
       {/* Local Create Portfolio Modal */}
       {creating && (
-        <div className="modal-overlay active portfolio-selector-modal-overlay">
-          <div className="modal-container portfolio-selector-modal-container">
-            <div className="modal-header portfolio-selector-modal-header">
-              <h3 className="modal-title portfolio-selector-modal-title">Create New Portfolio</h3>
+        <div className="modal-overlay active portfolio-selector-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="create-portfolio-title">
+          <div className="modal-container portfolio-selector-modal-container pro-modal">
+            <div className="modal-header portfolio-selector-modal-header pro-modal-header">
+              <span className="pro-modal-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#2563eb"/><path d="M12 7v6m0 4h.01" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
+              </span>
+              <div>
+                <h3 className="modal-title portfolio-selector-modal-title pro-modal-title" id="create-portfolio-title">Create New Portfolio</h3>
+                <div className="pro-modal-subtitle">Organize your investments by creating a new portfolio.</div>
+              </div>
             </div>
-            <div className="modal-body portfolio-selector-modal-body">
-              <div className="portfolio-selector-modal-body-inner">
-                <label htmlFor="new-portfolio-name" className="portfolio-selector-modal-label">Portfolio Name</label>
+            <div className="modal-body portfolio-selector-modal-body pro-modal-body">
+              <div className="portfolio-selector-modal-body-inner pro-modal-body-inner">
+                <label htmlFor="new-portfolio-name" className="portfolio-selector-modal-label pro-modal-label">Portfolio Name</label>
                 <input
                   id="new-portfolio-name"
                   type="text"
@@ -111,13 +117,22 @@ const PortfolioSelector = ({
                   value={modalInput}
                   onChange={e => setModalInput(e.target.value)}
                   placeholder="Enter portfolio name"
-                  className="portfolio-selector-modal-input"
+                  className={`portfolio-selector-modal-input pro-modal-input${modalInput.trim() && portfolios[modalInput.trim()] ? ' pro-modal-input-error' : ''}`}
+                  aria-invalid={modalInput.trim() && portfolios[modalInput.trim()] ? 'true' : 'false'}
+                  aria-describedby={modalInput.trim() && !portfolios[modalInput.trim()] ? 'portfolio-name-desc' : undefined}
+                  onKeyDown={e => { if (e.key === 'Enter') handleCreateConfirm(); if (e.key === 'Escape') handleCreateCancel(); }}
                 />
+                {modalInput.trim() && !portfolios[modalInput.trim()] && (
+                  <div id="portfolio-name-desc" className="pro-modal-input-desc pro-modal-input-hint">Choose a unique name for your new portfolio.</div>
+                )}
+                {modalInput.trim() && portfolios[modalInput.trim()] && (
+                  <div className="pro-modal-error" role="alert">A portfolio with this name already exists.</div>
+                )}
               </div>
             </div>
-            <div className="modal-footer portfolio-selector-modal-footer">
-              <button className="btn btn-secondary" onClick={handleCreateCancel}>Cancel</button>
-              <button className="btn btn-danger" onClick={handleCreateConfirm} disabled={!modalInput.trim() || portfolios[modalInput.trim()]}>Create</button>
+            <div className="modal-footer portfolio-selector-modal-footer pro-modal-footer">
+              <button className="btn btn-secondary pro-modal-btn" onClick={handleCreateCancel} tabIndex={0}>Cancel</button>
+              <button className="btn btn-primary pro-modal-btn" onClick={handleCreateConfirm} disabled={!modalInput.trim() || portfolios[modalInput.trim()]} tabIndex={0}>Create</button>
             </div>
           </div>
         </div>
