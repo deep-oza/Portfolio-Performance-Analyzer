@@ -321,7 +321,6 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="copyright-links">
-                  <span className="copyright-divider">•</span>
                   <a href="mailto:ozadeep70@gmail.com" className="copyright-link">
                     <FontAwesomeIcon icon={faEnvelopeSolid} />
                     Support
