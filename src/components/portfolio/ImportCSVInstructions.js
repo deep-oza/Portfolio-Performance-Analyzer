@@ -25,6 +25,8 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
   const [isParsing, setIsParsing] = useState(false);
   const [showRequiredFields, setShowRequiredFields] = useState(true);
   const fileInputRef = useRef();
+  // Add state for the whole How to Import section collapse/expand
+  const [showHowToImportSection, setShowHowToImportSection] = useState(false);
 
   // Step 1: File upload and parse
   const handleFileChange = async (e) => {
@@ -320,27 +322,36 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
 
             {/* Instructions, tips, etc. can be shown in all steps below */}
             <div className="importcsv-stepper-section">
-              <div className="importcsv-stepper-header">How to Import</div>
-              <ul className="importcsv-stepper-list">
-                {stepperSteps.map((step, idx) => (
-                  <li key={idx} className="importcsv-stepper-item">
-                    <div className="importcsv-stepper-label-row" onClick={() => setShowHowToImport(showHowToImport === idx ? null : idx)}>
-                      <span className={`importcsv-stepper-icon importcsv-stepper-icon-${showHowToImport === idx ? 'active' : 'inactive'}`}>{step.icon}</span>
-                      <span className="importcsv-howto-step-title">{step.label}</span>
-                      <span className="importcsv-stepper-expand-icon">
-                        {showHowToImport === idx ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                      </span>
-                    </div>
-                    {showHowToImport === idx && (
-                      <div className="importcsv-stepper-content">{step.content}</div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <div className="importcsv-infobox">
-                <AlertCircle size={16} />
-                <span>Use plain <code>.csv</code> files. Avoid formulas and merged cells. If you have trouble, download the sample CSV and use it as a template.</span>
+              <div className="importcsv-stepper-header-row" onClick={() => setShowHowToImportSection(v => !v)}>
+                <span className="importcsv-stepper-header">How to Import</span>
+                <span className="importcsv-stepper-expand-icon">
+                  {showHowToImportSection ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                </span>
               </div>
+              {showHowToImportSection && (
+                <>
+                  <ul className="importcsv-stepper-list">
+                    {stepperSteps.map((step, idx) => (
+                      <li key={idx} className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row" onClick={() => setShowHowToImport(showHowToImport === idx ? null : idx)}>
+                          <span className={`importcsv-stepper-icon importcsv-stepper-icon-${showHowToImport === idx ? 'active' : 'inactive'}`}>{step.icon}</span>
+                          <span className="importcsv-howto-step-title">{step.label}</span>
+                          <span className="importcsv-stepper-expand-icon">
+                            {showHowToImport === idx ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                          </span>
+                        </div>
+                        {showHowToImport === idx && (
+                          <div className="importcsv-stepper-content">{step.content}</div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="importcsv-infobox">
+                    <AlertCircle size={16} />
+                    <span>Use plain <code>.csv</code> files. Avoid formulas and merged cells. If you have trouble, download the sample CSV and use it as a template.</span>
+                  </div>
+                </>
+              )}
             </div>
             {/* ...other collapsible sections for required/optional columns, tips, warning, etc. can be added here as before... */}
           </div>
