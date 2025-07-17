@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import './ImportCSVInstructions.css';
 import { importPortfolioCSV } from '../../utils/csvUtils';
 // eslint-disable-next-line
-import { FileText, Download, Upload, AlertCircle, CheckCircle, X, ChevronDown, ChevronRight, Loader2 } from 'lucide-react';
+import { FileText, Download, Upload, AlertCircle, CheckCircle, X, ChevronDown, ChevronRight, Loader2, FileDown, Columns, Upload as UploadIcon, FolderPlus, CheckCircle as CheckCircleIcon } from 'lucide-react';
 
 const requiredColumns = [
   { name: 'symbol', alternatives: 'stock, ticker, scrip' },
@@ -11,7 +11,7 @@ const requiredColumns = [
   { name: 'avg price', alternatives: 'average price, buy price, purchase price, cost' }
 ];
 
-const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, showError }) => {
+const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, showError, theme = 'light' }) => {
   const [step, setStep] = useState(1); // 1: upload, 2: portfolio select, 3: confirm
   const [file, setFile] = useState(null);
   const [parsedData, setParsedData] = useState(null); // { portfolio, prices, warnings }
@@ -118,10 +118,70 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
     document.body.removeChild(link);
   };
 
+  const stepperSteps = [
+    {
+      label: 'Download Sample CSV',
+      icon: <FileDown size={18} />,
+      content: (
+        <div>
+          Download the sample CSV and use it as a template for your data.
+        </div>
+      ),
+    },
+    {
+      label: 'Prepare Required Columns',
+      icon: <Columns size={18} />,
+      content: (
+        <div>
+          <div className="importcsv-howto-step-desc">Your file must include these columns:</div>
+          <ul className="importcsv-required-columns-grid">
+            {requiredColumns.map((col) => (
+              <li key={col.name} className="importcsv-required-column">
+                <span className="importcsv-column-name">
+                  <FileText size={14} style={{ marginRight: 6 }} />
+                  {col.name}
+                </span>
+                <span className="importcsv-column-alternatives">(e.g., {col.alternatives})</span>
+              </li>
+            ))}
+          </ul>
+          <div className="importcsv-howto-note">Column names are case-insensitive. Extra columns are ignored.</div>
+        </div>
+      ),
+    },
+    {
+      label: 'Upload Your CSV',
+      icon: <UploadIcon size={18} />,
+      content: (
+        <div>
+          Upload your CSV file and preview your data before importing.
+        </div>
+      ),
+    },
+    {
+      label: 'Select/Create Portfolio',
+      icon: <FolderPlus size={18} />,
+      content: (
+        <div>
+          Choose an existing portfolio or create a new one to import your stocks.
+        </div>
+      ),
+    },
+    {
+      label: 'Confirm and Import',
+      icon: <CheckCircleIcon size={18} />,
+      content: (
+        <div>
+          Review your selections and complete the import process.
+        </div>
+      ),
+    },
+  ];
+
   // UI for each step
   return (
-    <div className="importcsv-overlay" onClick={handleCancel}>
-      <div className="importcsv-modal" onClick={e => e.stopPropagation()}>
+    <div className={`importcsv-overlay${theme === 'dark' ? ' dark' : ''}`} onClick={handleCancel}>
+      <div className={`importcsv-modal${theme === 'dark' ? ' dark' : ''}`} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="importcsv-header">
           <div className="importcsv-header-content">
@@ -259,42 +319,28 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
             {/* Step 3: Success (handled by showMessage and modal close) */}
 
             {/* Instructions, tips, etc. can be shown in all steps below */}
-            <div className="importcsv-collapsible-section" style={{ marginTop: 24 }}>
-              <button className="importcsv-section-header" onClick={() => setShowHowToImport((prev) => !prev)}>
-                <div className="importcsv-section-header-content">
-                  <FileText size={16} color="#4b5563" />
-                  <span className="importcsv-section-title">How to Import</span>
-                </div>
-                {showHowToImport ? (
-                  <ChevronDown size={16} color="#4b5563" />
-                ) : (
-                  <ChevronRight size={16} color="#4b5563" />
-                )}
-              </button>
-              {showHowToImport && (
-                <div className="importcsv-section-content">
-                  <div className="importcsv-howto-intro">
-                    <strong>Follow these steps to import your portfolio CSV:</strong>
-                  </div>
-                  <ol className="importcsv-howto-list">
-                    <li><b>Download the sample CSV</b> to see the required format.</li>
-                    <li><b>Prepare your file</b> with the required columns:
-                      <ul className="importcsv-howto-fields">
-                        <li><b>symbol</b> <span className="importcsv-howto-alt">(also accepts: stock, ticker, scrip)</span></li>
-                        <li><b>qty</b> <span className="importcsv-howto-alt">(also accepts: quantity, shares, units, holding)</span></li>
-                        <li><b>avg price</b> <span className="importcsv-howto-alt">(also accepts: average price, buy price, purchase price, cost)</span></li>
-                      </ul>
-                      <span className="importcsv-howto-note">Column names are case-insensitive. Extra columns are ignored.</span>
-                    </li>
-                    <li><b>Upload your CSV file</b> and review the preview.</li>
-                    <li><b>Select or create a portfolio</b> to import your data into.</li>
-                    <li><b>Confirm and finish</b> the import process.</li>
-                  </ol>
-                  <div className="importcsv-howto-tip">
-                    <b>Tip:</b> If you have trouble, download the sample CSV and use it as a template.
-                  </div>
-                </div>
-              )}
+            <div className="importcsv-stepper-section">
+              <div className="importcsv-stepper-header">How to Import</div>
+              <ul className="importcsv-stepper-list">
+                {stepperSteps.map((step, idx) => (
+                  <li key={idx} className="importcsv-stepper-item">
+                    <div className="importcsv-stepper-label-row" onClick={() => setShowHowToImport(showHowToImport === idx ? null : idx)}>
+                      <span className={`importcsv-stepper-icon importcsv-stepper-icon-${showHowToImport === idx ? 'active' : 'inactive'}`}>{step.icon}</span>
+                      <span className="importcsv-howto-step-title">{step.label}</span>
+                      <span className="importcsv-stepper-expand-icon">
+                        {showHowToImport === idx ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                      </span>
+                    </div>
+                    {showHowToImport === idx && (
+                      <div className="importcsv-stepper-content">{step.content}</div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <div className="importcsv-infobox">
+                <AlertCircle size={16} />
+                <span>Use plain <code>.csv</code> files. Avoid formulas and merged cells. If you have trouble, download the sample CSV and use it as a template.</span>
+              </div>
             </div>
             {/* ...other collapsible sections for required/optional columns, tips, warning, etc. can be added here as before... */}
           </div>
