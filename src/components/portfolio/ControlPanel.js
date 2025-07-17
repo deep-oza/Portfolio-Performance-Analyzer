@@ -39,27 +39,12 @@ const ControlPanel = () => {
   const [showImportModal, setShowImportModal] = useState(false);
   
   const isDarkTheme = theme === 'dark';
-  // Modal text for CSV upload confirmation
-  const csvModalConfig = {
-    title: '', // Title is now in the component
-    message: <ImportCSVInstructions />,
-    confirmText: "Confirm and Upload",
-    cancelText: "Cancel",
-    confirmButtonClass: "btn-primary",
-    showCancel: true
-  };
-  
+
+  // Remove csvModalConfig and handleImportClick using showModal
   const handleImportClick = () => {
-    showModal({
-      ...csvModalConfig,
-      onConfirm: () => {
-        if (fileInputRef.current) fileInputRef.current.value = null; // reset file input
-        fileInputRef.current.click();
-      },
-      onCancel: () => {},
-    });
+    setShowImportModal(true);
   };
-  
+
   // Directly process file after selection (no modal here)
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -194,131 +179,15 @@ const ControlPanel = () => {
           <FontAwesomeIcon icon={faTrashAlt} /> Clear Portfolio
         </button>
       )}
-      {/* Local Import Portfolio Modal */}
+      {/* Use only ImportCSVInstructions modal for import */}
       {showImportModal && (
-        <div className="modal-overlay active import-modal-overlay">
-          <div className="modal-container import-modal-card">
-            <div className="modal-header import-modal-header">
-              <div className="import-modal-title-row">
-                <span className="import-modal-title-icon"><FontAwesomeIcon icon={faFileImport} /></span>
-                <div>
-                  <h3 className="modal-title import-modal-title">Import Portfolio</h3>
-                  <div className="import-modal-subtitle">Select or create a portfolio to import your CSV data into.</div>
-                </div>
-              </div>
-            </div>
-            <div className="modal-body import-modal-body">
-              <div className="import-modal-guide">
-                <strong>How to Import:</strong>
-                <ol className="import-modal-guide-list">
-                  <li>Download the <a href="/sample_portfolio.csv" download className="import-modal-link">Sample CSV</a> for reference.</li>
-                  <li>Ensure your file includes <b>all required columns</b>:</li>
-                </ol>
-                <ul className="import-modal-required-cols">
-                  <li><b>symbol</b> <span className="import-modal-col-alt">(or: stock, ticker, scrip)</span></li>
-                  <li><b>qty</b> <span className="import-modal-col-alt">(or: quantity, shares, units, holding)</span></li>
-                  <li><b>avg price</b> <span className="import-modal-col-alt">(or: average price, buy price, purchase price, cost)</span></li>
-                </ul>
-                <div className="import-modal-optional-label">Optional columns for enhanced analysis:</div>
-                <ul className="import-modal-optional-cols">
-                  <li>name, purchase date, realized gain, dividend</li>
-                </ul>
-                <div className="import-modal-tips-label"><b>Tips:</b></div>
-                <ul className="import-modal-tips-list">
-                  <li>Check your data for accuracy before uploading.</li>
-                  <li>Missing or incorrect data may result in incomplete or inaccurate analysis.</li>
-                  <li>File must be in <b>.csv</b> format (comma or tab separated).</li>
-                </ul>
-                <div className="import-modal-warning">
-                  <FontAwesomeIcon icon={faFileImport} /> This will <b>replace</b> the selected portfolio's data with the imported CSV.
-                </div>
-              </div>
-              <div className="import-modal-row">
-                <label htmlFor="import-portfolio-select" className="import-modal-label">Portfolio</label>
-                {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && !importAddNew ? (
-                  <>
-                    <select
-                      id="import-portfolio-select"
-                      value={importPortfolioId}
-                      onChange={e => {
-                        if (e.target.value === '__add_new__') {
-                          setImportAddNew(true);
-                          setImportNewName('');
-                        } else {
-                          setImportPortfolioId(e.target.value);
-                        }
-                      }}
-                      className="import-modal-select modern"
-                    >
-                      <option value="" disabled>Select portfolio</option>
-                      {Object.keys(portfolios).filter(k => k !== 'default').map(id => (
-                        <option key={id} value={id}>{id}</option>
-                      ))}
-                      <option value="__add_new__">+ Add new portfolio</option>
-                    </select>
-                  </>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      id="import-portfolio-input"
-                      placeholder="New portfolio name"
-                      value={importNewName}
-                      onChange={e => setImportNewName(e.target.value)}
-                      ref={importNewNameRef}
-                      className={`import-modal-input modern${importError ? ' import-modal-input-error' : ''}`}
-                      aria-invalid={importError ? 'true' : 'false'}
-                    />
-                    {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && (
-                      <button type="button" onClick={() => { setImportAddNew(false); setImportNewName(''); }} className="import-modal-cancel">
-                        Cancel
-                      </button>
-                    )}
-                  </>
-                )}
-              </div>
-              {importError && <div className="import-modal-error">{importError}</div>}
-            </div>
-            <div className="modal-footer import-modal-footer">
-              <div className="modal-actions import-modal-actions">
-                <button className="import-modal-btn btn-secondary" onClick={() => setShowImportModal(false)}>Cancel</button>
-                <button className="import-modal-btn btn-primary" onClick={() => {
-                  let keys = Object.keys(portfolios).filter(k => k !== 'default');
-                  let portfolioId = importPortfolioId;
-                  const noPortfolios = keys.length === 0;
-                  if (importAddNew || noPortfolios) {
-                    const latestName = getLatestImportNewName();
-                    if (!latestName.trim()) {
-                      setImportError('Portfolio name is required.');
-                      return;
-                    }
-                    if (keys.includes(latestName.trim())) {
-                      setImportError('Portfolio already exists.');
-                      return;
-                    }
-                    portfolioId = latestName.trim();
-                  }
-                  if (!portfolioId) {
-                    setImportError('Portfolio name is required.');
-                    return;
-                  }
-                  importCSV(pendingImport, portfolioId);
-                  let message = '✅ Imported portfolio from CSV!';
-                  if (pendingImport.warnings && pendingImport.warnings.length > 0) {
-                    message += '\n\nWarnings:\n' + pendingImport.warnings.join('\n');
-                  }
-                  showMessage('Import Successful', message);
-                  setPendingImport(null);
-                  setImportPortfolioId('');
-                  setImportAddNew(false);
-                  setImportNewName('');
-                  setImportError('');
-                  setShowImportModal(false);
-                }}>Import</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ImportCSVInstructions 
+          onClose={() => setShowImportModal(false)}
+          portfolios={portfolios}
+          importCSV={importCSV}
+          showMessage={showMessage}
+          showError={showError}
+        />
       )}
     </div>
   );
