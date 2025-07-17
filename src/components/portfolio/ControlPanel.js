@@ -5,6 +5,7 @@ import { PortfolioContext } from '../../contexts/PortfolioContext';
 import { importPortfolioCSV, exportPortfolioCSV, downloadCSV } from '../../utils/csvUtils';
 import ConfirmModal from '../modals/ConfirmModal';
 import '../portfolio/StockFormPortfolioSection.css';
+import ImportCSVInstructions from './ImportCSVInstructions';
 
 const ControlPanel = () => {
   const { 
@@ -40,46 +41,8 @@ const ControlPanel = () => {
   const isDarkTheme = theme === 'dark';
   // Modal text for CSV upload confirmation
   const csvModalConfig = {
-    title: "Import Portfolio from CSV",
-    message: (
-      <div style={{ textAlign: 'left', fontSize: '1.05em' }}>
-        <div style={{
-          marginBottom: 16,
-          background: isDarkTheme ? '' : '#f8f9fa',
-          padding: 12,
-          borderRadius: 8,
-          border: isDarkTheme ? '1px solid #444' : '1px solid #e0e0e0',
-          color: isDarkTheme ? '#f1f1f1' : undefined
-        }}>
-          <strong>How to Import:</strong>
-          <ol style={{ margin: '10px 0 0 20px' }}>
-            <li>Download the <a href="/sample_portfolio.csv" download style={{ color: isDarkTheme ? '#66bfff' : '#007bff', textDecoration: 'underline' }}>Sample CSV</a> for reference.</li>
-            <li>Ensure your file includes <b>all required columns</b>:</li>
-          </ol>
-          <ul style={{ marginLeft: 30 }}>
-            <li><b>symbol</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: stock, ticker, scrip)</span></li>
-            <li><b>qty</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: quantity, shares, units, holding)</span></li>
-            <li><b>avg price</b> <span style={{ color: isDarkTheme ? '#bbb' : '#888' }}>(or: average price, buy price, purchase price, cost)</span></li>
-          </ul>
-          <div style={{ marginTop: 8 }}>Optional columns for enhanced analysis:</div>
-          <ul style={{ marginLeft: 30 }}>
-            <li>name, purchase date, realized gain, dividend</li>
-          </ul>
-        </div>
-        <div style={{ marginBottom: 8 }}>
-          <b>Tips:</b>
-          <ul style={{ marginLeft: 20 }}>
-            <li>Check your data for accuracy before uploading.</li>
-            <li>Missing or incorrect data may result in incomplete or inaccurate analysis.</li>
-            <li>File must be in <b>.csv</b> format (comma or tab separated).</li>
-          </ul>
-        </div>
-        <div style={{ color: '#d9534f', fontWeight: 500, marginBottom: 8 }}>
-          <FontAwesomeIcon icon={faFileImport} /> This will <b>replace</b> your current portfolio.
-        </div>
-        <div style={{ marginTop: 10 }}>Do you want to proceed with the upload?</div>
-      </div>
-    ),
+    title: '', // Title is now in the component
+    message: <ImportCSVInstructions />,
     confirmText: "Confirm and Upload",
     cancelText: "Cancel",
     confirmButtonClass: "btn-primary",
@@ -235,18 +198,43 @@ const ControlPanel = () => {
       {showImportModal && (
         <div className="modal-overlay active import-modal-overlay">
           <div className="modal-container import-modal-card">
-            <div className="modal-header import-modal-header" style={{ padding: '19.2px 19.2px 0 19.2px' }}>
-              <div className="import-modal-title-row" style={{ gap: 10 }}>
-                <span className="import-modal-title-icon" style={{ fontSize: '1.5rem', padding: 5 }}><FontAwesomeIcon icon={faFileImport} /></span>
+            <div className="modal-header import-modal-header">
+              <div className="import-modal-title-row">
+                <span className="import-modal-title-icon"><FontAwesomeIcon icon={faFileImport} /></span>
                 <div>
-                  <h3 className="modal-title import-modal-title" style={{ fontSize: '1.08rem', margin: 0 }}>Import Portfolio</h3>
-                  <div className="import-modal-subtitle" style={{ fontSize: '0.97rem', marginTop: 1 }}>Select or create a portfolio to import your CSV data into.</div>
+                  <h3 className="modal-title import-modal-title">Import Portfolio</h3>
+                  <div className="import-modal-subtitle">Select or create a portfolio to import your CSV data into.</div>
                 </div>
               </div>
             </div>
-            <div className="modal-body import-modal-body" style={{ padding: '19.2px' }}>
-              <div className="portfolio-section-row" style={{ marginBottom: 0, gap: 8 }}>
-                <label htmlFor="import-portfolio-select" className="portfolio-section-label" style={{ fontSize: '0.98rem', minWidth: 70 }}>Portfolio</label>
+            <div className="modal-body import-modal-body">
+              <div className="import-modal-guide">
+                <strong>How to Import:</strong>
+                <ol className="import-modal-guide-list">
+                  <li>Download the <a href="/sample_portfolio.csv" download className="import-modal-link">Sample CSV</a> for reference.</li>
+                  <li>Ensure your file includes <b>all required columns</b>:</li>
+                </ol>
+                <ul className="import-modal-required-cols">
+                  <li><b>symbol</b> <span className="import-modal-col-alt">(or: stock, ticker, scrip)</span></li>
+                  <li><b>qty</b> <span className="import-modal-col-alt">(or: quantity, shares, units, holding)</span></li>
+                  <li><b>avg price</b> <span className="import-modal-col-alt">(or: average price, buy price, purchase price, cost)</span></li>
+                </ul>
+                <div className="import-modal-optional-label">Optional columns for enhanced analysis:</div>
+                <ul className="import-modal-optional-cols">
+                  <li>name, purchase date, realized gain, dividend</li>
+                </ul>
+                <div className="import-modal-tips-label"><b>Tips:</b></div>
+                <ul className="import-modal-tips-list">
+                  <li>Check your data for accuracy before uploading.</li>
+                  <li>Missing or incorrect data may result in incomplete or inaccurate analysis.</li>
+                  <li>File must be in <b>.csv</b> format (comma or tab separated).</li>
+                </ul>
+                <div className="import-modal-warning">
+                  <FontAwesomeIcon icon={faFileImport} /> This will <b>replace</b> the selected portfolio's data with the imported CSV.
+                </div>
+              </div>
+              <div className="import-modal-row">
+                <label htmlFor="import-portfolio-select" className="import-modal-label">Portfolio</label>
                 {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && !importAddNew ? (
                   <>
                     <select
@@ -260,8 +248,7 @@ const ControlPanel = () => {
                           setImportPortfolioId(e.target.value);
                         }
                       }}
-                      className="portfolio-section-select"
-                      style={{ fontSize: '0.98rem', padding: '7px 10px', minWidth: 120 }}
+                      className="import-modal-select modern"
                     >
                       <option value="" disabled>Select portfolio</option>
                       {Object.keys(portfolios).filter(k => k !== 'default').map(id => (
@@ -279,32 +266,25 @@ const ControlPanel = () => {
                       value={importNewName}
                       onChange={e => setImportNewName(e.target.value)}
                       ref={importNewNameRef}
-                      className={`portfolio-section-input${importError ? ' portfolio-section-input-error' : ''}`}
+                      className={`import-modal-input modern${importError ? ' import-modal-input-error' : ''}`}
                       aria-invalid={importError ? 'true' : 'false'}
-                      style={{ fontSize: '0.98rem', padding: '7px 10px', minWidth: 120 }}
                     />
                     {Object.keys(portfolios).filter(k => k !== 'default').length > 0 && (
-                      <button type="button" onClick={() => { setImportAddNew(false); setImportNewName(''); }} className="portfolio-section-cancel" style={{ fontSize: '0.98rem', padding: '0 6px 2px 6px' }}>
+                      <button type="button" onClick={() => { setImportAddNew(false); setImportNewName(''); }} className="import-modal-cancel">
                         Cancel
                       </button>
                     )}
                   </>
                 )}
               </div>
-              {importError && <div className="portfolio-section-error" style={{ fontSize: '0.93rem', marginTop: 2 }}>{importError}</div>}
-              <div style={{ height: 10 }} />
-              <div className="import-modal-info" style={{ fontSize: '0.97rem', padding: '8px 10px', borderRadius: 6 }}>
-                <FontAwesomeIcon icon={faFileImport} style={{ marginRight: 6, color: '#1976d2', fontSize: '1rem' }} />
-                This will <b>replace</b> the selected portfolio's data with the imported CSV.
-              </div>
+              {importError && <div className="import-modal-error">{importError}</div>}
             </div>
-            <div className="modal-footer import-modal-footer" style={{ padding: '16px 19.2px' }}>
-              <div className="modal-actions import-modal-actions" style={{ gap: 10 }}>
-                <button className="btn btn-secondary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => setShowImportModal(false)}>Cancel</button>
-                <button className="btn btn-primary import-modal-btn" style={{ fontSize: '0.98rem', padding: '7px 22px', minWidth: 80 }} onClick={() => {
+            <div className="modal-footer import-modal-footer">
+              <div className="modal-actions import-modal-actions">
+                <button className="import-modal-btn btn-secondary" onClick={() => setShowImportModal(false)}>Cancel</button>
+                <button className="import-modal-btn btn-primary" onClick={() => {
                   let keys = Object.keys(portfolios).filter(k => k !== 'default');
                   let portfolioId = importPortfolioId;
-                  // If there are no portfolios, always use the new name
                   const noPortfolios = keys.length === 0;
                   if (importAddNew || noPortfolios) {
                     const latestName = getLatestImportNewName();

@@ -32,6 +32,11 @@
   margin: auto;
   min-width: 320px;
   max-width: 98vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 98vh;
+  height: 100%;
+  overflow: hidden;
 }
 
 .import-modal-header {
@@ -75,8 +80,9 @@
 
 .import-modal-body {
   overflow-y: auto;
-  flex: 1;
+  flex: 1 1 auto;
   padding: 32px;
+  min-height: 0;
 }
 
 .import-modal-row {
@@ -224,17 +230,87 @@
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
 }
 
+.import-modal-guide {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 18px 18px 12px 18px;
+  margin-bottom: 22px;
+  border: 1px solid #e0e0e0;
+  color: #1a237e;
+  font-size: 1.04rem;
+}
+.import-modal-guide-list {
+  margin: 10px 0 0 20px;
+  padding-left: 18px;
+}
+.import-modal-link {
+  color: #1976d2;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.import-modal-required-cols {
+  margin-left: 30px;
+  margin-bottom: 0;
+  color: #263238;
+  font-size: 0.98em;
+}
+.import-modal-col-alt {
+  color: #888;
+  font-size: 0.97em;
+  margin-left: 2px;
+}
+.import-modal-optional-label {
+  margin-top: 8px;
+  font-size: 0.97em;
+  color: #607d8b;
+}
+.import-modal-optional-cols {
+  margin-left: 30px;
+  color: #607d8b;
+  font-size: 0.97em;
+  margin-bottom: 0;
+}
+.import-modal-tips-label {
+  margin-top: 10px;
+  font-size: 0.97em;
+  color: #1976d2;
+}
+.import-modal-tips-list {
+  margin-left: 20px;
+  color: #37474f;
+  font-size: 0.97em;
+}
+.import-modal-warning {
+  color: #d9534f;
+  font-weight: 500;
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
 /* Responsive Styles */
 @media (max-width: 600px) {
   .import-modal-card {
     min-width: 0;
     max-width: 98vw;
+    max-height: 98vh;
   }
   .import-modal-header,
   .import-modal-body,
   .import-modal-footer {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .import-modal-body {
+    padding-bottom: 16px;
+    max-height: 60vh;
+  }
+  .import-modal-footer {
+    padding-bottom: 18px;
+    padding-top: 18px;
   }
   .import-modal-row {
     flex-direction: column;
