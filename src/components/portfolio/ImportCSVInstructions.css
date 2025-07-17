@@ -674,7 +674,6 @@
   padding: 0 0 0 0;
   min-height: 48px;
   border-radius: 12px;
-  background: var(--importcsv-section-bg);
   font-size: 15px;
   font-weight: 700;
   color: var(--importcsv-title);
@@ -683,6 +682,5 @@
   width: 100%;
 }
 .importcsv-stepper-header-row:hover {
-  color: var(--importcsv-primary);
 }
   
