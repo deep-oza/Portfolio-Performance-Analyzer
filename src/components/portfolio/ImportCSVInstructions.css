@@ -457,4 +457,49 @@
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
+
+.importcsv-howto-intro {
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: var(--importcsv-title);
+}
+.importcsv-howto-list {
+  margin: 0 0 14px 18px;
+  padding: 0;
+  font-size: 14px;
+  color: var(--importcsv-text);
+  line-height: 1.7;
+}
+.importcsv-howto-list > li {
+  margin-bottom: 10px;
+}
+.importcsv-howto-fields {
+  margin: 8px 0 4px 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--importcsv-success);
+}
+.importcsv-howto-fields > li {
+  margin-bottom: 2px;
+}
+.importcsv-howto-alt {
+  color: var(--importcsv-muted);
+  font-size: 12px;
+  margin-left: 4px;
+}
+.importcsv-howto-note {
+  display: block;
+  font-size: 12px;
+  color: var(--importcsv-muted);
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+.importcsv-howto-tip {
+  background: var(--importcsv-primary-light);
+  color: var(--importcsv-primary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+}
   

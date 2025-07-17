@@ -21,7 +21,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
   const [newPortfolio, setNewPortfolio] = useState('');
   const [importError, setImportError] = useState('');
   const [isImporting, setIsImporting] = useState(false);
-  const [showHowToImport, setShowHowToImport] = useState(true);
+  const [showHowToImport, setShowHowToImport] = useState(false);
   const [isParsing, setIsParsing] = useState(false);
   const [showRequiredFields, setShowRequiredFields] = useState(true);
   const fileInputRef = useRef();
@@ -273,17 +273,25 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
               </button>
               {showHowToImport && (
                 <div className="importcsv-section-content">
-                  <div className="importcsv-step-container">
-                    <div className="importcsv-step-number">1</div>
-                    <p className="importcsv-step-text">Download sample CSV for reference</p>
+                  <div className="importcsv-howto-intro">
+                    <strong>Follow these steps to import your portfolio CSV:</strong>
                   </div>
-                  <div className="importcsv-step-container">
-                    <div className="importcsv-step-number">2</div>
-                    <p className="importcsv-step-text">Include all required columns in your file</p>
-                  </div>
-                  <div className="importcsv-step-container">
-                    <div className="importcsv-step-number">3</div>
-                    <p className="importcsv-step-text">Upload and analyze your portfolio</p>
+                  <ol className="importcsv-howto-list">
+                    <li><b>Download the sample CSV</b> to see the required format.</li>
+                    <li><b>Prepare your file</b> with the required columns:
+                      <ul className="importcsv-howto-fields">
+                        <li><b>symbol</b> <span className="importcsv-howto-alt">(also accepts: stock, ticker, scrip)</span></li>
+                        <li><b>qty</b> <span className="importcsv-howto-alt">(also accepts: quantity, shares, units, holding)</span></li>
+                        <li><b>avg price</b> <span className="importcsv-howto-alt">(also accepts: average price, buy price, purchase price, cost)</span></li>
+                      </ul>
+                      <span className="importcsv-howto-note">Column names are case-insensitive. Extra columns are ignored.</span>
+                    </li>
+                    <li><b>Upload your CSV file</b> and review the preview.</li>
+                    <li><b>Select or create a portfolio</b> to import your data into.</li>
+                    <li><b>Confirm and finish</b> the import process.</li>
+                  </ol>
+                  <div className="importcsv-howto-tip">
+                    <b>Tip:</b> If you have trouble, download the sample CSV and use it as a template.
                   </div>
                 </div>
               )}
