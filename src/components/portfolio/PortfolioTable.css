@@ -212,10 +212,25 @@ tr:hover {
     overflow-x: auto;
     margin-left: -16px;
     margin-right: -16px;
+    padding-right: 32px; /* Add extra right padding for last column visibility */
+    position: relative;
   }
   th, td {
     padding: var(--space-2);
     font-size: 12px;
+  }
+  /* Add a right-edge gradient to indicate scrollability */
+  .table-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to left, var(--bg-card) 70%, transparent 100%);
+    z-index: 2;
+    display: block;
   }
 }
 
@@ -226,12 +241,12 @@ tr td:last-child, tr th:last-child {
 
 @media (max-width: 600px) {
   tr td:last-child, tr th:last-child {
-    padding-right: 1.2rem;
+    padding-right: 1.8rem; /* Slightly more padding for mobile */
   }
 }
 
 @media (max-width: 425px) {
   tr td:last-child, tr th:last-child {
-    padding-right: 0.5rem;
+    padding-right: 1rem;
   }
 } 
