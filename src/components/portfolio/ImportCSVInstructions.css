@@ -155,39 +155,62 @@
   cursor: default;
 }
 
-/* Collapsible Sections */
+/* Collapsible Section Redesign */
 .importcsv-collapsible-section {
   border: 1px solid var(--importcsv-border);
   border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
+  background: var(--importcsv-section-bg);
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.06);
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.2s;
+}
+.importcsv-collapsible-section:focus-within,
+.importcsv-collapsible-section:hover {
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.10);
 }
 .importcsv-section-header {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 18px 20px;
   background: var(--importcsv-section-bg);
   border: none;
   cursor: pointer;
   transition: background 0.2s;
+  outline: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 12px 12px 0 0;
 }
-.importcsv-section-header:hover {
-  background: var(--importcsv-section-hover);
+.importcsv-section-header:focus {
+  box-shadow: 0 0 0 2px var(--importcsv-primary-light);
 }
 .importcsv-section-header-content {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 .importcsv-section-title {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--importcsv-title);
-  font-size: 14px;
+  font-size: 16px;
+}
+.importcsv-section-chevron {
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  color: var(--importcsv-primary);
+}
+.importcsv-section-chevron.expanded {
+  transform: rotate(180deg);
 }
 .importcsv-section-content {
-  padding: 16px;
+  padding: 0 20px;
+  background: var(--importcsv-section-bg);
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.importcsv-section-content.expanded {
+  padding: 20px;
 }
 
 /* Steps */
@@ -544,77 +567,45 @@
   font-size: 13px;
   margin-top: 10px;
 }
+/* Stepper inside collapsible */
 .importcsv-stepper-section {
-  /* margin-top: 16px; */
-  padding: 0px 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.04);
-  border: 1px solid var(--importcsv-border);
-  width: 100%;
-  /* Match button width and border radius */
-}
-.importcsv-stepper-header {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--importcsv-title);
-  letter-spacing: 0.01em;
+  margin-top: 0;
 }
 .importcsv-stepper-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 .importcsv-stepper-item {
-  margin-bottom: 4px;
+  background: #fff;
   border-radius: 8px;
-  transition: background 0.18s;
+  box-shadow: 0 1px 4px rgba(30, 64, 175, 0.04);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .importcsv-stepper-label-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
-  padding: 6px 4px;
-  border-radius: 8px;
-  transition: background 0.18s;
-}
-.importcsv-stepper-label-row:hover {
-  background: var(--importcsv-section-hover);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--importcsv-title);
 }
 .importcsv-stepper-icon {
+  color: var(--importcsv-primary);
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--importcsv-primary-light);
-  color: var(--importcsv-primary);
-  font-size: 16px;
-  transition: background 0.18s, color 0.18s;
 }
-.importcsv-stepper-icon-active {
-  background: var(--importcsv-primary);
-  color: #fff;
+.importcsv-stepper-label {
+  font-size: 15px;
+  font-weight: 500;
 }
 .importcsv-stepper-content {
+  font-size: 14px;
+  color: var(--importcsv-text);
   margin-left: 32px;
-  margin-top: 2px;
-  margin-bottom: 4px;
-  font-size: 13px;
-  padding-bottom: 0;
-}
-.importcsv-howto-step-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--importcsv-title);
-  margin-bottom: 4px;
-}
-.importcsv-howto-step-desc {
-  color: var(--importcsv-muted);
-  font-size: 13px;
-  margin-left: 4px;
 }
 .importcsv-required-columns-grid {
   display: grid;
