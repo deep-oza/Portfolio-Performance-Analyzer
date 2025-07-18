@@ -113,7 +113,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
   // Download sample CSV
   const handleDownloadSample = () => {
     const link = document.createElement('a');
-    link.href = '/sample_portfolio.csv';
+    link.href = process.env.PUBLIC_URL + '/sample_portfolio.csv';
     link.download = 'sample_portfolio.csv';
     document.body.appendChild(link);
     link.click();
