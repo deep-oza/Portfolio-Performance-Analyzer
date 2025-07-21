@@ -15,9 +15,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
+  gap: 8px; 
+  /* border-bottom: none !important; */
+
   min-width: 70px;
-  padding: 0.25rem 0 0.25rem 0.25rem;
+  padding: var(--space-4);
+  /* padding: 0.25rem 0 0.25rem 0.25rem; */
   z-index: 1;
 }
 
