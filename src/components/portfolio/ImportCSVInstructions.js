@@ -330,7 +330,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
 
             {/* Instructions, tips, etc. can be shown in all steps below */}
             {/* Collapsible How to Import Section */}
-            <div className="importcsv-collapsible-section">
+            <div className="importcsv-collapsible-section" style={{ marginTop: '24px' }}>
               <button
                 className="importcsv-section-header"
                 aria-expanded={showHowToImportSection}
