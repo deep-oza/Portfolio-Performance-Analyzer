@@ -351,7 +351,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
                     size={20}
                     aria-hidden="true"
                   />
-                  <span className="importcsv-section-title">How to Import</span>
+                  <span className="importcsv-section-title">How to Import (Step-by-Step Guide)</span>
                 </div>
               </button>
               <div
@@ -363,15 +363,73 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
                 {showHowToImportSection && (
                   <div className="importcsv-stepper-section">
                     <div className="importcsv-stepper-list">
-                      {stepperSteps.map((step, idx) => (
-                        <div className="importcsv-stepper-item" key={step.label}>
-                          <div className="importcsv-stepper-label-row">
-                            <span className="importcsv-stepper-icon">{step.icon}</span>
-                            <span className="importcsv-stepper-label">{idx + 1}. {step.label}</span>
-                          </div>
-                          <div className="importcsv-stepper-content">{step.content}</div>
+                      {/* Step 1 */}
+                      <div className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row">
+                          <span className="importcsv-stepper-icon"><FileDown size={18} /></span>
+                          <span className="importcsv-stepper-label">1. Download Sample File</span>
                         </div>
-                      ))}
+                        <div className="importcsv-stepper-content">
+                          Download our <button className="importcsv-link" onClick={() => handleDownloadSample('csv')}>Sample CSV</button> or <button className="importcsv-link" onClick={() => handleDownloadSample('excel')}>Sample Excel</button> to use as a template. Ensure your file matches the required format.
+                        </div>
+                      </div>
+                      {/* Step 2 */}
+                      <div className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row">
+                          <span className="importcsv-stepper-icon"><Columns size={18} /></span>
+                          <span className="importcsv-stepper-label">2. Prepare Your Data</span>
+                        </div>
+                        <div className="importcsv-stepper-content">
+                          <div className="importcsv-howto-step-desc">Your file must include these columns (case-insensitive):</div>
+                          <ul className="importcsv-required-columns-grid">
+                            {requiredColumns.map((col) => (
+                              <li key={col.name} className="importcsv-required-column">
+                                <span className="importcsv-column-name">
+                                  <FileText size={14} style={{ marginRight: 6 }} />
+                                  {col.name}
+                                </span>
+                                <span className="importcsv-column-alternatives">(e.g., {col.alternatives})</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <span className="importcsv-howto-note">Extra columns are ignored. Column order does not matter.</span>
+                        </div>
+                      </div>
+                      {/* Step 3 */}
+                      <div className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row">
+                          <span className="importcsv-stepper-icon"><UploadIcon size={18} /></span>
+                          <span className="importcsv-stepper-label">3. Upload Your File</span>
+                        </div>
+                        <div className="importcsv-stepper-content">
+                          Click <b>Select CSV or Excel File</b> to upload your portfolio. You can preview your data before importing.
+                        </div>
+                      </div>
+                      {/* Step 4 */}
+                      <div className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row">
+                          <span className="importcsv-stepper-icon"><FolderPlus size={18} /></span>
+                          <span className="importcsv-stepper-label">4. Select or Create Portfolio</span>
+                        </div>
+                        <div className="importcsv-stepper-content">
+                          Choose an existing portfolio or create a new one to import your stocks.
+                        </div>
+                      </div>
+                      {/* Step 5 */}
+                      <div className="importcsv-stepper-item">
+                        <div className="importcsv-stepper-label-row">
+                          <span className="importcsv-stepper-icon"><CheckCircleIcon size={18} /></span>
+                          <span className="importcsv-stepper-label">5. Confirm & Import</span>
+                        </div>
+                        <div className="importcsv-stepper-content">
+                          Review your selections and complete the import. Any warnings will be shown before finalizing.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="importcsv-howto-tips">
+                      <div className="importcsv-tip"><span className="importcsv-tip-bullet" /> <span className="importcsv-tip-text">Supported formats: .csv, .xlsx, .xls</span></div>
+                      <div className="importcsv-tip"><span className="importcsv-tip-bullet" /> <span className="importcsv-tip-text">Column names are not case-sensitive</span></div>
+                      <div className="importcsv-tip"><span className="importcsv-tip-bullet" /> <span className="importcsv-tip-text">If you face issues, check your file for typos or missing columns</span></div>
                     </div>
                   </div>
                 )}
