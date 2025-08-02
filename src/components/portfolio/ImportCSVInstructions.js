@@ -110,11 +110,12 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
     if (onClose) onClose();
   };
 
-  // Download sample CSV
-  const handleDownloadSample = () => {
+  // Download sample files
+  const handleDownloadSample = (fileType) => {
     const link = document.createElement('a');
-    link.href = process.env.PUBLIC_URL + '/sample_portfolio.csv';
-    link.download = 'sample_portfolio.csv';
+    const fileName = fileType === 'excel' ? 'sample_portfolio.xlsx' : 'sample_portfolio.csv';
+    link.href = process.env.PUBLIC_URL + '/' + fileName;
+    link.download = fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -126,7 +127,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
       icon: <FileDown size={18} />,
       content: (
         <div>
-          Download the sample CSV and use it as a template for your data.
+          Download the sample CSV and use it as a template for your data. You can also create an Excel file with the same columns.
         </div>
       ),
     },
@@ -152,11 +153,11 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
       ),
     },
     {
-      label: 'Upload Your CSV',
+      label: 'Upload Your File',
       icon: <UploadIcon size={18} />,
       content: (
         <div>
-          Upload your CSV file and preview your data before importing.
+          Upload your CSV or Excel file and preview your data before importing.
         </div>
       ),
     },
@@ -192,7 +193,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
             </div>
             <div>
               <h2 className="importcsv-header-title">Import Portfolio</h2>
-              <p className="importcsv-header-subtitle">Upload CSV file</p>
+              <p className="importcsv-header-subtitle">Upload CSV or Excel file</p>
             </div>
           </div>
           <button className="importcsv-close-button" onClick={handleCancel}>
@@ -209,10 +210,17 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
                 <div className="importcsv-quick-actions">
                   <button
                     className="importcsv-action-button importcsv-download-button"
-                    onClick={handleDownloadSample}
+                    onClick={() => handleDownloadSample('csv')}
                   >
                     <Download size={16} />
                     <span>Sample CSV</span>
+                  </button>
+                  <button
+                    className="importcsv-action-button importcsv-download-button"
+                    onClick={() => handleDownloadSample('excel')}
+                  >
+                    <Download size={16} />
+                    <span>Sample Excel</span>
                   </button>
                   {/* Status indicator always visible */}
                   <div className="importcsv-action-button importcsv-status-button" style={{ minWidth: 120, justifyContent: 'flex-start' }}>
@@ -240,7 +248,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
                 <div className="importcsv-file-upload-area">
                   <input
                     type="file"
-                    accept=".csv"
+                    accept=".csv,.xlsx,.xls"
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
@@ -251,7 +259,7 @@ const ImportCSVInstructions = ({ onClose, portfolios, importCSV, showMessage, sh
                     disabled={isParsing}
                   >
                     <Upload size={16} />
-                    {file ? file.name : 'Select CSV File'}
+                    {file ? file.name : 'Select CSV or Excel File'}
                   </button>
                   {parseError && <div style={{ color: 'red', marginTop: 8 }}>{parseError}</div>}
                 </div>
