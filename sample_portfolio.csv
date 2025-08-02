@@ -1,4 +1,11 @@
-symbol,qty,avg price,purchase date,name,realized gain,dividend
-AAPL,10,150,2022-01-15,Apple Inc,50,10
-GOOGL,5,2500,2021-11-10,Alphabet Inc,0,0
-TSLA,8,700,2022-03-05,Tesla Inc,100,5 
+symbol,qty,avg price,purchase date,name,realized gain,dividend,current price
+RELIANCE,10,2500,2023-05-15,Reliance Industries Ltd,1200,350,2750
+TCS,5,3400,2023-02-10,Tata Consultancy Services,800,250,3650
+INFY,15,1450,2023-04-22,Infosys Limited,600,180,1520
+HDFC,8,1650,2023-01-18,HDFC Bank Limited,450,200,1720
+ICICIBANK,20,950,2023-03-12,ICICI Bank Ltd,350,120,980
+BHARTIARTL,12,850,2023-06-05,Bharti Airtel Limited,250,100,890
+WIPRO,18,420,2023-07-20,Wipro Limited,150,80,440
+SUNPHARMA,7,980,2023-08-15,Sun Pharmaceutical Industries,200,90,1050
+HINDUNILVR,4,2600,2023-09-10,Hindustan Unilever Limited,300,220,2750
+LT,6,2200,2023-10-05,Larsen & Toubro Limited,400,180,2350
