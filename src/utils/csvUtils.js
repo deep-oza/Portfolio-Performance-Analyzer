@@ -158,10 +158,7 @@ export const importPortfolioCSV = (file) => {
             "profit/loss",
             "realized p&l",
             "realised gain/loss",
-            "overall gain/loss",
-            // Add exact column names
             "Realised Gain/Loss",
-            "Overall Gain/Loss"
           ],
           dividend: [
             "dividend", 
@@ -662,10 +659,8 @@ const importExcelFile = (file, resolve, reject) => {
             "booked profit",
             "profit booked",
             "realised gain/loss",
-            "overall gain/loss",
             // Add exact column names from Excel file
             "Realised Gain/Loss",
-            "Overall Gain/Loss"
           ],
           dividend: [
             "dividend", 
