@@ -697,24 +697,54 @@
 }
 
 /* Responsive Styles */
-@media (max-width: 640px) {
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
   .importcsv-modal {
-    max-width: 100vw;
-    border-radius: 0;
-    margin: 0;
-    height: 100vh;
+    max-width: 700px;
   }
   
-  .importcsv-overlay {
-    padding: 0;
+  .importcsv-content {
+    padding: 40px;
   }
   
   .importcsv-header {
-    padding: 20px 24px;
+    padding: 32px 40px;
+  }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .importcsv-modal {
+    max-width: 600px;
+  }
+  
+  .importcsv-content {
+    padding: 32px;
+  }
+  
+  .importcsv-header {
+    padding: 24px 32px;
+  }
+}
+
+/* Small screens (481px to 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .importcsv-modal {
+    max-width: 95vw;
+    border-radius: 16px;
+  }
+  
+  .importcsv-overlay {
+    padding: 16px;
   }
   
   .importcsv-content {
     padding: 24px;
+  }
+  
+  .importcsv-header {
+    padding: 20px 24px;
   }
   
   .importcsv-quick-actions {
@@ -732,21 +762,229 @@
     justify-content: center;
   }
   
+  .importcsv-upload-area {
+    padding: 32px 20px;
+  }
+  
+  .importcsv-upload-icon {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .importcsv-upload-title {
+    font-size: 16px;
+  }
+  
+  .importcsv-upload-subtitle {
+    font-size: 13px;
+  }
+  
+  .importcsv-required-columns-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .importcsv-steps {
+    gap: 16px;
+  }
+  
+  .importcsv-step {
+    padding: 16px;
+  }
+}
+
+/* Extra small screens (480px and below) */
+@media (max-width: 480px) {
+  .importcsv-modal {
+    max-width: 95vw;
+    border-radius: 12px;
+    max-height: 90vh;
+  }
+  
+  .importcsv-overlay {
+    padding: 16px;
+  }
+  
+  .importcsv-header {
+    padding: 16px 20px;
+  }
+  
+  .importcsv-header-title {
+    font-size: 20px;
+  }
+  
+  .importcsv-header-subtitle {
+    font-size: 14px;
+  }
+  
+  .importcsv-icon-container {
+    padding: 8px;
+  }
+  
+  .importcsv-content {
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .importcsv-quick-actions {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .importcsv-action-group {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .importcsv-status-indicator {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .importcsv-upload-area {
+    padding: 24px 16px;
+  }
+  
+  .importcsv-upload-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .importcsv-upload-title {
+    font-size: 16px;
+  }
+  
+  .importcsv-upload-subtitle {
+    font-size: 12px;
+  }
+  
+  .importcsv-section-title {
+    font-size: 18px;
+  }
+  
+  .importcsv-section-description {
+    font-size: 14px;
+  }
+  
+  .importcsv-select,
+  .importcsv-input {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  
   .importcsv-action-buttons {
     flex-direction: column;
+    gap: 8px;
+  }
+  
+  .importcsv-back-button,
+  .importcsv-import-button {
+    padding: 12px 20px;
+    font-size: 14px;
   }
   
   .importcsv-input-group {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
   
   .importcsv-cancel-new-button {
     width: 100%;
+    padding: 12px 16px;
   }
   
   .importcsv-required-columns-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .importcsv-required-column {
+    padding: 12px;
+  }
+  
+  .importcsv-steps {
+    gap: 12px;
+  }
+  
+  .importcsv-step {
+    padding: 16px;
+  }
+  
+  .importcsv-step-header {
+    gap: 8px;
+  }
+  
+  .importcsv-step-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .importcsv-step-title {
+    font-size: 14px;
+  }
+  
+  .importcsv-step-content {
+    font-size: 13px;
+  }
+  
+  .importcsv-instructions-content.expanded {
+    padding: 0 20px 20px 20px;
+  }
+  
+  .importcsv-tips {
+    padding: 16px;
+  }
+  
+  .importcsv-tips-title {
+    font-size: 14px;
+  }
+  
+  .importcsv-tips-list {
+    font-size: 13px;
+  }
+  
+  .importcsv-instructions-toggle {
+    padding: 16px 20px;
+  }
+  
+  .importcsv-instructions-header {
+    font-size: 14px;
+  }
+  
+  .importcsv-error-message,
+  .importcsv-warnings {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .importcsv-warning-list {
+    padding-left: 16px;
+  }
+  
+  .importcsv-warning-item {
+    font-size: 13px;
+  }
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 767px) {
+  .importcsv-action-button,
+  .importcsv-download-button,
+  .importcsv-next-button,
+  .importcsv-back-button,
+  .importcsv-import-button,
+  .importcsv-cancel-new-button {
+    min-height: 44px;
+  }
+  
+  .importcsv-close-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .importcsv-instructions-toggle {
+    min-height: 44px;
   }
 }
 
