@@ -276,12 +276,13 @@
 /* Navigation */
 .importcsv-navigation {
   display: flex;
-  justify-content: flex-end;
+  justify-content: stretch;
 }
 
 .importcsv-next-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 14px 24px;
   background: var(--primary);
@@ -293,6 +294,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
+  width: 100%;
 }
 
 .importcsv-next-button:hover:not(:disabled) {
