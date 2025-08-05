@@ -556,8 +556,8 @@
 }
 
 .importcsv-instructions-content.expanded {
-  max-height: 1000px;
-  padding: 0 24px 24px 24px;
+  max-height: 2000px;
+  padding: 0 24px 32px 24px;
 }
 
 /* Steps */
@@ -610,6 +610,7 @@
   border: 1px solid var(--primary);
   border-radius: 12px;
   padding: 20px;
+  margin-bottom: 8px;
 }
 
 .importcsv-tips-title {
