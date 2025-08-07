@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
 } from 'recharts';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
+import GainLossChart from './GainLossChart'; // Import the new component
 import './AnalyticsDashboard.css';
 
 // Helper to format days as years, months, days
@@ -109,7 +110,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     minHeight: isMobile ? '300px' : '340px',
     display: 'flex',
     flexDirection: 'column',
-    border: `1px solid ${isDarkTheme ? '#444' : '#e0e0e0'}`,
+    border: `1px solid ${isDarkTheme ? '#444' : '#e0e0e0'}`, 
   };
   const titleStyle = {
     fontWeight: 600,
@@ -131,7 +132,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
   const listGroupStyle = {
     marginTop: isMobile ? 8 : 12,
     borderRadius: 8,
-    border: `1px solid ${isDarkTheme ? '#505050' : '#e0e0e0'}`,
+    border: `1px solid ${isDarkTheme ? '#505050' : '#e0e0e0'}`, 
     background: isDarkTheme ? '#383838' : '#fafbfc',
     padding: 0,
     overflow: 'hidden',
@@ -141,7 +142,7 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: isMobile ? '8px 12px' : '10px 16px',
-    borderBottom: `1px solid ${isDarkTheme ? '#484848' : '#ececec'}`,
+    borderBottom: `1px solid ${isDarkTheme ? '#484848' : '#ececec'}`, 
     fontSize: isMobile ? 12 : 14,
     minHeight: isMobile ? 36 : 40,
     background: isDarkTheme ? '#404040' : '#fff',
@@ -199,224 +200,233 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         fontSize: 10,
         dy: 10,
         interval: 0,
-        height: 50
+        height: 60
       };
     } else {
       return {
-        angle: -45,
-        fontSize: 11,
-        dy: 10,
-        interval: 0
+        angle: -30,
+        fontSize: 12,
+        dy: 5,
+        interval: 0,
+        height: 40
       };
     }
   };
 
-  const getLegendStyle = () => {
+  const getYAxisConfig = () => {
     return {
-      color: textColor,
       fontSize: isMobile ? 10 : 12,
-      marginTop: isMobile ? 0 : 5
+      width: isMobile ? 30 : 40,
+      tickFormatter: (value) => `₹${(value / 1000).toFixed(0)}k`,
     };
   };
 
-  // Chart custom tooltip style
-  const getTooltipStyle = () => {
+  const getTooltipConfig = () => {
     return {
-      background: tooltipBackground,
-      border: `1px solid ${tooltipBorder}`,
-      color: tooltipText,
-      fontSize: isMobile ? 10 : 12,
-      padding: isMobile ? '5px' : '10px',
+      cursor: { fill: 'transparent' },
+      contentStyle: { 
+        backgroundColor: tooltipBackground, 
+        borderColor: tooltipBorder, 
+        borderRadius: '8px', 
+        fontSize: isMobile ? 12 : 14,
+        padding: '10px 12px',
+      },
+      labelStyle: { color: tooltipText, marginBottom: '5px', fontWeight: 'bold' },
+      itemStyle: { color: tooltipText },
+      formatter: (value) => `₹${value.toLocaleString('en-IN')}`,
+    };
+  };
+
+  const getLegendConfig = () => {
+    return {
+      wrapperStyle: {
+        fontSize: isMobile ? 10 : 12,
+        color: textColor,
+        paddingTop: '10px',
+      },
+      iconSize: isMobile ? 10 : 12,
     };
   };
 
   return (
-    <div className="analytics-dashboard-wrapper">
-      <h2 className="analytics-dashboard-title">
-        📊 Portfolio Analytics
-      </h2>
-      {isMobile ? (
-        <div className="analytics-dashboard-mobile-info">
-          <div className="analytics-dashboard-mobile-icon">📊</div>
-          <div className="analytics-dashboard-mobile-title">
-            Analytics Available on Desktop
+    <div className="analytics-dashboard">
+      <div className="dashboard-grid" style={gridStyle}>
+        {/* Top Gainers Card */}
+        <div className="card" style={cardStyle}>
+          <h3 style={titleStyle}>Top 5 Gainers</h3>
+          <div style={listGroupStyle}>
+            {topGainers.length > 0 ? (
+              topGainers.map((stock, idx) => (
+                <div key={stock.symbol} style={idx === topGainers.length - 1 ? lastListItemStyle : listItemStyle}>
+                  <span style={nameTextStyle} title={stock.symbol}>{truncateName(stock.symbol, 18, windowWidth)}</span>
+                  <span style={{ color: '#4CAF50', fontWeight: 600, fontSize: isMobile ? 13 : 15 }}>
+                    {stock.returnPercent.toFixed(2)}%
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div style={{ ...listItemStyle, justifyContent: 'center', color: '#888' }}>No top gainers.</div>
+            )}
           </div>
-          <div className="analytics-dashboard-mobile-desc">
-            For the best experience, please use a desktop or tablet device to view detailed portfolio analytics and charts.
+        </div>
+
+        {/* Top Losers Card */}
+        <div className="card" style={cardStyle}>
+          <h3 style={titleStyle}>Top 5 Losers</h3>
+          <div style={listGroupStyle}>
+            {topLosers.length > 0 ? (
+              topLosers.map((stock, idx) => (
+                <div key={stock.symbol} style={idx === topLosers.length - 1 ? lastListItemStyle : listItemStyle}>
+                  <span style={nameTextStyle} title={stock.symbol}>{truncateName(stock.symbol, 18, windowWidth)}</span>
+                  <span style={{ color: '#F44336', fontWeight: 600, fontSize: isMobile ? 13 : 15 }}>
+                    {stock.returnPercent.toFixed(2)}%
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div style={{ ...listItemStyle, justifyContent: 'center', color: '#888' }}>No top losers.</div>
+            )}
           </div>
-          <button
-            className="analytics-dashboard-mobile-btn"
-            onClick={() => window.location.href = '/'}
-          >
-            Back to Portfolio
-          </button>
         </div>
-      ) : (
-        <div className="analytics-dashboard-grid">
-        {/* CAGR by Stock – Column/Vertical bar chart */}
-        <div style={cardStyle}>
-          <div style={titleStyle}>CAGR by Stock</div>
-            <ResponsiveContainer width="100%" height={getChartHeight()} style={{ background: chartBackground }}>
-              <BarChart data={chartData} margin={getChartMargin()}>
-              <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="symbol" tick={getXAxisConfig()} />
-                <YAxis width={isMobile ? 35 : 40} tickFormatter={v => v + '%'} />
-                <Tooltip 
-                  formatter={v => v.toFixed(2) + '%'} 
-                  contentStyle={getTooltipStyle()}
-                />
-                <Legend wrapperStyle={getLegendStyle()} />
-              <Bar dataKey="cagr" fill="#82ca9d" name="CAGR %" />
-            </BarChart>
-          </ResponsiveContainer>
+
+        {/* New GainLossChart component */}
+        <div className="card gain-loss-chart-card" style={{ ...cardStyle, gridColumn: 'span 2' }}>
+          <h3 style={titleStyle}>Total Gain/Loss Distribution</h3>
+          <GainLossChart portfolioData={portfolioData} currentPrices={currentPrices} />
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
-        {/* Return % per Stock – Column chart */}
-        <div style={cardStyle}>
-          <div style={titleStyle}>Return % per Stock</div>
-            <ResponsiveContainer width="100%" height={getChartHeight()} style={{ background: chartBackground }}>
-              <BarChart data={chartData} margin={getChartMargin()}>
-              <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="symbol" tick={getXAxisConfig()} />
-                <YAxis width={isMobile ? 35 : 40} tickFormatter={v => v + '%'} />
-                <Tooltip 
-                  formatter={v => v.toFixed(2) + '%'} 
-                  contentStyle={getTooltipStyle()}
-                />
-                <Legend wrapperStyle={getLegendStyle()} />
-              <Bar dataKey="returnPercent" fill="#ffc658" name="Return %" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
-        {/* Invested vs Current Value – Grouped bar chart */}
-        <div style={cardStyle}>
-          <div style={titleStyle}>Invested vs Current Value</div>
-            <ResponsiveContainer width="100%" height={getChartHeight()} style={{ background: chartBackground }}>
-              <BarChart data={chartData} margin={getChartMargin()}>
-              <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="symbol" tick={getXAxisConfig()} />
-                <YAxis 
-                  width={isMobile ? 35 : 40} 
-                  tickFormatter={value => 
-                    isMobile ? value.toLocaleString(undefined, {notation: 'compact', maximumFractionDigits: 1}) : value
-                  }
-                />
-                <Tooltip 
-                  formatter={v => v.toLocaleString(undefined, { maximumFractionDigits: 2 })} 
-                  contentStyle={getTooltipStyle()}
-                />
-                <Legend wrapperStyle={getLegendStyle()} />
-              <Bar dataKey="invested" fill="#8884d8" name="Invested" />
-              <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
-        {/* Top Gainers & Losers – Bar chart */}
-        <div style={cardStyle}>
-          <div style={titleStyle}>Top Gainers & Losers</div>
-            <ResponsiveContainer width="100%" height={getChartHeight()} style={{ background: chartBackground }}>
-              <BarChart data={gainersLosersData} margin={getChartMargin()}>
+
+        {/* CAGR Distribution Chart */}
+        <div className="card" style={cardStyle}>
+          <h3 style={titleStyle}>CAGR Distribution</h3>
+          <ResponsiveContainer width="100%" height={getChartHeight()}>
+            <BarChart
+              data={chartData.filter(d => d.cagr !== null).sort((a, b) => b.cagr - a.cagr)}
+              margin={getChartMargin()}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                <XAxis 
-                  dataKey="symbol" 
-                  tick={{ 
-                    ...getXAxisConfig(), 
-                    fill: textColor 
-                  }} 
-                />
-                <YAxis 
-                  width={isMobile ? 35 : 40} 
-                  tickFormatter={v => v + '%'} 
-                  tick={{ fill: textColor }} 
-                />
-              <Tooltip 
-                formatter={v => v.toFixed(2) + '%'} 
-                  contentStyle={getTooltipStyle()}
+              <XAxis
+                dataKey="symbol"
+                stroke={textColor}
+                tickLine={false}
+                axisLine={false}
+                {...getXAxisConfig()}
+                formatter={(value) => truncateName(value, 10, windowWidth)}
               />
-                <Legend wrapperStyle={getLegendStyle()} />
-              <Bar dataKey="returnPercent" name="Return %" >
-                {gainersLosersData.map((entry, idx) => (
-                  <Cell key={`cell-${idx}`} fill={entry.returnPercent >= 0 ? '#4caf50' : '#e53935'} />
+              <YAxis
+                stroke={textColor}
+                tickLine={false}
+                axisLine={false}
+                {...getYAxisConfig()}
+                label={{ value: 'CAGR (%)', angle: -90, position: 'insideLeft', fill: textColor, fontSize: isMobile ? 10 : 12 }}
+              />
+              <Tooltip {...getTooltipConfig()} formatter={(value) => `${value.toFixed(2)}%`} />
+              <Legend {...getLegendConfig()} />
+              <Bar dataKey="cagr" name="CAGR" fill="#8884d8">
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.cagr >= 0 ? '#4CAF50' : '#F44336'} />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--divider, #444)', margin: isMobile ? '16px 0' : '32px 0' }} />
-        <div style={holdingGridStyle}>
-          {/* Short Term Holdings – List group only, no chart */}
-          <div style={cardStyle}>
-            <div style={titleStyle}>Short Term Holdings (≤ 1 year)</div>
-            {/* List stocks in short term as list group */}
-              <div style={{ marginTop: isMobile ? 10 : 16 }}>
-                <div style={{ fontWeight: 500, marginBottom: 4, fontSize: isMobile ? 13 : 'inherit' }}>Stocks:</div>
-              {(() => {
-                const stocks = portfolioData.filter(stock => {
+
+        {/* Investment vs. Current Value Chart */}
+        <div className="card" style={cardStyle}>
+          <h3 style={titleStyle}>Investment vs. Current Value</h3>
+          <ResponsiveContainer width="100%" height={getChartHeight()}>
+            <BarChart
+              data={chartData.sort((a, b) => b.invested - a.invested)}
+              margin={getChartMargin()}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+              <XAxis
+                dataKey="symbol"
+                stroke={textColor}
+                tickLine={false}
+                axisLine={false}
+                {...getXAxisConfig()}
+                formatter={(value) => truncateName(value, 10, windowWidth)}
+              />
+              <YAxis
+                stroke={textColor}
+                tickLine={false}
+                axisLine={false}
+                {...getYAxisConfig()}
+                label={{ value: 'Amount (₹)', angle: -90, position: 'insideLeft', fill: textColor, fontSize: isMobile ? 10 : 12 }}
+              />
+              <Tooltip {...getTooltipConfig()} />
+              <Legend {...getLegendConfig()} />
+              <Bar dataKey="invested" name="Invested" fill="#82ca9d" />
+              <Bar dataKey="currentValue" name="Current Value" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Longest Held Stocks Card */}
+        <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
+          <h3 style={titleStyle}>Longest Held Stocks</h3>
+          <div style={listGroupStyle}>
+            {(() => {
+              const sortedStocks = [...portfolioData].sort((a, b) => {
+                const daysA = Math.ceil((new Date() - new Date(a.purchaseDate)) / (1000 * 60 * 60 * 24));
+                const daysB = Math.ceil((new Date() - new Date(b.purchaseDate)) / (1000 * 60 * 60 * 24));
+                return daysB - daysA;
+              }).slice(0, 5);
+
+              return sortedStocks.length > 0 ? (
+                sortedStocks.map((stock, idx, stocks) => {
                   const purchase = new Date(stock.purchaseDate);
                   const today = new Date();
                   const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-                  return days <= 365;
-                });
-                if (stocks.length === 0) return <div style={{ color: '#888' }}>No short term holdings</div>;
-                return (
-                  <div style={listGroupStyle}>
-                    {stocks.map((stock, idx) => {
-                      const purchase = new Date(stock.purchaseDate);
-                      const today = new Date();
-                      const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-                      const isLast = idx === stocks.length - 1;
-                      return (
-                        <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
-                            <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
-                          <span style={heldTextStyle}>{formatDuration(days)}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-          {/* Long Term Holdings – List group only, no chart */}
-          <div style={cardStyle}>
-            <div style={titleStyle}>Long Term Holdings (&gt; 1 year)</div>
-            {/* List stocks in long term as list group */}
-              <div style={{ marginTop: isMobile ? 10 : 16 }}>
-                <div style={{ fontWeight: 500, marginBottom: 4, fontSize: isMobile ? 13 : 'inherit' }}>Stocks:</div>
-              {(() => {
-                const stocks = portfolioData.filter(stock => {
-                  const purchase = new Date(stock.purchaseDate);
-                  const today = new Date();
-                  const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-                  return days > 365;
-                });
-                if (stocks.length === 0) return <div style={{ color: '#888' }}>No long term holdings</div>;
-                return (
-                  <div style={listGroupStyle}>
-                    {stocks.map((stock, idx) => {
-                      const purchase = new Date(stock.purchaseDate);
-                      const today = new Date();
-                      const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
-                      const isLast = idx === stocks.length - 1;
-                      return (
-                        <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
-                            <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
-                          <span style={heldTextStyle}>{formatDuration(days)}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })()}
-            </div>
+                  const isLast = idx === stocks.length - 1;
+                  return (
+                    <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
+                        <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
+                      <span style={heldTextStyle}>{formatDuration(days)}</span>
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ ...listItemStyle, justifyContent: 'center', color: '#888' }}>No stocks held for long term.</div>
+              );
+            })()}
           </div>
         </div>
+
+        {/* Shortest Held Stocks Card */}
+        <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
+          <h3 style={titleStyle}>Shortest Held Stocks</h3>
+          <div style={listGroupStyle}>
+            {(() => {
+              const sortedStocks = [...portfolioData].sort((a, b) => {
+                const daysA = Math.ceil((new Date() - new Date(a.purchaseDate)) / (1000 * 60 * 60 * 24));
+                const daysB = Math.ceil((new Date() - new Date(b.purchaseDate)) / (1000 * 60 * 60 * 24));
+                return daysA - daysB;
+              }).slice(0, 5);
+
+              return sortedStocks.length > 0 ? (
+                sortedStocks.map((stock, idx, stocks) => {
+                  const purchase = new Date(stock.purchaseDate);
+                  const today = new Date();
+                  const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
+                  const isLast = idx === stocks.length - 1;
+                  return (
+                    <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
+                        <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
+                      <span style={heldTextStyle}>{formatDuration(days)}</span>
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ ...listItemStyle, justifyContent: 'center', color: '#888' }}>No stocks held for short term.</div>
+              );
+            })()}
+          </div>
+        </div>
+
       </div>
-      )}
     </div>
   );
 };
 
-export default AnalyticsDashboard; 
+export default AnalyticsDashboard;

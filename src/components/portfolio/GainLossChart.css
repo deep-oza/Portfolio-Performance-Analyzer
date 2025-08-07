@@ -1,0 +1,24 @@
+.gain-loss-chart-container {
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 340px; /* Ensure consistent height with other cards */
+}
+
+.gain-loss-chart-container h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Dark theme adjustments */
+body.dark .gain-loss-chart-container {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid #444;
+}
