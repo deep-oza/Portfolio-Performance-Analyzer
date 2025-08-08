@@ -6,18 +6,20 @@ import AnalyticsDashboard from './AnalyticsDashboard';
 import './PortfolioTable.css';
 
 const DEFAULT_COLUMNS = [
-  { key: 'symbol', label: 'Stock' },
-  { key: 'qty', label: 'Qty' },
-  { key: 'avgPrice', label: 'Avg Price' },
-  { key: 'invested', label: 'Invested' },
-  { key: 'purchaseDate', label: 'Purchase Date' },
+  { key: 'symbol', label: 'Stock Name' },
+  { key: 'qty', label: 'Quantity' },
+  { key: 'avgPrice', label: 'Buy Price' },
   { key: 'currentPrice', label: 'Current Price' },
+  { key: 'invested', label: 'Total Invested' },
   { key: 'currentValue', label: 'Current Value' },
-  { key: 'unrealizedGL', label: 'Unrealized G/L' },
+  { key: 'unrealizedGL', label: 'Gain/Loss' },
+  { key: 'returnPercent', label: '% Return' },
+  { key: 'cagr', label: 'CAGR' },
+  // Keep legacy/extra columns to avoid breaking persisted preferences
+  { key: 'purchaseDate', label: 'Purchase Date' },
   { key: 'totalReturnMerged', label: 'Total Return' },
   { key: 'realizedGain', label: 'Realized Gain' },
   { key: 'dividend', label: 'Dividend' },
-  { key: 'cagr', label: 'CAGR %' },
   { key: 'daysHeld', label: 'Days Held' },
 ];
 
@@ -133,6 +135,21 @@ const PortfolioTable = ({
         case "unrealizedGL":
           valueA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0) - a.invested;
           valueB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0) - b.invested;
+          break;
+
+        case "returnPercent":
+          {
+            const priceA = parseFloat(currentPrices[a.symbol]) || 0;
+            const priceB = parseFloat(currentPrices[b.symbol]) || 0;
+            const currValA = a.qty * priceA;
+            const currValB = b.qty * priceB;
+            const investedA = a.invested || (a.qty * a.avgPrice) || 0;
+            const investedB = b.invested || (b.qty * b.avgPrice) || 0;
+            const rpA = investedA > 0 && priceA > 0 ? ((currValA - investedA) / investedA) * 100 : -Infinity;
+            const rpB = investedB > 0 && priceB > 0 ? ((currValB - investedB) / investedB) * 100 : -Infinity;
+            valueA = Math.max(Math.min(rpA, 999999), -99.99);
+            valueB = Math.max(Math.min(rpB, 999999), -99.99);
+          }
           break;
 
         case "totalReturnMerged":
@@ -492,30 +509,27 @@ const PortfolioTable = ({
   if (!portfolioData || portfolioData.length === 0) {
     return (
       <div className="table-container">
-        <table id="portfolioTable">
+        <table id="portfolioTable" aria-label="Portfolio table">
+          <caption className="sr-only">Portfolio positions</caption>
           <thead>
             <tr>
-              <th className="sortable">Stock</th>
-              <th className="sortable">Qty</th>
-              <th className="sortable">Avg Price</th>
-              <th className="sortable">Invested</th>
-              <th className="sortable">Purchase Date</th>
-              <th className="sortable">Current Price</th>
-              <th className="sortable">Current Value</th>
-              <th className="sortable">Unrealized G/L</th>
-              <th className="sortable">Total Return</th>
-              <th className="sortable">Realized Gain</th>
-              <th className="sortable">Dividend</th>
-              <th className="sortable">CAGR %</th>
-              <th className="sortable">Days Held</th>
-              <th>Actions</th>
+              <th scope="col" className="sticky-col select-col">Select</th>
+              <th scope="col" className="sortable">Stock Name</th>
+              <th scope="col" className="sortable numeric">Quantity</th>
+              <th scope="col" className="sortable numeric">Buy Price</th>
+              <th scope="col" className="sortable numeric">Total Invested</th>
+              <th scope="col" className="sortable">Purchase Date</th>
+              <th scope="col" className="sortable numeric">Current Price</th>
+              <th scope="col" className="sortable numeric">Current Value</th>
+              <th scope="col" className="sortable numeric">Gain/Loss</th>
+              <th scope="col" className="sortable numeric">% Return</th>
+              <th scope="col" className="sortable numeric">CAGR</th>
+              <th scope="col" className="action-col">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td colSpan="15" style={{ textAlign: 'center', padding: '32px' }}>
-                No stocks in portfolio. Add a stock to get started.
-              </td>
+              <td colSpan="12" className="empty-state-cell">No stocks in portfolio. Add a stock to get started.</td>
             </tr>
           </tbody>
         </table>
@@ -527,34 +541,93 @@ const PortfolioTable = ({
   if (filteredData.length === 0) {
     return (
       <div className="table-container">
-        <table id="portfolioTable">
+        <table id="portfolioTable" aria-label="Portfolio table">
+          <caption className="sr-only">Portfolio positions</caption>
           <thead>
             <tr>
-              <th className="sortable">Stock</th>
-              <th className="sortable">Qty</th>
-              <th className="sortable">Avg Price</th>
-              <th className="sortable">Invested</th>
-              <th className="sortable">Purchase Date</th>
-              <th className="sortable">Current Price</th>
-              <th className="sortable">Current Value</th>
-              <th className="sortable">Unrealized G/L</th>
-              <th className="sortable">Total Return</th>
-              <th className="sortable">Realized Gain</th>
-              <th className="sortable">Dividend</th>
-              <th className="sortable">CAGR %</th>
-              <th className="sortable">Days Held</th>
-              <th>Actions</th>
+              <th scope="col" className="sticky-col select-col">Select</th>
+              <th scope="col" className="sortable">Stock Name</th>
+              <th scope="col" className="sortable numeric">Quantity</th>
+              <th scope="col" className="sortable numeric">Buy Price</th>
+              <th scope="col" className="sortable numeric">Total Invested</th>
+              <th scope="col" className="sortable">Purchase Date</th>
+              <th scope="col" className="sortable numeric">Current Price</th>
+              <th scope="col" className="sortable numeric">Current Value</th>
+              <th scope="col" className="sortable numeric">Gain/Loss</th>
+              <th scope="col" className="sortable numeric">% Return</th>
+              <th scope="col" className="sortable numeric">CAGR</th>
+              <th scope="col" className="action-col">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr id="noResultsRow">
-              <td colSpan="15" className="no-results">No matching stocks found</td>
+              <td colSpan="12" className="empty-state-cell">No matching stocks found</td>
             </tr>
           </tbody>
         </table>
       </div>
     );
   }
+  
+  // Calculate summary for the displayed (filtered) data
+  const displayedSummary = React.useMemo(() => {
+    let totalInvested = 0;
+    let currentValue = 0;
+    let totalGainLoss = 0;
+    let sumWeightedCagr = 0;
+    let sumInvestedWithPrice = 0;
+    let totalQuantity = 0;
+
+    filteredData.forEach((stock) => {
+      const symbol = stock.symbol;
+      const invested = stock.invested || (stock.qty * stock.avgPrice) || 0;
+      totalInvested += invested;
+      totalQuantity += stock.qty || 0;
+
+      const price = parseFloat(currentPrices[symbol]);
+      if (price && price > 0) {
+        const currVal = stock.qty * price;
+        currentValue += currVal;
+        const gl = currVal - invested;
+        totalGainLoss += gl;
+
+        const daysHeld = calculateDaysHeld(stock.purchaseDate);
+        const years = daysHeld / 365.25;
+        if (years > 0 && invested > 0 && currVal > 0 && daysHeld >= 90) {
+          try {
+            const cagr = (Math.pow(currVal / invested, 1 / years) - 1) * 100;
+            if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
+              sumWeightedCagr += invested * cagr;
+              sumInvestedWithPrice += invested;
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+      }
+    });
+
+    let overallReturn = 0;
+    if (totalInvested > 0) {
+      overallReturn = (totalGainLoss / totalInvested) * 100;
+      overallReturn = Math.max(Math.min(overallReturn, 999999), -99.99);
+    }
+
+    let weightedAvgCagr = 0;
+    if (sumInvestedWithPrice > 0) {
+      weightedAvgCagr = sumWeightedCagr / sumInvestedWithPrice;
+      weightedAvgCagr = Math.max(Math.min(weightedAvgCagr, 999999), -99.99);
+    }
+
+    return {
+      totalInvested,
+      currentValue,
+      totalGainLoss,
+      overallReturn,
+      weightedAvgCagr,
+      totalQuantity
+    };
+  }, [filteredData, currentPrices, calculateDaysHeld]);
   
   return (
     <>
@@ -567,23 +640,22 @@ const PortfolioTable = ({
       )}
       
       <div className="portfolio-table-container" data-tour="portfolio-table">
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', gap: '1rem' }}>
+        <div className="portfolio-table-toolbar" aria-live="polite">
           {selectedRows.length > 0 && (
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div className="selection-actions">
               <button className="btn btn-danger" onClick={handleBulkDelete}>
                 Delete Selected
               </button>
-              <span style={{ color: '#888', fontSize: '0.95em' }}>
-                {selectedRows.length} selected
-              </span>
+              <span className="selection-count">{selectedRows.length} selected</span>
             </div>
           )}
         </div>
         <div className="table-container">
-          <table id="portfolioTable">
+          <table id="portfolioTable" aria-label="Portfolio table">
+            <caption className="sr-only">Portfolio positions</caption>
             <thead>
               <tr>
-                <th>
+                <th scope="col" className="sticky-col select-col">
                   <input
                     type="checkbox"
                     checked={selectedRows.length === filteredData.length && filteredData.length > 0}
@@ -598,15 +670,15 @@ const PortfolioTable = ({
                   return (
                     <th
                       key={col.key}
-                      className={getSortClass(col.key)}
+                      className={`${getSortClass(col.key)} ${['qty','avgPrice','invested','currentPrice','currentValue','unrealizedGL','returnPercent','cagr','realizedGain','dividend','daysHeld'].includes(col.key) ? 'numeric' : ''}`}
                       onClick={() => handleSort(col.key)}
-                      style={{ cursor: 'pointer' }}
+                      aria-sort={sortState.column === col.key ? (sortState.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
                     >
                       {col.label}
                     </th>
                   );
                 })}
-                <th>Actions</th>
+                <th scope="col" className="action-col">Actions</th>
               </tr>
             </thead>
             <tbody id="portfolioBody">
@@ -616,7 +688,7 @@ const PortfolioTable = ({
                 const metrics = calculateRowMetrics(stock);
                 return (
                   <tr key={symbol}>
-                    <td>
+                    <td className="sticky-col select-col">
                       <input
                         type="checkbox"
                         checked={selectedRows.includes(symbol)}
@@ -629,13 +701,13 @@ const PortfolioTable = ({
                       switch (colKey) {
                         case 'symbol':
                           return (
-                            <td key="symbol" className="stock-symbol">
+                            <td key="symbol" className="stock-symbol" title={symbol}>
                               <FontAwesomeIcon icon={faChartLine} /> {symbol}
                             </td>
                           );
                         case 'qty':
                           return (
-                            <td key="qty" onClick={() => startEditCell(originalIndex, 'qty', stock.qty)} tabIndex={0} aria-label="Edit quantity" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'qty', stock.qty); }}>
+                            <td key="qty" className="numeric" onClick={() => startEditCell(originalIndex, 'qty', stock.qty)} tabIndex={0} aria-label="Edit quantity" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'qty', stock.qty); }}>
                               {editingCell.row === originalIndex && editingCell.col === 'qty' ? (
                                 <input
                                   type="number"
@@ -653,7 +725,7 @@ const PortfolioTable = ({
                           );
                         case 'avgPrice':
                           return (
-                            <td key="avgPrice" onClick={() => startEditCell(originalIndex, 'avgPrice', stock.avgPrice)} tabIndex={0} aria-label="Edit average price" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'avgPrice', stock.avgPrice); }}>
+                            <td key="avgPrice" className="numeric" onClick={() => startEditCell(originalIndex, 'avgPrice', stock.avgPrice)} tabIndex={0} aria-label="Edit average price" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'avgPrice', stock.avgPrice); }}>
                               {editingCell.row === originalIndex && editingCell.col === 'avgPrice' ? (
                                 <input
                                   type="number"
@@ -671,7 +743,7 @@ const PortfolioTable = ({
                           );
                         case 'invested':
                           return (
-                            <td key="invested">₹{stock.invested.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</td>
+                            <td key="invested" className="numeric">₹{stock.invested.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</td>
                           );
                         case 'purchaseDate':
                           return (
@@ -693,7 +765,7 @@ const PortfolioTable = ({
                           );
                         case 'currentPrice':
                           return (
-                            <td key="currentPrice">
+                            <td key="currentPrice" className="numeric">
                               <input 
                                 type="number" 
                                 className="current-price-input" 
@@ -707,13 +779,13 @@ const PortfolioTable = ({
                           );
                         case 'currentValue':
                           return (
-                            <td key="currentValue" id={`currentValue_${symbol}`}>
+                            <td key="currentValue" id={`currentValue_${symbol}`} className="numeric">
                               {metrics.currentValue ? formatCurrency(metrics.currentValue) : '-'}
                             </td>
                           );
                         case 'unrealizedGL':
                           return (
-                            <td key="unrealizedGL" id={`unrealizedGL_${symbol}`}>
+                            <td key="unrealizedGL" id={`unrealizedGL_${symbol}`} className="numeric">
                               {metrics.unrealizedGL ? (
                                 <span className={metrics.unrealizedGL >= 0 ? 'positive' : 'negative'}>
                                   {formatCurrency(metrics.unrealizedGL)}
@@ -721,9 +793,19 @@ const PortfolioTable = ({
                               ) : '-'}
                             </td>
                           );
+                        case 'returnPercent':
+                          return (
+                            <td key="returnPercent" id={`returnPercent_${symbol}`} className="numeric">
+                              {metrics.returnPercent !== null && metrics.returnPercent !== undefined ? (
+                                <span className={metrics.returnPercent >= 0 ? 'positive' : 'negative'}>
+                                  {metrics.returnPercent >= 0 ? '+' : ''}{formatPercent(metrics.returnPercent)}
+                                </span>
+                              ) : '-'}
+                            </td>
+                          );
                         case 'totalReturnMerged':
                           return (
-                            <td key="totalReturnMerged" id={`totalReturnMerged_${symbol}`}>
+                            <td key="totalReturnMerged" id={`totalReturnMerged_${symbol}`} className="numeric">
                               {metrics.totalReturn !== null && metrics.returnPercent !== null ? (
                                 <span className={metrics.totalReturn >= 0 ? 'positive' : 'negative'}>
                                   {formatCurrency(metrics.totalReturn)} ({metrics.returnPercent >= 0 ? '+' : ''}{formatPercent(metrics.returnPercent)})
@@ -733,7 +815,7 @@ const PortfolioTable = ({
                           );
                         case 'realizedGain':
                           return (
-                            <td key="realizedGain" className="positive" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
+                            <td key="realizedGain" className="positive numeric" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
                               {editingCell.row === originalIndex && editingCell.col === 'realizedGain' ? (
                                 <input
                                   type="number"
@@ -751,7 +833,7 @@ const PortfolioTable = ({
                           );
                         case 'dividend':
                           return (
-                            <td key="dividend" className="positive" onClick={() => startEditCell(originalIndex, 'dividend', stock.dividend)} tabIndex={0} aria-label="Edit dividend" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'dividend', stock.dividend); }}>
+                            <td key="dividend" className="positive numeric" onClick={() => startEditCell(originalIndex, 'dividend', stock.dividend)} tabIndex={0} aria-label="Edit dividend" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'dividend', stock.dividend); }}>
                               {editingCell.row === originalIndex && editingCell.col === 'dividend' ? (
                                 <input
                                   type="number"
@@ -769,7 +851,7 @@ const PortfolioTable = ({
                           );
                         case 'cagr':
                           return (
-                            <td key="cagr" id={`cagr_${symbol}`}>
+                            <td key="cagr" id={`cagr_${symbol}`} className="numeric">
                               {metrics.cagr ? (
                                 <span className={metrics.cagr >= 0 ? 'positive' : 'negative'}>
                                   {formatPercent(metrics.cagr)}
@@ -779,7 +861,7 @@ const PortfolioTable = ({
                           );
                         case 'daysHeld':
                           return (
-                            <td key="daysHeld" id={`daysHeld_${symbol}`}>
+                            <td key="daysHeld" id={`daysHeld_${symbol}`} className="numeric">
                               {calculateDaysHeld(stock.purchaseDate)}
                             </td>
                           );
@@ -809,6 +891,62 @@ const PortfolioTable = ({
                 );
               })}
             </tbody>
+            <tfoot>
+              <tr className="summary-row">
+                <td className="sticky-col select-col" aria-hidden="true"></td>
+                {visibleColumns.map(colKey => {
+                  switch (colKey) {
+                    case 'symbol':
+                      return (
+                        <td key="summary-symbol" className="summary-label">Totals</td>
+                      );
+                    case 'qty':
+                      return (
+                        <td key="summary-qty" className="numeric">{displayedSummary.totalQuantity.toLocaleString()}</td>
+                      );
+                    case 'avgPrice':
+                      return <td key="summary-avgPrice"></td>;
+                    case 'currentPrice':
+                      return <td key="summary-currentPrice"></td>;
+                    case 'invested':
+                      return (
+                        <td key="summary-invested" className="numeric">{formatCurrency(displayedSummary.totalInvested)}</td>
+                      );
+                    case 'currentValue':
+                      return (
+                        <td key="summary-currentValue" className="numeric">{formatCurrency(displayedSummary.currentValue)}</td>
+                      );
+                    case 'unrealizedGL':
+                      return (
+                        <td key="summary-unrealizedGL" className="numeric">
+                          <span className={displayedSummary.totalGainLoss >= 0 ? 'positive' : 'negative'}>
+                            {formatCurrency(displayedSummary.totalGainLoss)}
+                          </span>
+                        </td>
+                      );
+                    case 'returnPercent':
+                      return (
+                        <td key="summary-returnPercent" className="numeric">
+                          <span className={displayedSummary.overallReturn >= 0 ? 'positive' : 'negative'}>
+                            {displayedSummary.overallReturn >= 0 ? '+' : ''}{formatPercent(displayedSummary.overallReturn)}
+                          </span>
+                        </td>
+                      );
+                    case 'cagr':
+                      return (
+                        <td key="summary-cagr" className="numeric">
+                          <span className={displayedSummary.weightedAvgCagr >= 0 ? 'positive' : 'negative'}>
+                            {displayedSummary.weightedAvgCagr >= 0 ? '+' : ''}{formatPercent(displayedSummary.weightedAvgCagr)}
+                          </span>
+                        </td>
+                      );
+                    default:
+                      return <td key={`summary-${colKey}`}></td>;
+                  }
+                })}
+                <td className="action-col" aria-hidden="true"></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>

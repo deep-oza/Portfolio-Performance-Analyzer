@@ -18,6 +18,20 @@ function formatDuration(days) {
   return str.trim();
 }
 
+// Helper to safely compute days held; returns null if date is invalid
+function getSafeDaysHeld(purchaseDate) {
+  if (!purchaseDate || typeof purchaseDate !== 'string') {
+    return null;
+  }
+  const parsed = new Date(purchaseDate);
+  if (isNaN(parsed.getTime())) {
+    return null;
+  }
+  const today = new Date();
+  const diffTime = Math.abs(today - parsed);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
 // Helper to truncate long names
 function truncateName(name, maxLen = 18, windowWidth) {
   if (!name) return '';
@@ -65,8 +79,8 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
     const price = parseFloat(currentPrices[stock.symbol]) || 0;
     const invested = stock.qty * stock.avgPrice;
     const currentValue = stock.qty * price;
-    const daysHeld = Math.ceil((new Date() - new Date(stock.purchaseDate)) / (1000 * 60 * 60 * 24));
-    const years = daysHeld / 365.25;
+    const daysHeld = getSafeDaysHeld(stock.purchaseDate) ?? 0;
+    const years = daysHeld > 0 ? daysHeld / 365.25 : 0;
     let cagr = null;
     if (years > 0 && invested > 0 && currentValue > 0 && daysHeld >= 90) {
       try {
@@ -363,26 +377,24 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         </div>
 
         {/* Longest Held Stocks Card */}
-        <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
+         <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
           <h3 style={titleStyle}>Longest Held Stocks</h3>
           <div style={listGroupStyle}>
             {(() => {
-              const sortedStocks = [...portfolioData].sort((a, b) => {
-                const daysA = Math.ceil((new Date() - new Date(a.purchaseDate)) / (1000 * 60 * 60 * 24));
-                const daysB = Math.ceil((new Date() - new Date(b.purchaseDate)) / (1000 * 60 * 60 * 24));
-                return daysB - daysA;
-              }).slice(0, 5);
+              const sortedStocks = portfolioData
+                .map(s => ({ ...s, __days: getSafeDaysHeld(s.purchaseDate) }))
+                .filter(s => typeof s.__days === 'number' && !isNaN(s.__days))
+                .sort((a, b) => b.__days - a.__days)
+                .slice(0, 5);
 
               return sortedStocks.length > 0 ? (
                 sortedStocks.map((stock, idx, stocks) => {
-                  const purchase = new Date(stock.purchaseDate);
-                  const today = new Date();
-                  const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
+                  const days = stock.__days;
                   const isLast = idx === stocks.length - 1;
                   return (
                     <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
                         <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
-                      <span style={heldTextStyle}>{formatDuration(days)}</span>
+                      <span style={heldTextStyle}>{typeof days === 'number' ? formatDuration(days) : '-'}</span>
                     </div>
                   );
                 })
@@ -394,26 +406,24 @@ const AnalyticsDashboard = ({ portfolioData, currentPrices }) => {
         </div>
 
         {/* Shortest Held Stocks Card */}
-        <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
+          <div className="card" style={{ ...cardStyle, ...holdingGridStyle }}>
           <h3 style={titleStyle}>Shortest Held Stocks</h3>
           <div style={listGroupStyle}>
             {(() => {
-              const sortedStocks = [...portfolioData].sort((a, b) => {
-                const daysA = Math.ceil((new Date() - new Date(a.purchaseDate)) / (1000 * 60 * 60 * 24));
-                const daysB = Math.ceil((new Date() - new Date(b.purchaseDate)) / (1000 * 60 * 60 * 24));
-                return daysA - daysB;
-              }).slice(0, 5);
+              const sortedStocks = portfolioData
+                .map(s => ({ ...s, __days: getSafeDaysHeld(s.purchaseDate) }))
+                .filter(s => typeof s.__days === 'number' && !isNaN(s.__days))
+                .sort((a, b) => a.__days - b.__days)
+                .slice(0, 5);
 
               return sortedStocks.length > 0 ? (
                 sortedStocks.map((stock, idx, stocks) => {
-                  const purchase = new Date(stock.purchaseDate);
-                  const today = new Date();
-                  const days = Math.ceil(Math.abs(today - purchase) / (1000 * 60 * 60 * 24));
+                  const days = stock.__days;
                   const isLast = idx === stocks.length - 1;
                   return (
                     <div key={stock.symbol} style={isLast ? lastListItemStyle : listItemStyle}>
                         <span style={nameTextStyle} title={stock.name || stock.symbol}>{truncateName(stock.name || stock.symbol, 32, windowWidth)}</span>
-                      <span style={heldTextStyle}>{formatDuration(days)}</span>
+                      <span style={heldTextStyle}>{typeof days === 'number' ? formatDuration(days) : '-'}</span>
                     </div>
                   );
                 })
