@@ -306,19 +306,31 @@ const StockForm = () => {
   const isDarkTheme = theme === 'dark';
 
   return (
-    <div 
-      id="stockFormModal" 
-      className={`stock-form-modal-overlay${isDarkTheme ? ' dark' : ''}`} 
+    <div
+      id="stockFormModal"
+      className={`stock-form-modal-overlay${isDarkTheme ? ' dark' : ''}`}
       onClick={handleOutsideClick}
       data-tour="stock-form"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="stock-form-title"
     >
-      <div className="stock-form-modal-container">
+      <div className="stock-form-modal-container" role="document">
         {/* Header */}
         <div className="stock-form-modal-header">
-          <h3 className="stock-form-modal-title">
+          <h3 id="stock-form-title" className="stock-form-modal-title">
             <FontAwesomeIcon icon={isEditing ? faEdit : faPlusCircle} />
             {isEditing ? ' Edit Stock' : ' Add New Stock'}
           </h3>
+          <button
+            type="button"
+            className="stock-form-modal-close-btn"
+            aria-label="Close add or edit stock form"
+            onClick={hideForm}
+            disabled={isSubmitting}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
         </div>
 
         {/* Body */}
@@ -434,21 +446,35 @@ const StockForm = () => {
             <div className="form-grid">
               <div className="form-group">
                 <label className="form-label required" htmlFor="newSymbol">Stock Symbol</label>
-                <input
-                  type="text"
-                  id="newSymbol"
-                  className={`form-input ${errors.symbol ? 'error' : ''}`}
-                  placeholder="e.g. AAPL, MSFT"
-                  value={symbol}
-                  onChange={(e) => { setSymbol(e.target.value); setFetchTried(false); setManualPrice(false); }}
-                  onBlur={handleSymbolBlur}
-                  onKeyPress={handleKeyPress}
-                  autoComplete="off"
-                  disabled={isSubmitting}
-                />
+                <div className="input-group">
+                  <input
+                    type="text"
+                    id="newSymbol"
+                    className={`form-input ${errors.symbol ? 'error' : ''}`}
+                    placeholder="e.g. RELIANCE, TCS, INFY"
+                    value={symbol}
+                    onChange={(e) => { setSymbol(e.target.value); setFetchTried(false); setManualPrice(false); }}
+                    onBlur={handleSymbolBlur}
+                    onKeyPress={handleKeyPress}
+                    autoComplete="off"
+                    disabled={isSubmitting}
+                    autoFocus
+                    aria-describedby="symbol-helper"
+                  />
+                  <button
+                    type="button"
+                    className={`fetch-quote-btn ${quoteLoading ? 'loading' : ''}`}
+                    onClick={async () => { if (symbol.trim()) { setFetchTried(true); setManualPrice(false); await fetchQuote(); } }}
+                    disabled={isSubmitting || !symbol.trim()}
+                    aria-label="Fetch latest price for symbol"
+                    title="Fetch latest price"
+                  >
+                    <FontAwesomeIcon icon={faSync} spin={quoteLoading} />
+                  </button>
+                </div>
                 <div className="form-helper">
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  Stock ticker symbol (e.g., TCS for Tata Consultancy, RELIANCE for Reliance Industries, INFY for Infosys)
+                  <span id="symbol-helper">Stock ticker symbol (e.g., TCS for Tata Consultancy, RELIANCE for Reliance Industries, INFY for Infosys)</span>
                 </div>
                 {fetchTried && quoteData && quoteData.price && !quoteError && (
                   <div className="stock-form-fetched-price">
@@ -527,7 +553,8 @@ const StockForm = () => {
                 />
                 <div className="form-helper">
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  Stock Purchase Average Price                </div>
+                  Stock Purchase Average Price
+                </div>
                 {errors.avgPrice && <div className="form-error">Price must be greater than 0</div>}
               </div>
               

@@ -48,7 +48,10 @@ const PortfolioTable = ({
     searchTerm,
     performanceFilter,
     deleteStock,
-    updateStock
+    updateStock,
+    removeStock,
+    portfolios,
+    selectedPortfolioId
   } = useContext(PortfolioContext);
   
   // Bulk selection state
@@ -339,6 +342,19 @@ const PortfolioTable = ({
   const handleDeleteStock = (index) => {
     const stock = portfolioData[index];
     const symbol = stock.symbol;
+    // Helper to locate the stock's original portfolio and index
+    const findStockLocation = (targetStock) => {
+      for (const [pid, stocks] of Object.entries(portfolios)) {
+        if (pid === 'default') continue;
+        const idx = (stocks || []).findIndex(s => 
+          s.symbol === targetStock.symbol &&
+          s.purchaseDate === targetStock.purchaseDate &&
+          s.avgPrice === targetStock.avgPrice
+        );
+        if (idx !== -1) return { portfolioId: pid, index: idx };
+      }
+      return { portfolioId: selectedPortfolioId, index };
+    };
     
     showModal({
       title: "Delete Stock",
@@ -346,8 +362,12 @@ const PortfolioTable = ({
       confirmText: "Delete",
       onConfirm: () => {
         try {
-          // Delete stock using the context method
-          deleteStock(index);
+          const { portfolioId, index: idxInPortfolio } = findStockLocation(stock);
+          if (portfolioId && portfolioId !== 'default') {
+            removeStock(idxInPortfolio, portfolioId);
+          } else {
+            deleteStock(index);
+          }
           
           showMessage(
             "Success",
@@ -407,12 +427,39 @@ const PortfolioTable = ({
       message: `Are you sure you want to delete ${selectedRows.length} selected stock(s) from your portfolio?`,
       confirmText: 'Delete',
       onConfirm: () => {
-        const toDelete = portfolioData
-          .map((stock, idx) => ({ symbol: stock.symbol, idx }))
-          .filter(item => selectedRows.includes(item.symbol))
-          .map(item => item.idx)
-          .sort((a, b) => b - a);
-        toDelete.forEach(idx => deleteStock(idx));
+        // Build list of concrete locations across portfolios
+        const locations = portfolioData
+          .map((stock, idx) => ({ stock, idx }))
+          .filter(item => selectedRows.includes(item.stock.symbol))
+          .map(({ stock, idx }) => {
+            // Find exact portfolio and index
+            for (const [pid, stocks] of Object.entries(portfolios)) {
+              if (pid === 'default') continue;
+              const foundIdx = (stocks || []).findIndex(s => 
+                s.symbol === stock.symbol &&
+                s.purchaseDate === stock.purchaseDate &&
+                s.avgPrice === stock.avgPrice
+              );
+              if (foundIdx !== -1) return { portfolioId: pid, index: foundIdx };
+            }
+            return { portfolioId: selectedPortfolioId, index: idx };
+          });
+        // Delete in reverse order per portfolio to keep indices stable
+        const grouped = locations.reduce((acc, loc) => {
+          const key = loc.portfolioId || 'default';
+          acc[key] = acc[key] || [];
+          acc[key].push(loc.index);
+          return acc;
+        }, {});
+        Object.entries(grouped).forEach(([pid, indices]) => {
+          indices.sort((a, b) => b - a).forEach(i => {
+            if (pid !== 'default') {
+              removeStock(i, pid);
+            } else {
+              deleteStock(i);
+            }
+          });
+        });
         setSelectedRows([]);
         showMessage('Success', 'Selected stocks have been deleted.');
       }
