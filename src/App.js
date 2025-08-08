@@ -118,11 +118,41 @@ function MainApp() {
     localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(visibleColumns));
   }, [visibleColumns]);
   const handleToggleColumn = (key) => {
-    setVisibleColumns(cols =>
-      cols.includes(key)
-        ? cols.filter(col => col !== key)
-        : [...cols, key]
-    );
+    setVisibleColumns((currentVisibleColumns) => {
+      // If currently visible, remove it
+      if (currentVisibleColumns.includes(key)) {
+        return currentVisibleColumns.filter((columnKey) => columnKey !== key);
+      }
+
+      // When re-adding, insert near its natural spot from default order
+      const defaultOrder = DEFAULT_COLUMNS.map((column) => column.key);
+      const targetDefaultIndex = defaultOrder.indexOf(key);
+
+      // Prefer inserting after the closest previous visible column (by default order)
+      for (let i = targetDefaultIndex - 1; i >= 0; i -= 1) {
+        const previousKey = defaultOrder[i];
+        const positionInCurrent = currentVisibleColumns.indexOf(previousKey);
+        if (positionInCurrent !== -1) {
+          const updated = [...currentVisibleColumns];
+          updated.splice(positionInCurrent + 1, 0, key);
+          return updated;
+        }
+      }
+
+      // Otherwise, insert before the closest next visible column (by default order)
+      for (let i = targetDefaultIndex + 1; i < defaultOrder.length; i += 1) {
+        const nextKey = defaultOrder[i];
+        const positionInCurrent = currentVisibleColumns.indexOf(nextKey);
+        if (positionInCurrent !== -1) {
+          const updated = [...currentVisibleColumns];
+          updated.splice(positionInCurrent, 0, key);
+          return updated;
+        }
+      }
+
+      // Fallback: append to the end
+      return [...currentVisibleColumns, key];
+    });
   };
 
   // Enhanced professional modal markup
