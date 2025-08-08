@@ -230,8 +230,9 @@ const DropdownUI = ({
   setShowColumnDropdown
 }) => {
   const [columnSearch, setColumnSearch] = React.useState('');
-  const isSearching = columnSearch.trim().length > 0;
-  const lower = columnSearch.toLowerCase();
+  const trimmedSearch = columnSearch.trim();
+  const isSearching = trimmedSearch.length > 0;
+  const lower = trimmedSearch.toLowerCase();
   const visibleSet = new Set(visibleColumns);
   const allVisibleCols = visibleColumns
     .map(key => DEFAULT_COLUMNS.find(c => c.key === key))
@@ -259,14 +260,26 @@ const DropdownUI = ({
       <div className="column-dropdown-header">Customize Columns</div>
 
       <div className="column-dropdown-toolbar">
-        <input
-          type="text"
-          className="column-dropdown-search"
-          placeholder="Search columns..."
-          value={columnSearch}
-          onChange={(e) => setColumnSearch(e.target.value)}
-          aria-label="Search columns"
-        />
+        <div className="column-search-wrap">
+          <input
+            type="text"
+            className="column-dropdown-search"
+            placeholder="Search columns..."
+            value={columnSearch}
+            onChange={(e) => setColumnSearch(e.target.value)}
+            aria-label="Search columns"
+          />
+          {isSearching && (
+            <button
+              type="button"
+              className="column-search-clear"
+              aria-label="Clear search"
+              onClick={() => setColumnSearch('')}
+            >
+              ✕
+            </button>
+          )}
+        </div>
         <div className="column-dropdown-meta">
           <span className="column-badge" aria-live="polite">{selectedCount} / {totalCount} selected</span>
           {isSearching && <span className="column-hint">Drag disabled while searching</span>}
