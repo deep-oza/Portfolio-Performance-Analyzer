@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faCog, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faCog } from '@fortawesome/free-solid-svg-icons';
 import './PortfolioSelector.css';
 
 const PortfolioSelector = ({
@@ -184,45 +184,18 @@ const PortfolioSelector = ({
 <FontAwesomeIcon icon={faCog} className="column-icon" />
 <span className="column-text">Columns</span>    </button>
     {showColumnDropdown && (
-      <div className="column-dropdown portfolio-selector-column-dropdown">
-        <div className="column-dropdown-header">Customize Columns</div>
-        <div className="column-dropdown-list">
-          {DEFAULT_COLUMNS.map((col, idx) => (
-            <label
-              key={col.key}
-              className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}${dragColIndex.current === idx ? ' dragging' : ''}`}
-              draggable={col.key !== 'symbol'}
-              onDragStart={col.key !== 'symbol' ? () => handleDragStart(idx) : undefined}
-              onDragOver={col.key !== 'symbol' ? (e) => handleDragOver(e, idx) : undefined}
-              onDrop={col.key !== 'symbol' ? () => handleDrop(idx) : undefined}
-              onDragEnd={col.key !== 'symbol' ? handleDragEnd : undefined}
-            >
-              {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle">☰</span>}
-              <input
-                type="checkbox"
-                checked={visibleColumns.includes(col.key)}
-                onChange={() => handleToggleColumn(col.key)}
-                disabled={col.key === 'symbol'}
-              />
-              {col.label}
-            </label>
-          ))}
-        </div>
-        <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
-          <button
-            className="btn btn-sm btn-secondary"
-            onClick={() => setVisibleColumns(DEFAULT_COLUMNS.map(col => col.key))}
-          >
-            Reset
-          </button>
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={() => setShowColumnDropdown(false)}
-          >
-            Close
-          </button>
-        </div>
-      </div>
+      <DropdownUI
+        DEFAULT_COLUMNS={DEFAULT_COLUMNS}
+        visibleColumns={visibleColumns}
+        setVisibleColumns={setVisibleColumns}
+        handleToggleColumn={handleToggleColumn}
+        dragColIndex={dragColIndex}
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDrop={handleDrop}
+        handleDragEnd={handleDragEnd}
+        setShowColumnDropdown={setShowColumnDropdown}
+      />
     )}
   </div>
 
@@ -242,3 +215,129 @@ const PortfolioSelector = ({
 };
 
 export default PortfolioSelector; 
+
+// Extracted dropdown UI for clarity
+const DropdownUI = ({
+  DEFAULT_COLUMNS,
+  visibleColumns,
+  setVisibleColumns,
+  handleToggleColumn,
+  dragColIndex,
+  handleDragStart,
+  handleDragOver,
+  handleDrop,
+  handleDragEnd,
+  setShowColumnDropdown
+}) => {
+  const [columnSearch, setColumnSearch] = React.useState('');
+  const isSearching = columnSearch.trim().length > 0;
+  const lower = columnSearch.toLowerCase();
+  const visibleSet = new Set(visibleColumns);
+  const allVisibleCols = visibleColumns
+    .map(key => DEFAULT_COLUMNS.find(c => c.key === key))
+    .filter(Boolean);
+  const allHiddenCols = DEFAULT_COLUMNS.filter(c => !visibleSet.has(c.key));
+  const filterFn = (col) => col.label.toLowerCase().includes(lower) || col.key.toLowerCase().includes(lower);
+  const visibleList = isSearching ? allVisibleCols.filter(filterFn) : allVisibleCols;
+  const hiddenList = isSearching ? allHiddenCols.filter(filterFn) : allHiddenCols;
+  const selectedCount = visibleColumns.length;
+  const totalCount = DEFAULT_COLUMNS.length;
+
+  const handleSelectAll = () => {
+    setVisibleColumns(DEFAULT_COLUMNS.map(c => c.key));
+  };
+  const handleDeselectAll = () => {
+    setVisibleColumns(DEFAULT_COLUMNS.filter(c => c.key === 'symbol').map(c => c.key));
+  };
+  const handleReset = () => {
+    setVisibleColumns(DEFAULT_COLUMNS.map(c => c.key));
+    setColumnSearch('');
+  };
+
+  return (
+    <div className="column-dropdown portfolio-selector-column-dropdown">
+      <div className="column-dropdown-header">Customize Columns</div>
+
+      <div className="column-dropdown-toolbar">
+        <input
+          type="text"
+          className="column-dropdown-search"
+          placeholder="Search columns..."
+          value={columnSearch}
+          onChange={(e) => setColumnSearch(e.target.value)}
+          aria-label="Search columns"
+        />
+        <div className="column-dropdown-meta">
+          <span className="column-badge" aria-live="polite">{selectedCount} / {totalCount} selected</span>
+          {isSearching && <span className="column-hint">Drag disabled while searching</span>}
+        </div>
+      </div>
+
+      <div className="column-dropdown-list">
+        {/* Visible section (draggable) */}
+        {visibleList.length > 0 && (
+          <div className="column-section">
+            <div className="column-dropdown-section-title">Visible</div>
+            {visibleList.map((col) => {
+              const vIdx = visibleColumns.indexOf(col.key);
+              return (
+                <label
+                  key={`vis-${col.key}`}
+                  className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}${dragColIndex.current === vIdx ? ' dragging' : ''}`}
+                  draggable={!isSearching && col.key !== 'symbol'}
+                  onDragStart={!isSearching && col.key !== 'symbol' ? () => handleDragStart(vIdx) : undefined}
+                  onDragOver={!isSearching && col.key !== 'symbol' ? (e) => handleDragOver(e, vIdx) : undefined}
+                  onDrop={!isSearching && col.key !== 'symbol' ? () => handleDrop(vIdx) : undefined}
+                  onDragEnd={!isSearching && col.key !== 'symbol' ? handleDragEnd : undefined}
+                >
+                  {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle" aria-hidden>☰</span>}
+                  <input
+                    type="checkbox"
+                    checked
+                    onChange={() => handleToggleColumn(col.key)}
+                    disabled={col.key === 'symbol'}
+                  />
+                  {col.label}
+                </label>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Divider */}
+        {visibleList.length > 0 && hiddenList.length > 0 && (
+          <div className="column-dropdown-divider" />
+        )}
+
+        {/* Hidden section (not draggable) */}
+        {hiddenList.length > 0 && (
+          <div className="column-section">
+            <div className="column-dropdown-section-title">Hidden</div>
+            {hiddenList.map((col) => (
+              <label
+                key={`hid-${col.key}`}
+                className={`column-dropdown-checkbox portfolio-selector-column-dropdown-checkbox${col.key === 'symbol' ? ' symbol' : ''}`}
+              >
+                {col.key !== 'symbol' && <span className="portfolio-selector-column-drag-handle" aria-hidden>☰</span>}
+                <input
+                  type="checkbox"
+                  checked={false}
+                  onChange={() => handleToggleColumn(col.key)}
+                  disabled={col.key === 'symbol'}
+                />
+                {col.label}
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
+        <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleSelectAll}>Select all</button>
+        <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleDeselectAll}>Deselect all</button>
+        <button className="btn btn-sm btn-secondary" onClick={handleReset}>Reset</button>
+        <button className="btn btn-sm btn-primary" onClick={() => setShowColumnDropdown(false)}>Close</button>
+      </div>
+    </div>
+  );
+};
