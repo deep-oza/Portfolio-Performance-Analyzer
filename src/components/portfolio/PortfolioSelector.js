@@ -43,18 +43,7 @@ const PortfolioSelector = ({
   };
   const handleDragEnd = () => { dragColIndex.current = null; };
 
-  // Close dropdown on outside click
-  const dropdownRef = useRef();
-  useEffect(() => {
-    if (!showColumnDropdown) return;
-    function handleClick(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowColumnDropdown(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [showColumnDropdown, setShowColumnDropdown]);
+  // No outside-click handler needed for modal; overlay handles focus trapping visually
 
   // Get portfolio data to check if it's empty
   const portfolioData = selectedPortfolioId === 'default'
@@ -184,7 +173,7 @@ const PortfolioSelector = ({
 <FontAwesomeIcon icon={faCog} className="column-icon" />
 <span className="column-text">Columns</span>    </button>
     {showColumnDropdown && (
-      <DropdownUI
+      <ColumnsModal
         DEFAULT_COLUMNS={DEFAULT_COLUMNS}
         visibleColumns={visibleColumns}
         setVisibleColumns={setVisibleColumns}
@@ -194,7 +183,7 @@ const PortfolioSelector = ({
         handleDragOver={handleDragOver}
         handleDrop={handleDrop}
         handleDragEnd={handleDragEnd}
-        setShowColumnDropdown={setShowColumnDropdown}
+        onClose={() => setShowColumnDropdown(false)}
       />
     )}
   </div>
@@ -216,8 +205,8 @@ const PortfolioSelector = ({
 
 export default PortfolioSelector; 
 
-// Extracted dropdown UI for clarity
-const DropdownUI = ({
+// Professional Columns Modal
+const ColumnsModal = ({
   DEFAULT_COLUMNS,
   visibleColumns,
   setVisibleColumns,
@@ -227,7 +216,7 @@ const DropdownUI = ({
   handleDragOver,
   handleDrop,
   handleDragEnd,
-  setShowColumnDropdown
+  onClose
 }) => {
   const [columnSearch, setColumnSearch] = React.useState('');
   const trimmedSearch = columnSearch.trim();
@@ -256,10 +245,14 @@ const DropdownUI = ({
   };
 
   return (
-    <div className="column-dropdown portfolio-selector-column-dropdown">
-      <div className="column-dropdown-header">Customize Columns</div>
+    <div className="columns-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="columns-modal-title">
+      <div className="columns-modal">
+        <div className="columns-modal-header">
+          <h3 id="columns-modal-title">Customize Columns</h3>
+          <button className="columns-modal-close" aria-label="Close" onClick={onClose}>✕</button>
+        </div>
 
-      <div className="column-dropdown-toolbar">
+        <div className="column-dropdown-toolbar">
         <div className="column-search-wrap">
           <input
             type="text"
@@ -284,9 +277,9 @@ const DropdownUI = ({
           <span className="column-badge" aria-live="polite">{selectedCount} / {totalCount} selected</span>
           {isSearching && <span className="column-hint">Drag disabled while searching</span>}
         </div>
-      </div>
+        </div>
 
-      <div className="column-dropdown-list">
+        <div className="column-dropdown-list">
         {/* Visible section (draggable) */}
         {visibleList.length > 0 && (
           <div className="column-section">
@@ -343,13 +336,14 @@ const DropdownUI = ({
             ))}
           </div>
         )}
-      </div>
+        </div>
 
-      <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
-        <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleSelectAll}>Select all</button>
-        <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleDeselectAll}>Deselect all</button>
-        <button className="btn btn-sm btn-secondary" onClick={handleReset}>Reset</button>
-        <button className="btn btn-sm btn-primary" onClick={() => setShowColumnDropdown(false)}>Close</button>
+        <div className="column-dropdown-actions portfolio-selector-column-dropdown-actions">
+          <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleSelectAll}>Select all</button>
+          <button className="btn btn-sm btn-secondary btn-ghost" onClick={handleDeselectAll}>Deselect all</button>
+          <button className="btn btn-sm btn-secondary" onClick={handleReset}>Reset</button>
+          <button className="btn btn-sm btn-primary" onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );
