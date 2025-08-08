@@ -1,6 +1,6 @@
-import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faEdit, faTrashAlt, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { PortfolioContext } from '../../contexts/PortfolioContext';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import './PortfolioTable.css';
@@ -53,34 +53,12 @@ const PortfolioTable = ({
   
   // Bulk selection state
   const [selectedRows, setSelectedRows] = useState([]);
-  const [editQueue, setEditQueue] = useState([]);
+  // Removed unused bulk edit queue
 
   // Column customization state
   const [editingCell, setEditingCell] = useState({ row: null, col: null, value: '' });
 
-  // Drag-and-drop for column reordering
-  const dragColIndex = useRef(null);
-  const handleDragStart = (index) => {
-    dragColIndex.current = index;
-  };
-  const handleDragOver = (e, index) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-  const handleDrop = (index) => {
-    const from = dragColIndex.current;
-    if (from === null || from === index) return;
-    setVisibleColumns(cols => {
-      const newCols = [...cols];
-      const [moved] = newCols.splice(from, 1);
-      newCols.splice(index, 0, moved);
-      return newCols;
-    });
-    dragColIndex.current = null;
-  };
-  const handleDragEnd = () => {
-    dragColIndex.current = null;
-  };
+  // Drag-and-drop for column reordering (handlers removed as unused)
 
   useEffect(() => {
     localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(visibleColumns));
@@ -155,8 +133,7 @@ const PortfolioTable = ({
         case "totalReturnMerged":
           const unrGainA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0) - a.invested;
           const unrGainB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0) - b.invested;
-          const currValA = a.qty * (parseFloat(currentPrices[a.symbol]) || 0);
-          const currValB = b.qty * (parseFloat(currentPrices[b.symbol]) || 0);
+          // Precomputed current values are not needed further; removing unused variables
           valueA = unrGainA + (a.realizedGain || 0) + (a.dividend || 0);
           valueB = unrGainB + (b.realizedGain || 0) + (b.dividend || 0);
           break;
@@ -442,31 +419,7 @@ const PortfolioTable = ({
     });
   };
 
-  // Bulk edit handler (edit all selected, one after another)
-  const handleBulkEdit = () => {
-    if (selectedRows.length === 0) return;
-    // Create a queue of indices to edit
-    const indices = selectedRows
-      .map(symbol => portfolioData.findIndex(stock => stock.symbol === symbol))
-      .filter(idx => idx !== -1);
-    if (indices.length > 0) {
-      setEditQueue(indices);
-      setEditingStock({ index: indices[0], stock: portfolioData[indices[0]] });
-    }
-  };
-  
-  // When editing is done, move to next in queue
-  React.useEffect(() => {
-    if (editQueue.length > 1 && !selectedRows.includes(portfolioData[editQueue[0]]?.symbol)) {
-      // Remove the first index and open the next
-      const nextQueue = editQueue.slice(1);
-      setEditQueue(nextQueue);
-      if (nextQueue.length > 0) {
-        setEditingStock({ index: nextQueue[0], stock: portfolioData[nextQueue[0]] });
-      }
-    }
-    // eslint-disable-next-line
-  }, [portfolioData]);
+  // Removed unused bulk edit handler and related effect
   
   const startEditCell = (rowIdx, colKey, initialValue) => {
     setEditingCell({ row: rowIdx, col: colKey, value: initialValue });
@@ -504,6 +457,66 @@ const PortfolioTable = ({
       setEditingCell({ row: null, col: null, value: '' });
     }
   };
+  
+  // Calculate summary for the displayed (filtered) data
+  const displayedSummary = useMemo(() => {
+    let totalInvested = 0;
+    let currentValue = 0;
+    let totalGainLoss = 0;
+    let sumWeightedCagr = 0;
+    let sumInvestedWithPrice = 0;
+    let totalQuantity = 0;
+
+    filteredData.forEach((stock) => {
+      const symbol = stock.symbol;
+      const invested = stock.invested || (stock.qty * stock.avgPrice) || 0;
+      totalInvested += invested;
+      totalQuantity += stock.qty || 0;
+
+      const price = parseFloat(currentPrices[symbol]);
+      if (price && price > 0) {
+        const currVal = stock.qty * price;
+        currentValue += currVal;
+        const gl = currVal - invested;
+        totalGainLoss += gl;
+
+        const daysHeld = calculateDaysHeld(stock.purchaseDate);
+        const years = daysHeld / 365.25;
+        if (years > 0 && invested > 0 && currVal > 0 && daysHeld >= 90) {
+          try {
+            const cagr = (Math.pow(currVal / invested, 1 / years) - 1) * 100;
+            if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
+              sumWeightedCagr += invested * cagr;
+              sumInvestedWithPrice += invested;
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+      }
+    });
+
+    let overallReturn = 0;
+    if (totalInvested > 0) {
+      overallReturn = (totalGainLoss / totalInvested) * 100;
+      overallReturn = Math.max(Math.min(overallReturn, 999999), -99.99);
+    }
+
+    let weightedAvgCagr = 0;
+    if (sumInvestedWithPrice > 0) {
+      weightedAvgCagr = sumWeightedCagr / sumInvestedWithPrice;
+      weightedAvgCagr = Math.max(Math.min(weightedAvgCagr, 999999), -99.99);
+    }
+
+    return {
+      totalInvested,
+      currentValue,
+      totalGainLoss,
+      overallReturn,
+      weightedAvgCagr,
+      totalQuantity
+    };
+  }, [filteredData, currentPrices, calculateDaysHeld]);
   
   // If no data, return message
   if (!portfolioData || portfolioData.length === 0) {
@@ -569,65 +582,7 @@ const PortfolioTable = ({
     );
   }
   
-  // Calculate summary for the displayed (filtered) data
-  const displayedSummary = React.useMemo(() => {
-    let totalInvested = 0;
-    let currentValue = 0;
-    let totalGainLoss = 0;
-    let sumWeightedCagr = 0;
-    let sumInvestedWithPrice = 0;
-    let totalQuantity = 0;
-
-    filteredData.forEach((stock) => {
-      const symbol = stock.symbol;
-      const invested = stock.invested || (stock.qty * stock.avgPrice) || 0;
-      totalInvested += invested;
-      totalQuantity += stock.qty || 0;
-
-      const price = parseFloat(currentPrices[symbol]);
-      if (price && price > 0) {
-        const currVal = stock.qty * price;
-        currentValue += currVal;
-        const gl = currVal - invested;
-        totalGainLoss += gl;
-
-        const daysHeld = calculateDaysHeld(stock.purchaseDate);
-        const years = daysHeld / 365.25;
-        if (years > 0 && invested > 0 && currVal > 0 && daysHeld >= 90) {
-          try {
-            const cagr = (Math.pow(currVal / invested, 1 / years) - 1) * 100;
-            if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
-              sumWeightedCagr += invested * cagr;
-              sumInvestedWithPrice += invested;
-            }
-          } catch (e) {
-            // ignore
-          }
-        }
-      }
-    });
-
-    let overallReturn = 0;
-    if (totalInvested > 0) {
-      overallReturn = (totalGainLoss / totalInvested) * 100;
-      overallReturn = Math.max(Math.min(overallReturn, 999999), -99.99);
-    }
-
-    let weightedAvgCagr = 0;
-    if (sumInvestedWithPrice > 0) {
-      weightedAvgCagr = sumWeightedCagr / sumInvestedWithPrice;
-      weightedAvgCagr = Math.max(Math.min(weightedAvgCagr, 999999), -99.99);
-    }
-
-    return {
-      totalInvested,
-      currentValue,
-      totalGainLoss,
-      overallReturn,
-      weightedAvgCagr,
-      totalQuantity
-    };
-  }, [filteredData, currentPrices, calculateDaysHeld]);
+  
   
   return (
     <>
