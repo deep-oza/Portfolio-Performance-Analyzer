@@ -76,7 +76,10 @@ const ControlPanel = () => {
   
   const handleExportClick = () => {
     const csv = exportPortfolioCSV(portfolioData, currentPrices, calculateDaysHeld);
-    downloadCSV(csv, "portfolio_full_export.csv");
+    const fileName = selectedPortfolioId === 'default' 
+      ? "all_portfolios.csv" 
+      : `${selectedPortfolioId}_portfolio.csv`;
+    downloadCSV(csv, fileName);
   };
   
   const handleAddClick = () => {
@@ -193,4 +196,4 @@ const ControlPanel = () => {
   );
 };
 
-export default ControlPanel; 
+export default ControlPanel;
