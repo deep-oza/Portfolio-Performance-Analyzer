@@ -404,6 +404,27 @@ const PortfolioTable = ({
     return `${value.toFixed(2)}%`;
   };
   
+  // Format days held in human-readable format
+  const formatDaysHeld = (purchaseDate) => {
+    const days = calculateDaysHeld(purchaseDate);
+    const years = Math.floor(days / 365);
+    const months = Math.floor((days % 365) / 30);
+    const remainingDays = days % 30;
+    
+    if (years > 0) {
+      if (months > 0) {
+        return `${years}y ${months}m`;
+      }
+      return `${years}y`;
+    } else if (months > 0) {
+      if (remainingDays > 0) {
+        return `${months}m ${remainingDays}d`;
+      }
+      return `${months}m`;
+    }
+    return `${days}d`;
+  };
+  
   // Select all handler
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -870,7 +891,7 @@ const PortfolioTable = ({
                         case 'daysHeld':
                           return (
                             <td key="daysHeld" id={`daysHeld_${symbol}`} className="numeric">
-                              {calculateDaysHeld(stock.purchaseDate)}
+                              {formatDaysHeld(stock.purchaseDate)}
                             </td>
                           );
                         default:
