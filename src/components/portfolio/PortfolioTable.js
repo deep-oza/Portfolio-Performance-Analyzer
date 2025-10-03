@@ -162,9 +162,10 @@ const PortfolioTable = ({
           const currValueB = b.qty * priceB;
 
           try {
-            // Safe CAGR calculation for sorting stock A
-            if (yearsA > 0 && a.invested > 0 && currValueA > 0) {
-              valueA = (Math.pow(currValueA / a.invested, 1 / yearsA) - 1) * 100;
+            // Safe CAGR calculation for sorting stock A (including dividends and realized gains)
+            if (yearsA >= 1 && a.invested > 0 && currValueA > 0) {
+              const totalReturnA = currValueA + (a.dividend || 0) + (a.realizedGain || 0);
+              valueA = (Math.pow(totalReturnA / a.invested, 1 / yearsA) - 1) * 100;
               // Apply bounds to prevent extreme values
               if (!isFinite(valueA) || isNaN(valueA)) {
                 valueA = -Infinity;
@@ -175,9 +176,10 @@ const PortfolioTable = ({
               valueA = -Infinity;
             }
 
-            // Safe CAGR calculation for sorting stock B
-            if (yearsB > 0 && b.invested > 0 && currValueB > 0) {
-              valueB = (Math.pow(currValueB / b.invested, 1 / yearsB) - 1) * 100;
+            // Safe CAGR calculation for sorting stock B (including dividends and realized gains)
+            if (yearsB >= 1 && b.invested > 0 && currValueB > 0) {
+              const totalReturnB = currValueB + (b.dividend || 0) + (b.realizedGain || 0);
+              valueB = (Math.pow(totalReturnB / b.invested, 1 / yearsB) - 1) * 100;
               // Apply bounds to prevent extreme values
               if (!isFinite(valueB) || isNaN(valueB)) {
                 valueB = -Infinity;
@@ -302,12 +304,13 @@ const PortfolioTable = ({
       returnPercent = Math.max(Math.min(returnPercent, 999999), -99.99);
     }
     
-    // Calculate CAGR with validation
+    // Calculate CAGR with validation (including dividends and realized gains)
     let cagr = 0;
-    if (years > 0 && stock.invested > 0 && currentValue > 0) {
+    if (years >= 1 && stock.invested > 0 && currentValue > 0) {
       try {
-        // Use a safe calculation approach for CAGR
-        cagr = (Math.pow(currentValue / stock.invested, 1 / years) - 1) * 100;
+        // Include dividends and realized gains in total return
+        const totalReturn = currentValue + (stock.dividend || 0) + (stock.realizedGain || 0);
+        cagr = (Math.pow(totalReturn / stock.invested, 1 / years) - 1) * 100;
         
         // Apply reasonable bounds to CAGR
         if (!isFinite(cagr) || isNaN(cagr)) {
@@ -529,9 +532,10 @@ const PortfolioTable = ({
 
         const daysHeld = calculateDaysHeld(stock.purchaseDate);
         const years = daysHeld / 365.25;
-        if (years > 0 && invested > 0 && currVal > 0 && daysHeld >= 90) {
+        if (years >= 1 && invested > 0 && currVal > 0) {
           try {
-            const cagr = (Math.pow(currVal / invested, 1 / years) - 1) * 100;
+            const totalReturn = currVal + (stock.dividend || 0) + (stock.realizedGain || 0);
+            const cagr = (Math.pow(totalReturn / invested, 1 / years) - 1) * 100;
             if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
               sumWeightedCagr += invested * cagr;
               sumInvestedWithPrice += invested;

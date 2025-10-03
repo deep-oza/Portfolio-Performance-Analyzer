@@ -299,7 +299,7 @@ export const PortfolioProvider = ({ children }) => {
         
         const daysHeld = calculateDaysHeld(stock.purchaseDate);
         const years = daysHeld / 365.25;
-        if (years > 0 && invested > 0 && currentVal > 0 && daysHeld >= 90) {
+        if (years >= 1 && invested > 0 && currentVal > 0) {
           try {
             const cagr = (Math.pow(currentVal / invested, 1 / years) - 1) * 100;
             if (isFinite(cagr) && !isNaN(cagr) && cagr > -100 && cagr < 200) {
