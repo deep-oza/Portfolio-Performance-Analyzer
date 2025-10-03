@@ -821,7 +821,7 @@ const PortfolioTable = ({
                           );
                         case 'realizedGain':
                           return (
-                            <td key="realizedGain" className="positive numeric" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
+                            <td key="realizedGain" className="numeric" onClick={() => startEditCell(originalIndex, 'realizedGain', stock.realizedGain)} tabIndex={0} aria-label="Edit realized gain" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditCell(originalIndex, 'realizedGain', stock.realizedGain); }}>
                               {editingCell.row === originalIndex && editingCell.col === 'realizedGain' ? (
                                 <input
                                   type="number"
@@ -833,7 +833,9 @@ const PortfolioTable = ({
                                   className="table-edit-input table-edit-input-realizedGain"
                                 />
                               ) : (
-                                `₹${stock.realizedGain.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`
+                                <span className={stock.realizedGain >= 0 ? 'positive' : 'negative'}>
+                                  ₹{stock.realizedGain.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+                                </span>
                               )}
                             </td>
                           );
